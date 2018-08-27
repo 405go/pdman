@@ -28,6 +28,7 @@ class ChangeCode extends React.Component{
       again: false,
       synchronous: false,
       preSynchronous: false,
+      flagSynchronous: false,
     };
   }
   _onSave = () => {
@@ -63,7 +64,7 @@ class ChangeCode extends React.Component{
         this.setState({
           [tempType]: false,
         });
-      });
+      }, type === 'flagSynchronous');
     } else {
       Modal.error({
         title: '同步失败',
@@ -78,7 +79,7 @@ class ChangeCode extends React.Component{
     });
   };
   render() {
-    const { width, again, synchronous, preSynchronous } = this.state;
+    const { width, again, synchronous, preSynchronous, flagSynchronous } = this.state;
     const { database = [], messages, data, code,
       currentVersion = {}, dbVersion, init } = this.props;
     const { version } = currentVersion;
@@ -146,14 +147,15 @@ class ChangeCode extends React.Component{
               {synchronous ? '正在同步' : '同步'}
             </Button>
             <Button
-              loading={synchronous}
+              loading={flagSynchronous}
               title='更新数据库的版本号，不会执行差异化的SQL'
               style={{
                 marginLeft: 10,
                 display: (version && compareStringVersion(version, dbVersion)) ? '' : 'none',
               }}
+              onClick={() => this._execSQL(true, 'flagSynchronous')}
             >
-              {synchronous ? '正在标记为同步' : '标记为同步'}
+              {flagSynchronous ? '正在标记为同步' : '标记为同步'}
             </Button>
             <Button
               loading={again}
@@ -664,7 +666,7 @@ export default class DatabaseVersion extends React.Component{
         cb && cb(error, stdout, stderr);
       });
   };
-  _generateSQL = (dbData, version, data, updateVersion, path, cb) => {
+  _generateSQL = (dbData, version, data, updateVersion, path, cb, onlyUpdateVersion) => {
     // 获取外层目录
     const { project } = this.props;
     const temp = path || app.getPath('temp');
@@ -687,6 +689,7 @@ export default class DatabaseVersion extends React.Component{
               sql: tempPath,
               versionDesc: version.message,
               updateVersion,
+              onlyUpdateVersion,
             },
             showModal: true,
           }, (error, stdout, stderror) => {
@@ -812,7 +815,7 @@ export default class DatabaseVersion extends React.Component{
       .filter(v => v.version !== version.version)
       .some(v => !compareStringVersion(v.version, version.version));
   };
-  _execSQL = (data, version, updateDBVersion, cb) => {
+  _execSQL = (data, version, updateDBVersion, cb, onlyUpdateDBVersion) => {
     const dbData = this._getCurrentDBData();
     if (!dbData) {
       this.setState({
@@ -822,7 +825,7 @@ export default class DatabaseVersion extends React.Component{
         title: '初始化数据库版本表失败',
         message: '无法获取到数据库信息，请切换尝试数据库'});
     } else {
-      this._generateSQL(dbData, version, data, updateDBVersion, null, cb);
+      this._generateSQL(dbData, version, data, updateDBVersion, null, cb, onlyUpdateDBVersion);
     }
   };
   _readDb = (status, version, lastVersion, changes = [], initVersion, updateVersion) => {

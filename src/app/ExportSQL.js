@@ -1,14 +1,29 @@
 import React from 'react';
 import electron from 'electron';
+import _object from 'lodash/object';
+import fs from 'fs';
 
-import {Button, Checkbox, Editor, RadioGroup, Select, TreeSelect, openModal} from '../components';
+import {
+  Button,
+  Checkbox,
+  Editor,
+  RadioGroup,
+  Select,
+  TreeSelect,
+  openModal,
+  Modal,
+  Input,
+  Icon,
+  Code,
+} from '../components';
 import { getAllDataSQLByFilter } from '../utils/json2code';
-import { readFilePromise, saveFilePromise } from '../utils/json';
+import {fileExist, fileExistPromise, readFilePromise, saveFilePromise} from '../utils/json';
 import defaultConfig from '../../profile';
 
-const { remote } = electron;
+const { remote, ipcRenderer } = electron;
 const { app } = remote;
 const { Radio } = RadioGroup;
+const { execFile } = require('child_process');
 
 export default class ExportSQL extends React.Component{
   constructor(props){
@@ -28,6 +43,7 @@ export default class ExportSQL extends React.Component{
       },
       data: getAllDataSQLByFilter(props.dataSource,
         props.defaultDb, ['deleteTable', 'createTable', 'createIndex', 'updateComment']),
+      loading: false,
     };
   }
   componentDidMount(){
@@ -143,9 +159,183 @@ export default class ExportSQL extends React.Component{
   _saveConfigData = (data) => {
     return saveFilePromise(data, this.historyPath);
   };
+  _getProject = (project, type) => {
+    const tempItem = project.replace(/\\/g, '/');
+    const tempArray = tempItem.split('/');
+    if (type === 'name') {
+      return tempArray[tempArray.length - 1];
+    }
+    return tempArray.splice(0, tempArray.length - 1).join(this.split);
+  };
+  _getJavaConfig = () => {
+    const { dataSource } = this.props;
+    const dataSourceConfig = _object.get(dataSource, 'profile.javaConfig', {});
+    if (!dataSourceConfig.JAVA_HOME) {
+      dataSourceConfig.JAVA_HOME = process.env.JAVA_HOME || process.env.JER_HOME || '';
+    }
+    return dataSourceConfig;
+  };
+  _getParam = (selectJDBC) => {
+    const { dataSource } = this.props;
+    const paramArray = [];
+    const properties = _object.get(selectJDBC, 'properties', {});
+    const separator = _object.get(dataSource, 'profile.sqlConfig', '/*SQL@Run*/');
+    Object.keys(properties).forEach((pro) => {
+      paramArray.push(`${pro}=${properties[pro]}`);
+    });
+    paramArray.push(`separator=${separator}`);
+    return paramArray;
+  };
+  _connectJDBC = (selectJDBC, cb) => {
+    const configData =  this._getJavaConfig();
+    const value = configData.JAVA_HOME;
+    const defaultPath = ipcRenderer.sendSync('jarPath');
+    const jar = configData.DB_CONNECTOR || defaultPath;
+    const tempValue = value ? `${value}${this.split}bin${this.split}java` : 'java';
+    execFile(tempValue,
+      [
+        '-Dfile.encoding=utf-8',
+        '-jar', jar,
+        ...this._getParam(selectJDBC),
+      ],
+      (error, stdout, stderr) => {
+        cb && cb(error, stdout, stderr);
+      });
+  };
+  _execSql = () => {
+    this.setState({
+      loading: true,
+    });
+    const { project, dataSource } = this.props;
+    const dbData = _object.get(dataSource, 'profile.dbs', []).filter(d => d.defaultDB)[0];
+    const temp = app.getPath('temp');
+    const proName = this._getProject(project, 'name');
+    if (dbData) {
+      const name = _object.get(dbData, 'name', 'untitled');
+      const fileName = `${proName}-${name}-exec-temp.sql`;
+      let tempPath = `${temp}${this.split}${fileName}`;
+      fileExistPromise(tempPath, true, this.state.data, '.sql')
+        .then(() => {
+          if (dbData) {
+            this._connectJDBC({
+              ...dbData,
+              properties: {
+                ...(dbData.properties || {}),
+                sql: tempPath,
+                versionDesc: '执行SQL',
+                updateVersion: false,
+              },
+            }, (error, stdout, stderror) => {
+              this.setState({
+                loading: false,
+              });
+              if (!stderror || !error) {
+                Modal.success({
+                  title: '执行成功',
+                  message: <div
+                    onKeyDown={e => this._onKeyDown(e)}
+                  >
+                    <div
+                      style={{
+                        height: '30px',
+                        display: 'flex',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <Input
+                        onChange={this._searchValueChange}
+                        wrapperStyle={{width: 'auto'}}
+                      />
+                      <Icon
+                        type='fa-search'
+                        style={{marginLeft: 10, cursor: 'pointer'}}
+                        onClick={this._search}
+                      />
+                      <span
+                        ref={instance => this.countDom = instance}
+                        style={{ marginLeft: 10, cursor: 'pointer' }}
+                      >
+                      0/0
+                    </span>
+                      <Icon style={{ marginLeft: 10, cursor: 'pointer' }} type='arrowdown' onClick={this._selectNext}/>
+                      <Icon style={{ marginLeft: 10, cursor: 'pointer' }} type='arrowup' onClick={this._selectPre}/>
+                    </div>
+                    <Code
+                      ref={(instance) => {
+                        if (instance) {
+                          this.code = instance.dom;
+                          this.tempHtml = this.code.innerHTML;
+                        }
+                      }}
+                      style={{height: 400}}
+                      data={stdout}
+                    />
+                  </div>});
+                if (fileExist(tempPath)) {
+                  fs.unlinkSync(tempPath);
+                }
+              } else {
+                Modal.error({
+                  title: '执行失败',
+                  message: <div
+                    onKeyDown={e => this._onKeyDown(e)}
+                  >
+                    <div
+                      style={{
+                        height: '30px',
+                        display: 'flex',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <Input
+                        onChange={this._searchValueChange}
+                        wrapperStyle={{width: 'auto'}}
+                      />
+                      <Icon
+                        type='fa-search'
+                        style={{marginLeft: 10, cursor: 'pointer'}}
+                        onClick={this._search}
+                      />
+                      <span
+                        ref={instance => this.countDom = instance}
+                        style={{ marginLeft: 10, cursor: 'pointer' }}
+                      >
+                      0/0
+                    </span>
+                      <Icon style={{ marginLeft: 10, cursor: 'pointer' }} type='arrowdown' onClick={this._selectNext}/>
+                      <Icon style={{ marginLeft: 10, cursor: 'pointer' }} type='arrowup' onClick={this._selectPre}/>
+                    </div>
+                    <Code
+                      ref={(instance) => {
+                        if (instance) {
+                          this.code = instance.dom;
+                          this.tempHtml = this.code.innerHTML;
+                        }
+                      }}
+                      style={{height: 400}}
+                      data={`${stdout}${error || stderror}`}
+                    />
+                  </div>
+                  ,
+                });
+              }
+            });
+          } else if (fileExist(tempPath)){
+            fs.unlinkSync(tempPath);
+          }
+        });
+    } else {
+      this.setState({
+        loading: false,
+      });
+      Modal.error({title: '执行失败', message: '未配置默认数据库，无法执行SQL，请到数据库版本界面配置默认数据库！'});
+    }
+  };
   render() {
     const { database } = this.props;
-    const { data, defaultDb, selectTable } = this.state;
+    const { data, defaultDb, selectTable, loading } = this.state;
     return (<div style={{display: 'flex'}}>
       <div
         style={{
@@ -256,7 +446,13 @@ export default class ExportSQL extends React.Component{
       <div style={{border: 'solid 1px #DFDFDF'}}>
         <div style={{margin: '10px 0px'}}>
           <Button type="primary" onClick={this._export}>导出</Button>
-          <Button style={{marginLeft: 10}} onClick={this._export}>执行</Button>
+          <Button
+            style={{marginLeft: 10}}
+            onClick={this._execSql}
+            loading={loading}
+          >
+            {loading ? '正在执行' : '执行'}
+          </Button>
         </div>
         <Editor
           height='300px'

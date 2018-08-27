@@ -19,7 +19,6 @@ import Database from './container/database';
 import Relation from './container/relation';
 import DatabaseVersion from './DatabaseVersion';
 import ExportSQL from './ExportSQL';
-import { getAllDataSQLByFilter } from '../utils/json2code';
 
 import Setting from './Setting';
 
@@ -398,6 +397,7 @@ export default class App extends React.Component {
         database={database}
         dataSource={dataSource}
         exportSQL={onOk}
+        project={project}
       />, {
         title: 'SQL导出配置',
         footer: [
