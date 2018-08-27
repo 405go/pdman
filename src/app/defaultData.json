@@ -1,0 +1,323 @@
+{
+  "profile": {
+    "defaultFields": [
+      {
+        "name": "REVISION",
+        "type": "Integer",
+        "remark": "",
+        "chnname": "乐观锁"
+      },
+      {
+        "name": "CREATED_BY",
+        "type": "IdOrKey",
+        "remark": "",
+        "chnname": "创建人"
+      },
+      {
+        "name": "CREATED_TIME",
+        "type": "DateTime",
+        "remark": "",
+        "chnname": "创建时间"
+      },
+      {
+        "name": "UPDATED_BY",
+        "type": "IdOrKey",
+        "remark": "",
+        "chnname": "更新人"
+      },
+      {
+        "name": "UPDATED_TIME",
+        "type": "DateTime",
+        "remark": "",
+        "chnname": "更新时间"
+      }
+    ],
+    "defaultDataTypeDomains": {
+      "datatype": [
+        {
+          "name": "默认字串",
+          "code": "DefaultString",
+          "apply": {
+            "MYSQL": {
+              "type": "VARCHAR(32)"
+            },
+            "ORACLE": {
+              "type": "NVARCHAR2(32)"
+            },
+            "JAVA": {
+              "type": "String"
+            }
+          }
+        },
+        {
+          "name": "标识号",
+          "code": "IdOrKey",
+          "apply": {
+            "MYSQL": {
+              "type": "VARCHAR(32)"
+            },
+            "ORACLE": {
+              "type": "VARCHAR2(32)"
+            },
+            "JAVA": {
+              "type": "String"
+            }
+          }
+        },
+        {
+          "name": "名称",
+          "code": "Name",
+          "apply": {
+            "MYSQL": {
+              "type": "VARCHAR(128)"
+            },
+            "ORACLE": {
+              "type": "NVARCHAR2(128)"
+            },
+            "JAVA": {
+              "type": "String"
+            }
+          }
+        },
+        {
+          "name": "备注说明",
+          "code": "Intro",
+          "apply": {
+            "MYSQL": {
+              "type": "VARCHAR(512)"
+            },
+            "ORACLE": {
+              "type": "NVARCHAR2(512)"
+            },
+            "JAVA": {
+              "type": "String"
+            }
+          }
+        },
+        {
+          "name": "字串-短",
+          "code": "ShortString",
+          "apply": {
+            "MYSQL": {
+              "type": "VARCHAR(128)"
+            },
+            "ORACLE": {
+              "type": "NVARCHAR2(128)"
+            },
+            "JAVA": {
+              "type": "String"
+            }
+          }
+        },
+        {
+          "name": "字串-中",
+          "code": "MiddleString",
+          "apply": {
+            "MYSQL": {
+              "type": "VARCHAR(1024)"
+            },
+            "ORACLE": {
+              "type": "NVARCHAR2(1024)"
+            },
+            "JAVA": {
+              "type": "String"
+            }
+          }
+        },
+        {
+          "name": "字串-长",
+          "code": "LongString",
+          "apply": {
+            "MYSQL": {
+              "type": "VARCHAR(3120)"
+            },
+            "ORACLE": {
+              "type": "NVARCHAR2(3120)"
+            },
+            "JAVA": {
+              "type": "String"
+            }
+          }
+        },
+        {
+          "name": "大文本",
+          "code": "LongText",
+          "apply": {
+            "MYSQL": {
+              "type": "TEXT"
+            },
+            "ORACLE": {
+              "type": "CLOB"
+            },
+            "JAVA": {
+              "type": "String"
+            }
+          }
+        },
+        {
+          "name": "小数",
+          "code": "Double",
+          "apply": {
+            "MYSQL": {
+              "type": "DECIMAL(64,16)"
+            },
+            "ORACLE": {
+              "type": "NUMBER(64,16)"
+            },
+            "JAVA": {
+              "type": "Double"
+            }
+          }
+        },
+        {
+          "name": "比例",
+          "code": "Ratio",
+          "apply": {
+            "MYSQL": {
+              "type": "DECIMAL(4,2)"
+            },
+            "ORACLE": {
+              "type": "NUMBER(4,2)"
+            },
+            "JAVA": {
+              "type": "Double"
+            }
+          }
+        },
+        {
+          "name": "整数",
+          "code": "Integer",
+          "apply": {
+            "MYSQL": {
+              "type": "INT"
+            },
+            "ORACLE": {
+              "type": "INT"
+            },
+            "JAVA": {
+              "type": "Integer"
+            }
+          }
+        },
+        {
+          "name": "金额",
+          "code": "Money",
+          "apply": {
+            "MYSQL": {
+              "type": "DECIMAL(32,8)"
+            },
+            "ORACLE": {
+              "type": "NUMBER(32,8)"
+            },
+            "JAVA": {
+              "type": "Double"
+            }
+          }
+        },
+        {
+          "name": "是否",
+          "code": "YesNo",
+          "apply": {
+            "MYSQL": {
+              "type": "VARCHAR(1)"
+            },
+            "ORACLE": {
+              "type": "VARCHAR2(1)"
+            },
+            "JAVA": {
+              "type": "String"
+            }
+          }
+        },
+        {
+          "name": "数据字典",
+          "code": "Dict",
+          "apply": {
+            "MYSQL": {
+              "type": "VARCHAR(32)"
+            },
+            "ORACLE": {
+              "type": "VARCHAR2(32)"
+            },
+            "JAVA": {
+              "type": "String"
+            }
+          }
+        },
+        {
+          "name": "日期",
+          "code": "Date",
+          "apply": {
+            "MYSQL": {
+              "type": "DATE"
+            },
+            "ORACLE": {
+              "type": "DATE"
+            },
+            "JAVA": {
+              "type": "Date"
+            }
+          }
+        },
+        {
+          "name": "日期时间",
+          "code": "DateTime",
+          "apply": {
+            "MYSQL": {
+              "type": "DATETIME"
+            },
+            "ORACLE": {
+              "type": "DATE"
+            },
+            "JAVA": {
+              "type": "Date"
+            }
+          }
+        }
+      ],
+      "database": [
+        {
+          "code": "MYSQL",
+          "template": "DROP TABLE {{=it.entity.title}};\n$blankline\nCREATE TABLE {{=it.entity.title}}(\n{{ pkList = [] ; }}\n{{~it.entity.fields:field:index}}\n    {{? field.pk }}{{ pkList.push(field.name) }}{{?}}\n    {{=field.name}} {{=field.type}} {{= field.pk ? 'NOT NULL' : '' }} COMMENT '{{=it.func.join(field.chnname,field.remark,';')}}' {{= index < it.entity.fields.length-1 ? ',' : ( pkList.length>0 ? ',' :'' ) }}\n{{~}}\n{{? pkList.length >0 }}\n    PRIMARY KEY ({{~pkList:pkName:i}}{{= pkName }}{{= i<pkList.length-1 ? ',' : '' }}{{~}})\n{{?}}\n) COMMENT = '{{=it.func.join(it.entity.chnname,it.entity.remark,';') }}'",
+          "fileShow": true,
+          "defaultDatabase": true,
+          "createTableTemplate": "CREATE TABLE {{=it.entity.title}}(\n{{ pkList = [] ; }}\n{{~it.entity.fields:field:index}}\n    {{? field.pk }}{{ pkList.push(field.name) }}{{?}}\n    {{=field.name}} {{=field.type}} {{= field.notNull ? 'NOT NULL' : '' }} COMMENT '{{=it.func.join(field.chnname,field.remark,';')}}' {{= index < it.entity.fields.length-1 ? ',' : ( pkList.length>0 ? ',' :'' ) }}\n{{~}}\n{{? pkList.length >0 }}\n    PRIMARY KEY ({{~pkList:pkName:i}}{{= pkName }}{{= i<pkList.length-1 ? ',' : '' }}{{~}})\n{{?}}\n) COMMENT = '{{=it.func.join(it.entity.chnname,it.entity.remark,';') }}'",
+          "deleteTableTemplate": "DROP TABLE {{=it.entity.title}};/*SkipError*/",
+          "rebuildTableTemplate": "create table PDMAN_UP_{{=it.oldEntity.title}}\r\nas select * from {{=it.oldEntity.title}};{{=it.separator}}\r\n$blankline\r\n\r\ndrop table {{=it.oldEntity.title}};{{=it.separator}}\r\n$blankline\r\n\r\nCREATE TABLE {{=it.newEntity.title}}(\r\n{{ pkList = [] ; }}\r\n{{~it.newEntity.fields:field:index}}\r\n    {{? field.pk }}{{ pkList.push(field.name) }}{{?}}\r\n    {{=field.name}} {{=field.type}} {{= field.notNull ? 'NOT NULL' : '' }} COMMENT '{{=it.func.join(field.chnname,field.remark,';')}}' {{= index < it.newEntity.fields.length-1 ? ',' : ( pkList.length>0 ? ',' :'' ) }}\r\n{{~}}\r\n{{? pkList.length >0 }}\r\n    PRIMARY KEY ({{~pkList:pkName:i}}{{= pkName }}{{= i<pkList.length-1 ? ',' : '' }}{{~}})\r\n{{?}}\r\n) COMMENT = '{{=it.func.join(it.newEntity.chnname,it.newEntity.remark,';') }}';{{=it.separator}}\r\n$blankline\r\n\r\n{{ sameCols = it.func.intersect(it.newEntity.fields,it.newEntity.fields) ;}}\r\ninsert into {{=it.newEntity.title}}(\r\n{{~sameCols:field:index}}\r\n    {{=field.name}}{{? index<it.newEntity.fields.length-1}},{{?}}\r\n{{~}}\r\n) \r\nvalues\r\nselect \r\n{{~sameCols:field:index}}\r\n    {{=field.name}}{{? index<it.oldEntity.fields.length-1}},{{?}}\r\n{{~}}\r\nfrom PDMAN_UP_{{=it.oldEntity.title}};{{=it.separator}}\r\n$blankline\r\n\r\ndrop table PDMAN_UP_{{=it.oldEntity.title}};{{=it.separator}}",
+          "createFieldTemplate": "ALTER TABLE {{=it.entity.title}} ADD COLUMN {{=it.field.name}} {{=it.field.type}} {{? it.field.notNull}}NOT NULL{{?}} {{? ''!=it.field.defaultValue}}DEFAULT {{? null==it.field.defaultValue}}NULL{{??}}'{{=it.field.defaultValue}}'{{?}}{{?}} {{? it.field.autoIncrement}}AUTO_INCREMENT{{?}} {{? it.field.pk}}PRIMARY KEY{{?}} {{? it.field.chnname}}COMMENT '{{=it.field.chnname}}'{{?}} {{? it.field.addAfter}}AFTER {{=it.field.addAfter}}{{?}};",
+          "updateFieldTemplate": "ALTER TABLE {{=it.entity.title}} MODIFY COLUMN {{=it.field.name}} {{=it.field.type}} {{? it.field.notNull}}NOT NULL{{?}} {{? ''!=it.field.defaultValue}}DEFAULT {{? null==it.field.defaultValue}}NULL{{??}}'{{=it.field.defaultValue}}'{{?}}{{?}} {{? it.field.autoIncrement}}AUTO_INCREMENT{{?}} {{? it.field.chnname}}COMMENT '{{=it.field.chnname}}'{{?}};",
+          "deleteFieldTemplate": "ALTER TABLE {{=it.entity.title}} DROP {{=it.field.name}};",
+          "deleteIndexTemplate": "ALTER TABLE {{=it.entity.title}} DROP INDEX {{=it.index.name}};",
+          "createIndexTemplate": "ALTER TABLE {{=it.entity.title}} ADD {{? it.index.isUnique}}UNIQUE{{?}} {{=it.index.name}}({{=it.func.join(...it.index.fields,',')}});",
+          "updateTableComment": "ALTER TABLE {{=it.entity.title}} COMMENT '{{=it.entity.chnname}}';"
+        },
+        {
+          "code": "ORACLE",
+          "template": "DROP TABLE {{=it.entity.title}};\n$blankline\nCREATE TABLE {{=it.entity.title}}(\n{{ pkList = [] ; }}\n{{~it.entity.fields:field:index}}\n    {{? field.pk }}{{ pkList.push(field.name) }}{{?}}\n    {{=field.name}} {{=field.type}}  {{= field.pk ? 'NOT NULL' : '' }} {{= index < it.entity.fields.length-1 ? ',' : ( pkList.length>0 ? ',' :'' ) }}\n{{~}}\n{{? pkList.length >0 }}\n    PRIMARY KEY ({{~pkList:pkName:i}}{{= pkName }}{{= i<pkList.length-1 ? ',' : '' }}{{~}})\n{{?}}\n);\n$blankline\nCOMMENT ON TABLE {{=it.entity.title}} IS '{{=it.func.join(it.entity.chnname,it.entity.remark,';') }}';\n{{~it.entity.fields:field:index}}\nCOMMENT ON COLUMN {{=it.entity.title}}.{{=field.name}} IS '{{=it.func.join(field.chnname,field.remark,';')}}';\n{{~}}",
+          "createTableTemplate": "CREATE TABLE {{=it.entity.title}}(\n{{ pkList = [] ; }}\n{{~it.entity.fields:field:index}}\n    {{? field.pk }}{{ pkList.push(field.name) }}{{?}}\n    {{=field.name}} {{=field.type}}  {{= field.notNull ? 'NOT NULL' : '' }} {{= index < it.entity.fields.length-1 ? ',' : ( pkList.length>0 ? ',' :'' ) }}\n{{~}}\n{{? pkList.length >0 }}\n    PRIMARY KEY ({{~pkList:pkName:i}}{{= pkName }}{{= i<pkList.length-1 ? ',' : '' }}{{~}})\n{{?}}\n);{{=it.separator}}\n$blankline\nCOMMENT ON TABLE {{=it.entity.title}} IS '{{=it.func.join(it.entity.chnname,it.entity.remark,';') }}';{{=it.separator}}\n{{~it.entity.fields:field:index}}\nCOMMENT ON COLUMN {{=it.entity.title}}.{{=field.name}} IS '{{=it.func.join(field.chnname,field.remark,';')}}';{{=it.separator}}\n{{~}}",
+          "deleteTableTemplate": "DROP TABLE {{=it.entity.title}};/*SkipError*/",
+          "rebuildTableTemplate": "create table PDMAN_UP_{{=it.oldEntity.title}}\r\nas select * from {{=it.oldEntity.title}};{{=it.separator}}\r\n$blankline\r\n\r\ndrop table {{=it.oldEntity.title}};{{=it.separator}}\r\n$blankline\r\n\r\nCREATE TABLE {{=it.newEntity.title}}(\r\n{{ pkList = [] ; }}\r\n{{~it.newEntity.fields:field:index}}\r\n    {{? field.pk }}{{ pkList.push(field.name) }}{{?}}\r\n    {{=field.name}} {{=field.type}} {{= field.notNull ? 'NOT NULL' : '' }} COMMENT '{{=it.func.join(field.chnname,field.remark,';')}}' {{= index < it.newEntity.fields.length-1 ? ',' : ( pkList.length>0 ? ',' :'' ) }}\r\n{{~}}\r\n{{? pkList.length >0 }}\r\n    PRIMARY KEY ({{~pkList:pkName:i}}{{= pkName }}{{= i<pkList.length-1 ? ',' : '' }}{{~}})\r\n{{?}}\r\n) COMMENT = '{{=it.func.join(it.newEntity.chnname,it.newEntity.remark,';') }}';{{=it.separator}}\r\n$blankline\r\n\r\n{{ sameCols = it.func.intersect(it.newEntity.fields,it.newEntity.fields) ;}}\r\ninsert into {{=it.newEntity.title}}(\r\n{{~sameCols:field:index}}\r\n    {{=field.name}}{{? index<it.newEntity.fields.length-1}},{{?}}\r\n{{~}}\r\n) \r\nvalues\r\nselect \r\n{{~sameCols:field:index}}\r\n    {{=field.name}}{{? index<it.oldEntity.fields.length-1}},{{?}}\r\n{{~}}\r\nfrom PDMAN_UP_{{=it.oldEntity.title}};{{=it.separator}}\r\n$blankline\r\n\r\ndrop table PDMAN_UP_{{=it.oldEntity.title}};{{=it.separator}}",
+          "createFieldTemplate": "ALTER TABLE {{=it.entity.title}} ADD({{=it.field.name}} {{=it.field.type}} {{? ''!=it.field.defaultValue}}DEFAULT {{? null==it.field.defaultValue}}NULL{{??}}'{{=it.field.defaultValue}}'{{?}}{{?}} {{? it.field.notNull}}NOT NULL{{?}});\r\nCOMMENT ON COLUMN {{=it.entity.title}}.{{=it.field.name}} is '{{=it.field.chnname}}';",
+          "updateFieldTemplate": "ALTER TABLE {{=it.entity.title}} MODIFY({{=it.field.name}} {{=it.field.type}} {{? ''!=it.field.defaultValue}}DEFAULT {{? null==it.field.defaultValue}}NULL{{??}}'{{=it.field.defaultValue}}'{{?}}{{?}} {{? it.field.notNull}}NOT NULL{{?}});\r\nCOMMENT ON COLUMN {{=it.entity.title}}.{{=it.field.name}} is '{{=it.field.chnname}}';",
+          "deleteFieldTemplate": "ALTER TABLE {{=it.entity.title}} DROP({{=it.field.name}});",
+          "deleteIndexTemplate": "DROP INDEX {{=it.entity.title}}.{{=it.index.name}};",
+          "createIndexTemplate": "CREATE {{? it.index.isUnique}}UNIQUE{{?}} INDEX {{=it.index.name}} ON {{=it.entity.title}}({{=it.func.join(...it.index.fields,',')}});",
+          "updateTableComment": "COMMENT ON TABLE {{=it.entity.title}} is '{{=it.entity.chnname}}';"
+        },
+        {
+          "code": "JAVA",
+          "template": "package group.rober.pdman.{{=it.module.name}}.entity;\n$blankline\nimport javax.persistence.*;\nimport java.io.Serializable;\nimport java.util.Date;\n$blankline\n$blankline\n\n/** {{=it.entity.chnname}} */\n@Table(name=\"{{=it.entity.title}}\")\npublic class {{=it.func.camel(it.entity.title,true) }} implements Serializable,Cloneable{\n{{~it.entity.fields:field:index}}\n    /** {{=it.func.join(field.chnname,field.remark,';')}} */\n    {{? field.pk }}\n    @Id\n    @GeneratedValue\n    {{?}}\n    private {{=field.type}} {{=it.func.camel(field.name,false)}} ;\n{{~}}\n$blankline\n{{~it.entity.fields:field:index}}\n    /** {{=it.func.join(field.chnname,field.remark,';')}} */\n    public {{=field.type}} get{{=it.func.camel(field.name,true)}}(){\n        return this.{{=it.func.camel(field.name,false)}};\n    }\n    /** {{=it.func.join(field.chnname,field.remark,';')}} */\n    public void set{{=it.func.camel(field.name,true)}}({{=field.type}} {{= it.func.camel(field.name,false) }}){\n        this.{{=it.func.camel(field.name,false)}} = {{= it.func.camel(field.name,false) }};\n    }\n{{~}}\n}",
+          "createTableTemplate": "package group.rober.pdman.{{=it.module.name}}.entity;\n$blankline\nimport javax.persistence.*;\nimport java.io.Serializable;\nimport java.util.Date;\n$blankline\n$blankline\n@Table(name=\"{{=it.entity.title}}\")\npublic class {{=it.func.camel(it.entity.title,true) }} implements Serializable,Cloneable{\n{{~it.entity.fields:field:index}}\n    /** {{=it.func.join(field.chnname,field.remark,';')}} */\n    {{? field.pk }}\n    @Id\n    @GeneratedValue\n    {{?}}\n    private {{=field.type}} {{=it.func.camel(field.name,false)}} ;\n{{~}}\n$blankline\n{{~it.entity.fields:field:index}}\n    /** {{=it.func.join(field.chnname,field.remark,';')}} */\n    public {{=field.type}} get{{=it.func.camel(field.name,true)}}(){\n        return this.{{=it.func.camel(field.name,false)}};\n    }\n    /** {{=it.func.join(field.chnname,field.remark,';')}} */\n    public void set{{=it.func.camel(field.name,true)}}({{=field.type}} {{= it.func.camel(field.name,false) }}){\n        this.{{=it.func.camel(field.name,false)}} = {{= it.func.camel(field.name,false) }};\n    }\n{{~}}\n}",
+          "deleteTableTemplate": "",
+          "rebuildTableTemplate": "",
+          "createFieldTemplate": "",
+          "updateFieldTemplate": "",
+          "deleteFieldTemplate": "",
+          "deleteIndexTemplate": "",
+          "createIndexTemplate": "",
+          "updateTableComment": ""
+        }
+      ]
+    }
+  }
+}
