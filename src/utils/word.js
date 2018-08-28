@@ -47,3 +47,7 @@ export const generateWord = (dataSource, images, projectName, dir, callBack) => 
   });
   callBack && callBack();
 };
+
+export const generateWordByJar = () => {
+
+};

@@ -92,7 +92,8 @@
     "npmRebuild": false,
     "asar": true,
     "asarUnpack": [
-      "build/jar/"
+      "build/jar/",
+      "build/word/"
     ],
     "dmg": {
       "icon": "build/icon.icns",

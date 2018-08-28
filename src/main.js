@@ -169,7 +169,7 @@ function createWindow() {
     if (process.env.NODE_ENV === 'development') {
       wordPath = path.join(__dirname, '../public/word/template.doc');
     } else {
-      wordPath = path.join(__dirname, '../word/template.doc')
+      wordPath = path.join(__dirname, '../../app.asar.unpacked/build/jar/template.doc')
     }
     event.returnValue = wordPath;
   });
