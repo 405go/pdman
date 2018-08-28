@@ -6,7 +6,7 @@ import {Icon, Tree, Context, Tab, Modal, Message, openModal, Button, Editor} fro
 import { ensureDirectoryExistence } from '../utils/json';
 import { addOnResize } from '../../src/utils/listener';
 import { generate } from '../../src/utils/markdown';
-import { generateWord } from '../../src/utils/word';
+import { generateByJar } from '../../src/utils/office';
 //import { generatepdf } from '../../src/utils/generatepdf';
 import { generateHtml } from '../../src/utils/generatehtml';
 import { saveImage } from '../../src/utils/relation2file';
@@ -297,60 +297,44 @@ export default class App extends React.Component {
           });
         });
       });
-    } else if (type === 'PDF') {
-      // 先生成文件
-      // 选择目录
-      Message.warning({title: '该功能正在开发中，敬请期待！'})
-      /*openDir((dir) => {
+    } else if (type === 'Word' || type === 'PDF') {
+      //Message.warning({title: '该功能正在开发中，敬请期待！'})
+      const postfix = type === 'Word' ? 'doc' : 'pdf';
+      openDir((dir) => {
         // 保存图片
-        const imagePaths = {};
-        saveImage(dataSource, columnOrder, writeFile, (images) => {
-          Promise.all(Object.keys(images).map(mo => {
-            const base64Data = images[mo].replace(/^data:image\/\w+;base64,/, "");
-            const dataBuffer = new Buffer(base64Data, 'base64');
-            return new Promise((res) => {
-              // 用户目录下的临时目录
-              writeFile(`${dir}/${mo}-image.png`, dataBuffer).then(() => {
-                imagePaths[mo] = `${mo}-image.png`;
-                res();
-              });
-            });
-          })).then(() => {
-            // 图片保存成功
-            generatepdf(dataSource, imagePaths, `${dir}/${this._getProjectName(project)}.pdman.pdf`, () => {
-              Message.success({title: `PDF导出成功！导出目录：[${dir}]`});
-              // 删除临时的图片
-
-            });
-          });
-        });
-      });*/
-    } else if (type === 'Word') {
-      Message.warning({title: '该功能正在开发中，敬请期待！'})
-      /*openDir((dir) => {
-        // 保存图片
-        const imagePaths = {};
         const projectName = projectDemo || this._getProjectName(project);
         saveImage(dataSource, columnOrder, writeFile, (images) => {
+          const imagesPath = `${dir}/${projectName}_files/`;
           Promise.all(Object.keys(images).map(mo => {
             const base64Data = images[mo].replace(/^data:image\/\w+;base64,/, "");
             const dataBuffer = new Buffer(base64Data, 'base64');
             return new Promise((res) => {
               // 判断图片目录是否存在
-              ensureDirectoryExistence(`${dir}/${projectName}_files/`);
-              writeFile(`${dir}/${projectName}_files/${mo}-image.png`, dataBuffer).then(() => {
-                imagePaths[mo] = `${mo}-image.png`;
+              ensureDirectoryExistence(imagesPath);
+              writeFile(`${imagesPath}${mo}.png`, dataBuffer).then(() => {
                 res();
               });
             });
           })).then(() => {
             // 图片保存成功
-            generateWord(dataSource, imagePaths, projectName, dir, (dataSource) => {
-              Message.success({title: `word！导出目录：[${dir}]`});
+            const defaultPath = ipcRenderer.sendSync('wordPath');
+            const templatePath = _object.get(dataSource, 'profile.wordTemplateConfig') || defaultPath;
+            generateByJar(dataSource, {
+              jsonFilePath: `${project}.pdman.json`,
+              docTemplatePath: templatePath,
+              imagePath: imagesPath,
+              imageExt: '.png',
+              outputFileName: `${dir}/${projectName}.${postfix}`,
+            }, (error, stdout, stderr) => {
+              if (error || stderr) {
+                Message.error({title: `${type}！导出失败!请重试`});
+              } else {
+                Message.success({title: `${type}！导出目录：[${dir}]`});
+              }
             });
           });
         });
-      });*/
+      });
     } else if (type === 'Html') {
       openDir((dir) => {
         // 保存图片
@@ -412,6 +396,7 @@ export default class App extends React.Component {
     openModal(<div style={{textAlign: 'center', padding: 10}}>
       <Button icon='HTML' onClick={() => this._exportFile('Html')}>导出HTML</Button>
       <Button icon='wordfile1' style={{marginLeft: 40}} onClick={() => this._exportFile('Word')}>导出WORD</Button>
+      <Button icon='pdffile1' style={{marginLeft: 40}} onClick={() => this._exportFile('PDF')}>导出PDF</Button>
     </div>, {
       title: '文件导出'
     })
