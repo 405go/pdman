@@ -164,6 +164,15 @@ function createWindow() {
     }
     event.returnValue = jarPath;
   });
+  ipcMain.on("wordPath", (event) => {
+    let wordPath = '';
+    if (process.env.NODE_ENV === 'development') {
+      wordPath = path.join(__dirname, '../public/word/template.doc');
+    } else {
+      wordPath = path.join(__dirname, '../word/template.doc')
+    }
+    event.returnValue = wordPath;
+  });
   // 添加主线程监听
   ipcMain.on("loadingSuccess", (event) => {
     win.setResizable(true);

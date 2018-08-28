@@ -5,6 +5,7 @@ import * as Com from '../components';
 import defaultData from './defaultData';
 import JavaHomeConfig from './JavaHomeConfig';
 import SQLConfig from './SQLConfig';
+import WORDConfig from './WORDConfig';
 
 import './style/setting.less';
 import { uuid } from '../utils/uuid';
@@ -25,6 +26,7 @@ export default class Setting extends React.Component{
     this.inputInstance = [];
     this.javaConfig = _object.get(props.dataSource, 'profile.javaConfig', {});
     this.sqlConfig = _object.get(props.dataSource, 'profile.sqlConfig', '/*SQL@Run*/');
+    this.wordTemplateConfig = _object.get(props.dataSource, 'profile.wordTemplateConfig', '');
     this.dbs = _object.get(props.dataSource, 'profile.dbs', []);
   }
   componentDidMount(){
@@ -45,6 +47,7 @@ export default class Setting extends React.Component{
         javaConfig: this.javaConfig,
         sqlConfig: this.sqlConfig,
         dbs: this.dbs,
+        wordTemplateConfig: this.wordTemplateConfig,
       }
     };
   };
@@ -368,6 +371,9 @@ export default class Setting extends React.Component{
   _sqlSeparatorChange = (data) => {
     this.sqlConfig = data;
   };
+  _wordTemplateChange = (data) => {
+    this.wordTemplateConfig = data;
+  };
   render(){
     const { height, selectedTrs, fields } = this.state;
     const { prefix = 'pdman', columnOrder, dataSource, project } = this.props;
@@ -387,6 +393,10 @@ export default class Setting extends React.Component{
           onClick={() => this._tabClick('SQL')}
           className={`${prefix}-data-table-content-tab${this.state.tabShow === 'SQL' ? '-selected' : '-unselected'}`}
         >SQL分隔符配置</div>
+        <div
+          onClick={() => this._tabClick('word')}
+          className={`${prefix}-data-table-content-tab${this.state.tabShow === 'word' ? '-selected' : '-unselected'}`}
+        >WORD模板配置</div>
       </div>
       <div className={`${prefix}-data-tab-content`}>
         <div style={{ width: '100%', display: this.state.tabShow === 'fields' ? '' : 'none' }}>
@@ -530,6 +540,9 @@ export default class Setting extends React.Component{
         </div>
         <div style={{ width: '100%', display: this.state.tabShow === 'SQL' ? '' : 'none' }}>
           <SQLConfig onChange={this._sqlSeparatorChange} data={this.sqlConfig}/>
+        </div>
+        <div style={{ width: '100%', display: this.state.tabShow === 'word' ? '' : 'none' }}>
+          <WORDConfig onChange={this._wordTemplateChange} data={this.wordTemplateConfig}/>
         </div>
       </div>
     </div>);

@@ -293,6 +293,10 @@ function writeFile(file, dataBuffer) {
   });
 }
 
+function copyFileSync(from, to) {
+  return fs.writeFileSync(to, fs.readFileSync(from));
+}
+
 export {
   fileExist,
   ensureDirectoryExistence,
@@ -312,4 +316,5 @@ export {
   getDirListPromise,
   getDirNamePromise,
   writeFile,
+  copyFileSync,
 };
