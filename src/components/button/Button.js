@@ -11,12 +11,26 @@ class Button extends React.Component {
       selectColor: '#E3F1FA',
       defaultBorder: '1px solid #ADADAD',
       defaultColor: '#E3E3E3',
+      loading: props.loading,
     };
   }
-
+  componentWillReceiveProps(nextProps){
+    if (nextProps.loading !== this.props.loading) {
+      this.setState({
+        loading: nextProps.loading,
+      });
+    }
+  }
+  _setLoading = (flag) => {
+    this.setState({
+      loading: flag,
+    });
+  };
   _onClick = () => {
     const { onClick } = this.props;
-    onClick && onClick();
+    onClick && onClick({
+      setLoading: this._setLoading,
+    });
   };
 
   _mouseOver = () => {
@@ -34,7 +48,8 @@ class Button extends React.Component {
   };
 
   render() {
-    const { type, children, style, icon, title, loading } = this.props;
+    const { loading } = this.state;
+    const { type, children, style, icon, title } = this.props;
     return (<button
       disabled={loading}
       title={title}

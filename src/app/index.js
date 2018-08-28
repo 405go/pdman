@@ -264,7 +264,7 @@ export default class App extends React.Component {
     const tempArray = tempItem.split('/');
     return tempArray[tempArray.length - 1];
   };
-  _exportFile = (type) => {
+  _exportFile = (type, btn) => {
     const { dataSource, columnOrder, writeFile, openDir, project, projectDemo } = this.props;
     if (type === 'Markdown') {
       // 先生成文件
@@ -302,6 +302,7 @@ export default class App extends React.Component {
       const postfix = type === 'Word' ? 'doc' : 'pdf';
       openDir((dir) => {
         // 保存图片
+        btn && btn.setLoading(true);
         const projectName = projectDemo || this._getProjectName(project);
         saveImage(dataSource, columnOrder, writeFile, (images) => {
           const imagesPath = `${dir}/${projectName}_files/`;
@@ -326,6 +327,7 @@ export default class App extends React.Component {
               imageExt: '.png',
               outputFileName: `${dir}/${projectName}.${postfix}`,
             }, (error, stdout, stderr) => {
+              btn && btn.setLoading(false);
               if (error || stderr) {
                 Message.error({title: `${type}！导出失败!请重试`});
               } else {
@@ -338,11 +340,16 @@ export default class App extends React.Component {
     } else if (type === 'Html') {
       openDir((dir) => {
         // 保存图片
+        btn && btn.setLoading(true);
         const projectName = projectDemo || this._getProjectName(project);
         saveImage(dataSource, columnOrder, writeFile, (images) => {
           generateHtml(dataSource, images, projectName, (dataSource) => {
             writeFile(`${dir}/${projectName}.html`, dataSource).then(() => {
+              btn && btn.setLoading(false);
               Message.success({title: `html导出成功！导出目录：[${dir}]`});
+            }).catch(() => {
+              Message.success({title: 'SQL文件导出失败！'});
+              btn && btn.setLoading(false);
             });
           });
         });
@@ -366,8 +373,12 @@ export default class App extends React.Component {
             if (file) {
               const data = modal.com.getData();
               writeFile(file, data).then(() => {
+                //btn.setLoading(false);
                 Message.success({title: `SQL文件导出成功！导出路径：[${file}]`});
                 modal && modal.close();
+              }).catch(() => {
+                Message.success({title: 'SQL文件导出失败！'});
+                //btn.setLoading(false);
               });
             }
           });
@@ -394,9 +405,9 @@ export default class App extends React.Component {
   _export = () => {
     // 打开弹窗，选择导出html或者word
     openModal(<div style={{textAlign: 'center', padding: 10}}>
-      <Button icon='HTML' onClick={() => this._exportFile('Html')}>导出HTML</Button>
-      <Button icon='wordfile1' style={{marginLeft: 40}} onClick={() => this._exportFile('Word')}>导出WORD</Button>
-      <Button icon='pdffile1' style={{marginLeft: 40}} onClick={() => this._exportFile('PDF')}>导出PDF</Button>
+      <Button icon='HTML' onClick={(btn) => this._exportFile('Html', btn)}>导出HTML</Button>
+      <Button icon='wordfile1' style={{marginLeft: 40}} onClick={(btn) => this._exportFile('Word', btn)}>导出WORD</Button>
+      <Button icon='pdffile1' style={{marginLeft: 40}} onClick={(btn) => this._exportFile('PDF', btn)}>导出PDF</Button>
     </div>, {
       title: '文件导出'
     })
