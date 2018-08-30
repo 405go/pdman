@@ -1715,13 +1715,13 @@ export default class DatabaseVersion extends React.Component{
         <div className='pdman-db-version-opt'>
           <span style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
           切换数据库：
-          <Select value={currentDB} style={{minWidth: 200}} onChange={this._dbChange}>
-            <option key='' value=''>-请选择-</option>
-            {
-              dbs.map(db => (<option key={db.name} value={db.name}>{db.name}</option>))
-            }
-          </Select>
-        </span>
+            <Select value={currentDB} style={{minWidth: 200}} onChange={this._dbChange}>
+              <option key='' value=''>-请选择-</option>
+              {
+                dbs.map(db => (<option key={db.name} value={db.name}>{db.name}</option>))
+              }
+            </Select>
+          </span>
           <div
             className='pdman-db-version-opt-setting'
             onClick={this._JDBCConfig}
@@ -1814,13 +1814,13 @@ export default class DatabaseVersion extends React.Component{
                       >
                         {
                           !compareStringVersion(v.version, dbVersion) ? '已同步' :
-                            <span>
-                              {synchronous[v.version] ?
-                                <span>
-                                  <Icon className='anticon-spin' type='loading1' style={{marginRight: 5}}/>
-                                  正在同步
-                                </span> : '未同步'}
-                            </span>
+                          <span>
+                            {synchronous[v.version] ?
+                              <span>
+                                <Icon className='anticon-spin' type='loading1' style={{marginRight: 5}}/>
+                                正在同步
+                              </span> : '未同步'}
+                          </span>
                         }
                       </div>
                       <span

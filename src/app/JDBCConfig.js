@@ -67,7 +67,7 @@ export default class JDBCConfig extends React.Component{
       onChange && onChange(this.state.data.map(field => _object.omit(field, ['key'])));
     });
   };
-  _addDB = (e) => {
+  _addDB = () => {
     const { onChange } = this.props;
     const { data = [], selectedTrs } = this.state;
     const tempFields = [...data];

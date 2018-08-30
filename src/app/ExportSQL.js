@@ -257,7 +257,7 @@ export default class ExportSQL extends React.Component{
                         style={{ marginLeft: 10, cursor: 'pointer' }}
                       >
                       0/0
-                    </span>
+                      </span>
                       <Icon style={{ marginLeft: 10, cursor: 'pointer' }} type='arrowdown' onClick={this._selectNext}/>
                       <Icon style={{ marginLeft: 10, cursor: 'pointer' }} type='arrowup' onClick={this._selectPre}/>
                     </div>
@@ -303,7 +303,7 @@ export default class ExportSQL extends React.Component{
                         style={{ marginLeft: 10, cursor: 'pointer' }}
                       >
                       0/0
-                    </span>
+                      </span>
                       <Icon style={{ marginLeft: 10, cursor: 'pointer' }} type='arrowdown' onClick={this._selectNext}/>
                       <Icon style={{ marginLeft: 10, cursor: 'pointer' }} type='arrowup' onClick={this._selectPre}/>
                     </div>
@@ -394,9 +394,9 @@ export default class ExportSQL extends React.Component{
           alignItems: 'center',
           padding: 5,
         }}>
-        <span style={{width: 140, textAlign: 'right'}}>
-          自定义导出内容:
-        </span>
+          <span style={{width: 140, textAlign: 'right'}}>
+            自定义导出内容:
+          </span>
           <div style={{display: 'flex', flexWrap: 'wrap'}}>
             <div style={{display: 'flex'}}>
               <Checkbox

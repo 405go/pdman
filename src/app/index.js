@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDom from 'react-dom';
 import _object from 'lodash/object';
 import electron from 'electron';
-import {Icon, Tree, Context, Tab, Modal, Message, openModal, Button, Editor} from '../components';
+import {Icon, Tree, Context, Tab, Modal, Message, openModal, Button} from '../components';
 import { ensureDirectoryExistence } from '../utils/json';
 import { addOnResize } from '../../src/utils/listener';
 import { generate } from '../../src/utils/markdown';
