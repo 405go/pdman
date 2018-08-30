@@ -16,7 +16,7 @@ export default class WORDConfig extends React.Component{
     };
   }
   _openDir = (callBack) => {
-    const filter = [{name: 'word模板文件', extensions: ['doc', 'docx']}];
+    const filter = [{name: 'word模板文件', extensions: ['docx']}];
     dialog.showOpenDialog({
       title: 'Open File',
       properties:['openFile'],
@@ -43,7 +43,7 @@ export default class WORDConfig extends React.Component{
     dialog.showSaveDialog({
         title: 'Save as',
         filters: [
-          { name: 'word模板文件', extensions: ['doc'] },
+          { name: 'word模板文件', extensions: ['docx'] },
         ],
       },(file) => {
       if (file) {

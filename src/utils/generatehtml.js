@@ -96,7 +96,7 @@ const generateRelation = (moduleName, images, projectName) => {
   ![Alt text](/path/to/img.jpg "Optional title")
    */
   if (images[moduleName]) {
-    return `<img style="width: 100%;margin-top: 10px" src="${images[moduleName]}" title="${moduleName}-关系图"/>`;
+    return `<img style="width: auto;margin-top: 10px" src="${images[moduleName]}" title="${moduleName}-关系图"/>`;
   }
   return `<span>该模块未配置关系图</span>`;
 };

@@ -323,7 +323,8 @@ const renderRelation = (data, id) => {
   });
   const net = new G6.Net({
     id: id,      // 容器ID
-    height: window.innerHeight,
+    height: 2000,
+    width: 2000,
     fitView: 'autoZoom',
   });
   net.source(data.nodes, data.edges);
@@ -352,10 +353,13 @@ export const saveImage = (dataSource, columnOrder, writeFile, callBack) => {
         const id = uuid();
         const tempDom = document.createElement('div');
         tempDom.setAttribute('id', id);
+        tempDom.style.width = '2000px';
+        tempDom.style.height = '2000px';
         document.body.appendChild(tempDom);
         dom[id] = tempDom;
         // 渲染关系图
         const net = renderRelation(data, id);
+        //net.autoZoom();
         const graphContainer = net.get('graphContainer');
         // 将关系图转成canvas
         setTimeout(() => {
@@ -363,7 +367,7 @@ export const saveImage = (dataSource, columnOrder, writeFile, callBack) => {
             // 生成base64的图片
             images[module.name] = canvas.toDataURL('image/png');
             // 删除所有的DOM
-            dom[id] && dom[id].parentNode.removeChild(dom[id]);
+            // dom[id] && dom[id].parentNode.removeChild(dom[id]);
             res();
           });
         })
