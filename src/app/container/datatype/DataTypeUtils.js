@@ -103,6 +103,22 @@ export const renameDataType = (dataTypeCode, dataSource, callBack) => {
         modal && modal.close();
         callBack && callBack({
           ...dataSource,
+          // 修改所有已经使用的该数据类型的字段的dataType
+          modules: (dataSource.modules || []).map(m => ({
+            ...m,
+            entities: (m.entities || []).map(e => ({
+              ...e,
+              fields: (e.fields || []).map((f) => {
+                if (f.type === dataTypeCode) {
+                  return {
+                    ...f,
+                    type: tempDataType.code,
+                  };
+                }
+                return f;
+              }),
+            })),
+          })),
           dataTypeDomains: {
             ...(dataSource.dataTypeDomains || {}),
             datatype: _object.get(dataSource, 'dataTypeDomains.datatype', [])
