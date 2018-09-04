@@ -330,12 +330,13 @@ export default class App extends React.Component {
               btn && btn.setLoading(false);
               if (error || stderr) {
                 Modal.error({
-                  title: `${type}！导出失败!请重试！`,
+                  title: `${type}导出失败!请重试！`,
                   message: `出错原因：${stderr || error}`,
                 });
               } else {
-                Message.success({
-                  title: `${type}！导出目录：[${dir}]`
+                Modal.success({
+                  title: `${type}导出成功！`,
+                  message: `文件存储目录：[${dir}]`
                 });
               }
             });
