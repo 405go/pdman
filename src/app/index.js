@@ -636,6 +636,24 @@ export default class App extends React.Component {
     }
     return '';
   };
+  _getTabRealName = (value) => {
+    const { dataSource } = this.props;
+    const newTempValues = value.replace('&', '/').split('/');
+    let tempTitle = value;
+    const module = newTempValues[0];
+    const entity = newTempValues[1];
+    const moduleData = (dataSource.modules || []).filter(m => m.name === module)[0];
+    let entityData = null;
+    if (moduleData) {
+      entityData = (moduleData.entities || []).filter(e => e.title === entity)[0];
+    }
+    if (entityData) {
+      tempTitle = entityData && this._getTableNameByNameTemplate(entityData);
+    } else {
+      tempTitle = `${module}[${entity}]`
+    }
+    return tempTitle;
+  }
   _onDoubleClick = (value) => {
     const { dataSource, project, saveProject } = this.props;
     if (value.startsWith('datatype&data&')) {
@@ -1512,6 +1530,7 @@ export default class App extends React.Component {
                 >
                   {tabs.filter(lefttab => !lefttab.folding).map((leftTab) => {
                     return (<TabPane
+                      realName={this._getTabRealName(leftTab.title)}
                       icon={leftTab.icon}
                       title={leftTab.title.replace('&', '/')}
                       key={leftTab.key}
