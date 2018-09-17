@@ -41,12 +41,13 @@ export default class Loading extends React.Component{
             histories: res.histories || [],
             width: '100%',
           });
-        }).catch(() => {
+        }).catch((e) => {
           this.setState({
             width: '100%',
           });
           Modal.error({
             title: '读取系统配置失败!',
+            message: e.message,
           });
         });
       } else {

@@ -60,7 +60,7 @@ function readFilePromise(filePath) {
         try {
           resolve(JSON.parse(data.toString()));
         } catch (e) {
-          Modal.error({title: '打开文件失败！', message: JSON.stringify(e) + filePath});
+          reject(e);
         }
       }
     });
