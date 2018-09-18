@@ -272,6 +272,7 @@ export default class App extends React.Component {
       // 选择目录
       openDir((dir) => {
         // 保存图片
+        btn && btn.setLoading(true);
         const imagePaths = {};
         const projectName = projectDemo || this._getProjectName(project);
         saveImage(dataSource, columnOrder, writeFile, (images) => {
@@ -281,7 +282,7 @@ export default class App extends React.Component {
             return new Promise((res) => {
               // 判断图片目录是否存在
               ensureDirectoryExistence(`${dir}/${projectName}_files/`);
-              writeFile(`${dir}/${projectName}_files/${mo}-image.png`, dataBuffer).then(() => {
+              writeFile(`${dir}/${projectName}_files/${mo}.png`, dataBuffer).then(() => {
                 imagePaths[mo] = `${mo}-image.png`;
                 res();
               });
@@ -292,7 +293,11 @@ export default class App extends React.Component {
               // 将数据保存到文件
               writeFile(`${dir}/${projectName}.md`, dataSource).then(() => {
                 // md保存成功
-                Message.success({title: `markdown导出成功！导出目录：[${dir}]`});
+                btn && btn.setLoading(false);
+                Modal.success({
+                  title: `${type}导出成功！`,
+                  message: `文件存储目录：[${dir}]`
+                });
               });
             });
           });
@@ -415,6 +420,7 @@ export default class App extends React.Component {
       <Button icon='HTML' onClick={(btn) => this._exportFile('Html', btn)}>导出HTML</Button>
       <Button icon='wordfile1' style={{marginLeft: 40}} onClick={(btn) => this._exportFile('Word', btn)}>导出WORD</Button>
       <Button icon='pdffile1' style={{marginLeft: 40}} onClick={(btn) => this._exportFile('PDF', btn)}>导出PDF</Button>
+      <Button icon='file1' style={{marginLeft: 40}} onClick={(btn) => this._exportFile('Markdown', btn)}>导出MARKDOWN</Button>
     </div>, {
       title: '文件导出'
     })
