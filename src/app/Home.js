@@ -179,7 +179,7 @@ export default class Home extends React.Component{
     if (type === 'all') {
       temp = [];
     } else {
-      temp = temp.filter(h => h !== history);
+      temp = temp.filter(h => h !== history.split('.pdman.json')[0]);
     }
     this.setState({
       histories: temp,
