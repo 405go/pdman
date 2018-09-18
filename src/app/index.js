@@ -11,12 +11,14 @@ import Table from './container/table';
 import DataType from './container/datatype';
 import Database from './container/database';
 import Relation from './container/relation';
+import ExportImg from './ExportImg';
 
 import Setting from './Setting';
 
 import './style/index.less';
 
 const { ipcRenderer } = electron;
+const { dialog } = electron.remote;
 const moduleUtils = Module.Utils;
 const tableUtils = Table.Utils;
 const DataTypeUtils = DataType.DataTypeUtils;
@@ -1021,6 +1023,30 @@ export default class App extends React.Component {
     const { show } = this.state;
     this.relationInstance[show] && this.relationInstance[show].onZoom(zoom);
   };
+  _exportImage = () => {
+    openModal(<ExportImg/>, {
+      title: '选择图片导出类型',
+      onOk: (modal, com) => {
+        modal.close();
+        const type = com.getType();
+        // 打开选择图片存储路径的对话框
+        dialog.showSaveDialog({
+          title: '选择图片存储路径',
+          filters: [
+            { name: 'image/jpg', extensions: ['jpg'] },
+            { name: 'image/png', extensions: ['png'] },
+          ],
+        }, (file) => {
+          if (file) {
+            const { show } = this.state;
+            this.relationInstance[show] && this.relationInstance[show].exportImg(file, type, () => {
+              Message.success({title: '图片导出成功！'})
+            });
+          }
+        });
+      }
+    });
+  };
   render() {
     const { dataSource, project, saveProject, changeDataType,
       dataHistory, saveProjectSome, columnOrder, writeFile } = this.props;
@@ -1174,6 +1200,10 @@ export default class App extends React.Component {
               className={`tools-content-${clicked === 'edit' ? 'clicked' : 'clickeable'}`}
               onClick={() => this._changeMode('edit')}
             ><Icon type="fa-edit"/>编辑模式</div>
+            <div
+              className='tools-content-clickeable'
+              onClick={() => this._exportImage()}
+            ><Icon type="fa-file-image-o"/>导出图片</div>
           </div>
           <div className="tools-content-tab" style={{display: tabs.length > 0 && tools === 'entity' ? '' : 'none'}}>
             <div

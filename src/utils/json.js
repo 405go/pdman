@@ -1,6 +1,5 @@
 import fs from 'fs';
 import path from 'path';
-import { Modal } from '../components';
 
 // 判断文件是否存在
 function fileExist(filePath) {
