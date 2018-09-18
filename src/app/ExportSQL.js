@@ -19,6 +19,7 @@ import {
 import { getAllDataSQLByFilter } from '../utils/json2code';
 import {fileExist, fileExistPromise, readFilePromise, saveFilePromise} from '../utils/json';
 import defaultConfig from '../../profile';
+import { addOnResize } from '../../src/utils/listener';
 
 const { remote, ipcRenderer } = electron;
 const { app } = remote;
@@ -44,6 +45,7 @@ export default class ExportSQL extends React.Component{
       data: getAllDataSQLByFilter(props.dataSource,
         props.defaultDb, ['deleteTable', 'createTable', 'createIndex', 'updateComment']),
       loading: false,
+      editorWidth: '400px',
     };
   }
   componentDidMount(){
@@ -59,6 +61,8 @@ export default class ExportSQL extends React.Component{
         },
       });
     });
+    addOnResize(this._getEditorWidth);
+    this._getEditorWidth();
   }
   getData = () => {
     return this.state.data;
@@ -74,6 +78,14 @@ export default class ExportSQL extends React.Component{
       value: tempValue,
       defaultDb: this.state.defaultDb,
     };
+  };
+  _getEditorWidth = () => {
+    if (this.instance) {
+      const width = this.instance.offsetWidth;
+      this.setState({
+        editorWidth: `${width - 400}px`,
+      });
+    }
   };
   _exportChange = (e) => {
     this.setState({
@@ -335,11 +347,11 @@ export default class ExportSQL extends React.Component{
   };
   render() {
     const { database } = this.props;
-    const { data, defaultDb, selectTable, loading } = this.state;
-    return (<div style={{display: 'flex'}}>
+    const { data, defaultDb, selectTable, loading, editorWidth } = this.state;
+    return (<div style={{display: 'flex'}} ref={instance => this.instance = instance}>
       <div
         style={{
-          width: 'calc(100% - 400px)',
+          width: '400px',
           border: 'solid 1px #DFDFDF',
           display: 'flex',
           flexDirection: 'column',
@@ -378,8 +390,9 @@ export default class ExportSQL extends React.Component{
           alignItems: 'center',
           padding: 5,
         }}>
-          <span style={{width: 151, textAlign: 'right'}}>导出内容:</span>
+          <span style={{width: 110, textAlign: 'right'}}>导出内容:</span>
           <RadioGroup
+            groupStyle={{width: 'calc(100% - 110px)'}}
             name='export'
             title='数据表导出内容'
             value={this.state.export}
@@ -394,7 +407,7 @@ export default class ExportSQL extends React.Component{
           alignItems: 'center',
           padding: 5,
         }}>
-          <span style={{width: 140, textAlign: 'right'}}>
+          <span style={{width: 110, textAlign: 'right', minWidth: 110}}>
             自定义导出内容:
           </span>
           <div style={{display: 'flex', flexWrap: 'wrap'}}>
@@ -456,7 +469,7 @@ export default class ExportSQL extends React.Component{
         </div>
         <Editor
           height='300px'
-          width='400px'
+          width={editorWidth}
           mode={this._getMode(defaultDb)}
           value={data}
           onChange={this._valueChange}
