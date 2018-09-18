@@ -4,6 +4,7 @@ import G6 from '@antv/g6';
 import _object from 'lodash/object';
 import { Context, openModal, Icon, Modal } from '../../../components';
 import RelationEdit from './RelationEdit';
+import { writeFile } from '../../../utils/json';
 import './style/index.less';
 
 G6.track(false);
@@ -193,6 +194,25 @@ export default class Relation extends React.Component{
   };
   setNodes = (nodes) => {
     this.newNodes = nodes;
+  };
+  exportImg = (path, type, callback) => {
+    // 导出图片
+    const matrixStash = this.net.getMatrix();
+    if (type === 'all') {
+      this.net.autoZoom();
+    }
+    setTimeout(() => {
+      const graphContainer = this.net.get('graphContainer');
+      const imageType = path.endsWith('.jpg') ? 'jpg' : 'png';
+      html2canvas(graphContainer).then(canvas => {
+        const dataBuffer = new Buffer(canvas.toDataURL(`image/${imageType}`).replace(/^data:image\/\w+;base64,/, ""), 'base64');
+        writeFile(path, dataBuffer).then(() => {
+          callback && callback(path);
+          this.net.updateMatrix(matrixStash);
+          this.net.refresh();
+        });
+      });
+    });
   };
   saveData = (callBack) => {
     this.graphCanvas = this.net.save().source;

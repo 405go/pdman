@@ -10,8 +10,8 @@ export default class RadioGroup extends React.Component{
     onChange && onChange(value);
   };
   render(){
-    const { children, name = uuid(), title, value } = this.props;
-    return (<div style={{width: '100%', display: 'flex'}}>
+    const { children, name = uuid(), title, value, groupStyle } = this.props;
+    return (<div style={{width: '100%', display: 'flex', ...groupStyle}}>
       {
         [].concat(children)
           .map(c =>
