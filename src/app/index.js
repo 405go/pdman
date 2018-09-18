@@ -301,6 +301,12 @@ export default class App extends React.Component {
               });
             });
           });
+        }, (err) => {
+          btn && btn.setLoading(false);
+          Modal.error({
+            title: `${type}导出失败!请重试！`,
+            message: `出错原因：${err.message}`,
+          });
         });
       });
     } else if (type === 'Word' || type === 'PDF') {
@@ -347,6 +353,12 @@ export default class App extends React.Component {
               }
             });
           });
+        }, (err) => {
+          btn && btn.setLoading(false);
+          Modal.error({
+            title: `${type}导出失败!请重试！`,
+            message: `出错原因：${err.message}`,
+          });
         });
       });
     } else if (type === 'Html') {
@@ -363,6 +375,12 @@ export default class App extends React.Component {
               Message.success({title: 'SQL文件导出失败！'});
               btn && btn.setLoading(false);
             });
+          });
+        }, (err) => {
+          btn && btn.setLoading(false);
+          Modal.error({
+            title: `${type}导出失败!请重试！`,
+            message: `出错原因：${err.message}`,
           });
         });
       });

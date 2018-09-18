@@ -339,41 +339,55 @@ const renderRelation = (data, id) => {
   return net;
 };
 
-export const saveImage = (dataSource, columnOrder, writeFile, callBack) => {
+const createNotRelationDom = () => {
+  const dom = document.createElement('div');
+  dom.innerText = '未绘制关系图';
+  dom.style.width = '200px';
+  dom.style.height = '200px';
+  dom.style.textAlign = 'center';
+  return dom;
+};
+
+export const saveImage = (dataSource, columnOrder, writeFile, callBack, errorCallback) => {
   // 循环渲染每个模块的关系图
   const modules = _object.get(dataSource, 'modules', []);
   const images = {};
   Promise.all(modules.map((module) => {
-    return new Promise((res) => {
+    return new Promise((res, rej) => {
+      // 创建容器
+      const id = uuid();
+      const tempDom = document.createElement('div');
+      tempDom.setAttribute('id', id);
+      tempDom.style.width = '2000px';
+      tempDom.style.height = '2000px';
+      document.body.appendChild(tempDom);
+      dom[id] = tempDom;
       const data = getData(dataSource, module.name, columnOrder);
+      let graphContainer = null;
       if (data.nodes && data.nodes.length === 0) {
-        res();
+        graphContainer = createNotRelationDom();
+        dom[id].appendChild(graphContainer);
       } else {
-        // 创建容器
-        const id = uuid();
-        const tempDom = document.createElement('div');
-        tempDom.setAttribute('id', id);
-        tempDom.style.width = '2000px';
-        tempDom.style.height = '2000px';
-        document.body.appendChild(tempDom);
-        dom[id] = tempDom;
         // 渲染关系图
         const net = renderRelation(data, id);
-        //net.autoZoom();
-        const graphContainer = net.get('graphContainer');
-        // 将关系图转成canvas
-        setTimeout(() => {
-          html2canvas(graphContainer).then(canvas => {
-            // 生成base64的图片
-            images[module.name] = canvas.toDataURL('image/png');
-            // 删除所有的DOM
-            // dom[id] && dom[id].parentNode.removeChild(dom[id]);
-            res();
-          });
-        })
+        graphContainer = net.get('graphContainer');
       }
+      // 将关系图转成canvas
+      setTimeout(() => {
+        html2canvas(graphContainer).then(canvas => {
+          // 生成base64的图片
+          images[module.name] = canvas.toDataURL('image/png');
+          // 删除所有的DOM
+          dom[id] && dom[id].parentNode.removeChild(dom[id]);
+          res();
+        }).catch(err => {
+          rej(err);
+        });
+      })
     })
   })).then(() => {
     callBack && callBack(images);
+  }).catch(err => {
+    errorCallback && errorCallback(err);
   });
 };
