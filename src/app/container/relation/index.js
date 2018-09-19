@@ -6,6 +6,7 @@ import { Context, openModal, Icon, Modal } from '../../../components';
 import RelationEdit from './RelationEdit';
 import { writeFile } from '../../../utils/json';
 import './style/index.less';
+import { uuid } from '../../../utils/uuid';
 
 G6.track(false);
 
@@ -196,10 +197,20 @@ export default class Relation extends React.Component{
     this.newNodes = nodes;
   };
   exportImg = (path, type, callback) => {
-    // 导出图片
-    const matrixStash = this.net.getMatrix();
+    const tempNet = this.net;
+    let tempDom = null;
     if (type === 'all') {
-      this.net.autoZoom();
+      // 1.创建一个临时的dom节点
+      const id = uuid();
+      tempDom = document.createElement('div');
+      tempDom.setAttribute('id', id);
+      tempDom.style.width = '2000px';
+      tempDom.style.height = '2000px';
+      document.body.appendChild(tempDom);
+      // 2.缓存当前的net对象
+      const dataSource = this.net.save().source;
+      // 3.渲染新的关系图
+      this._renderRelation(2000, 2000, dataSource, null, id, 'autoSize');
     }
     setTimeout(() => {
       const graphContainer = this.net.get('graphContainer');
@@ -208,8 +219,8 @@ export default class Relation extends React.Component{
         const dataBuffer = new Buffer(canvas.toDataURL(`image/${imageType}`).replace(/^data:image\/\w+;base64,/, ""), 'base64');
         writeFile(path, dataBuffer).then(() => {
           callback && callback(path);
-          this.net.updateMatrix(matrixStash);
-          this.net.refresh();
+          this.net = tempNet;
+          tempDom && tempDom.parentNode.removeChild(tempDom);
         });
       });
     });
@@ -377,7 +388,7 @@ export default class Relation extends React.Component{
     }
       return clickPoint;
   };
-  _renderRelation = (paintHeight, paintWidth, data) => {
+  _renderRelation = (paintHeight, paintWidth, data, dataSource, id, fitView) => {
     const Util = G6.Util;
     const getDefaultDataType = this._getDefaultDataType;
     /* eslint-disable */
@@ -555,11 +566,11 @@ export default class Relation extends React.Component{
       },
     });
     this.net = new G6.Net({
-      id: `paint-${this.props.value}`,      // 容器ID
+      id: id || `paint-${this.props.value}`,      // 容器ID
       height: paintHeight,
       width: paintWidth,
       mode: 'edit',
-      //fitView: 'cc',
+      fitView: fitView,
       grid: {
         forceAlign: true, // 是否支持网格对齐
         cell: 10,         // 网格大小

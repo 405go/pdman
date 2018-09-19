@@ -33,7 +33,7 @@ export default class Loading extends React.Component{
     };
   }
   componentDidMount() {
-    webFrame.setZoomLevelLimits(1, 1);
+    webFrame.setVisualZoomLevelLimits(1, 1);
     setTimeout(() => {
       if (fileExist(this.historyPath)) {
         readFilePromise(this.historyPath).then((res) => {
