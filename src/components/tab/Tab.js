@@ -97,7 +97,7 @@ class Tab extends React.Component {
           {
             [].concat(children)
               .map(child => (<div
-                title={child.props.title}
+                title={child.props.realName || child.props.title}
                 style={{
                   alignItems: 'center',
                   display: 'flex',
@@ -122,7 +122,7 @@ class Tab extends React.Component {
                   textOverflow: 'ellipsis',
                   whiteSpace: 'nowrap',
                 }}
-              >{child.props.title}</span>
+              >{child.props.realName || child.props.title}</span>
                 {
                   type === 'edit' ? <Icon
                     onClick={(e) => this._iconCloseClick(e, child.key)}
