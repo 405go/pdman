@@ -176,7 +176,7 @@ export const renameModule = (oldName, dataSource, cb) => {
               ...module,
             };
           }),
-        });
+        }, tempModuleName);
       }
     },
   });
