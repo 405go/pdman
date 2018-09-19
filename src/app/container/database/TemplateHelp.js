@@ -91,14 +91,14 @@ export default class TemplateHelp extends React.Component{
           onClick={() => this._templateTabClick('updateFieldTemplate')}
           className={`${prefix}-data-table-content-tab${this.state.templateShow === 'updateFieldTemplate' ? '-selected' : '-unselected'}`}
         >
-          删除字段
+          修改字段
         </div>
 
         <div
           onClick={() => this._templateTabClick('deleteFieldTemplate')}
           className={`${prefix}-data-table-content-tab${this.state.templateShow === 'deleteFieldTemplate' ? '-selected' : '-unselected'}`}
         >
-          修改字段
+          删除字段
         </div>
 
         <div
