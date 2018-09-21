@@ -5,6 +5,38 @@ import { openModal, Input, Modal } from '../../../components';
 
 const clipboard = require('electron').clipboard;
 
+class ModuleForm extends React.Component{
+  render() {
+    const { onChange, validate, defaultValue } = this.props;
+    return (
+      <div>
+        <div style={{display: 'flex', padding: 5}}>
+          <span style={{width: 100, textAlign: 'right', paddingRight: 5}}>
+            模块名:
+          </span>
+          <Input
+            autoFocus
+            style={{width: 'calc(100% - 100px)'}}
+            validate={validate}
+            onChange={e => onChange('name', e)}
+            defaultValue={defaultValue.name}
+          />
+        </div>
+        <div style={{display: 'flex', padding: 5}}>
+          <span style={{width: 100, textAlign: 'right', paddingRight: 5}}>
+            中文名:
+          </span>
+          <Input
+            style={{width: 'calc(100% - 100px)'}}
+            onChange={e => onChange('chnname', e)}
+            defaultValue={defaultValue.chnname}
+          />
+        </div>
+      </div>
+    );
+  }
+}
+
 const getAllTable = (dataSource) => {
   return (dataSource.modules || []).reduce((a, b) => {
     return a.concat((b.entities || []).map(entity => entity.title));
@@ -38,9 +70,14 @@ export const addModule = (dataSource, cb) => {
   // 1.弹窗输入信息
   // 2.保存输入的信息，触发回调
   let tempModuleName = '';
+  let tempModuleChnname = '';
   let flag = true;
-  const onChange = (e) => {
-    tempModuleName = e.target.value;
+  const onChange = (name, e) => {
+    if (name === 'name') {
+      tempModuleName = e.target.value;
+    } else {
+      tempModuleChnname = e.target.value;
+    }
   };
   const modules = (dataSource.modules || []).map(module => module.name);
   const validate = () => {
@@ -55,9 +92,11 @@ export const addModule = (dataSource, cb) => {
     }
     return '';
   };
-  openModal(<div>
-    <Input autoFocus onChange={onChange} style={{width: '100%'}} validate={validate}/>
-  </div>, {
+  openModal(<ModuleForm
+    validate={validate}
+    onChange={onChange}
+    defaultValue={{name: '', chnname: ''}}
+  />, {
     title: 'PDMan-新增模块',
     onOk: (modal) => {
       // 1.修改dataSource
@@ -71,6 +110,7 @@ export const addModule = (dataSource, cb) => {
           ...dataSource,
           modules: (dataSource.modules || []).concat({
             name: tempModuleName,
+            chnname: tempModuleChnname,
             entities: [],
             graphCanvas: {},
           }),
@@ -81,15 +121,23 @@ export const addModule = (dataSource, cb) => {
 };
 
 export const renameModule = (oldName, dataSource, cb) => {
+  const modules = dataSource.modules || [];
+  const oldModuleData = modules.filter(m => m.name === oldName)[0];
+  const oldModuleChnname = (oldModuleData && oldModuleData.chnname) || '';
   // 模块重命名
   let tempModuleName = oldName;
-  const onChange = (e) => {
-    tempModuleName = e.target.value;
+  let tempModuleChnname = oldModuleChnname;
+  const onChange = (name, e) => {
+    if (name === 'name') {
+      tempModuleName = e.target.value;
+    } else {
+      tempModuleChnname = e.target.value;
+    }
   };
-  const modules = (dataSource.modules || []).map(module => module.name);
+  const moduleNames = modules.map(module => module.name);
   let flag = true;
   const validate = () => {
-    const resultName = validateModuleAndNewName(modules, tempModuleName);
+    const resultName = validateModuleAndNewName(moduleNames, tempModuleName);
     flag = true;
     if (resultName !== tempModuleName) {
       flag = false;
@@ -100,14 +148,16 @@ export const renameModule = (oldName, dataSource, cb) => {
     }
     return '';
   };
-  openModal(<div>
-    <Input autoFocus onChange={onChange} style={{ width:'100%' }} validate={validate} defaultValue={oldName}/>
-  </div>, {
+  openModal(<ModuleForm
+    validate={validate}
+    onChange={onChange}
+    defaultValue={{name: oldName, chnname: tempModuleChnname}}
+  />, {
     title: 'PDMan-重命名模块',
     onOk: (modal) => {
       // 1.修改dataSource
-      if (tempModuleName === oldName) {
-        Modal.error({title: '重命名失败', message: '模块名不能与旧名相同'});
+      if (tempModuleName === oldName && tempModuleChnname === oldModuleChnname) {
+        Modal.error({title: '重命名失败', message: '模块信息不能与旧信息相同'});
       } else if (tempModuleName.includes('/') || tempModuleName.includes('&') || tempModuleName.includes(':')) {
         Modal.error({title: '重命名失败', message: '模块名不能包含/或者&或者:'});
       } else {
@@ -119,13 +169,14 @@ export const renameModule = (oldName, dataSource, cb) => {
               return {
                 ...module,
                 name: tempModuleName,
+                chnname: tempModuleChnname,
               };
             }
             return {
               ...module,
             };
           }),
-        });
+        }, tempModuleName);
       }
     },
   });

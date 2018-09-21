@@ -955,8 +955,37 @@ export default class App extends React.Component {
       case 'new': moduleUtils.addModule(dataSource, (data) => {
         saveProject(`${project}.pdman.json`, data);
       }); break;
-      case 'rename': moduleUtils.renameModule(key[2], dataSource, (data) => {
-        saveProject(`${project}.pdman.json`, data);
+      case 'rename': moduleUtils.renameModule(key[2], dataSource, (data, newModule) => {
+        saveProject(`${project}.pdman.json`, data, () => {
+          // 如果有当前模块中已经打开的tab，则需要对其进行更新
+          const { tabs = [], show } = this.state;
+          const oldModule = key[2];
+          let tempShow = show;
+          this.setState({
+            tabs: tabs.map((tab) => {
+              const key = tab.key.replace('/', '&').split('&');
+              const module = key[0];
+              const table = key[1];
+              if (module === oldModule) {
+                // 关系图和实体的key的格式不一致
+                const type = tab.key.includes('&') ? 'entity' : 'map';
+                // 检查当前tab是否已经显示
+                const newKey = type === 'entity' ? `${newModule}&${table}/fa-table` : `${newModule}/关系图/fa-wpforms`;
+                if (tempShow === tab.key) {
+                  tempShow = newKey;
+                }
+                return {
+                  ...tab,
+                  title: type === 'entity' ? `${newModule}&${table}` : `${newModule}/关系图`,
+                  key: newKey,
+                  value: type === 'entity' ? `entity&${newModule}&${table}` : `map&${newModule}/关系图`,
+                };
+              }
+              return tab;
+            }),
+            show: show !== tempShow ? tempShow : show,
+          })
+        });
       }); break;
       case 'delete':
         Modal.confirm(
@@ -1494,7 +1523,13 @@ export default class App extends React.Component {
                   >
                     {
                       (dataSource.modules || []).map((module) => {
-                        return (<TreeNode draggable key={module.name} name={module.name} value={`module&${module.name}`}>
+                        const realName = module.chnname ? `${module.name}-${module.chnname}` : module.name;
+                        return (<TreeNode
+                          draggable
+                          key={module.name}
+                          realName={realName}
+                          name={realName}
+                          value={`module&${module.name}`}>
                           <TreeNode
                             name={<span><Icon
                               type='fa-wpforms'

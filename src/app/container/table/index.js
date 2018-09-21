@@ -49,15 +49,16 @@ class Table extends React.Component {
     // 如果Tab页被激活，则需要有一个提示信息，是否要覆盖
     if (this.props.dataSource !== nextProps.dataSource) {
       // 整体数据发生变化
-      // const newTableName = nextProps.value.split('&')[2];
+      const newModule = nextProps.value.split('&')[1];
       const newTableData =
-        this._initTableData(nextProps.dataSource, this.state.module, this.state.table || this.currentTable, 'same');
+        this._initTableData(nextProps.dataSource, newModule, this.state.table || this.currentTable, 'same');
       const oldTableData = this.dataTable;
       if (nextProps.changeDataType === 'reset') {
         this.setState({
           dataTable: this._initTableData(nextProps.dataSource,
-            this.state.module, this.state.table || this.currentTable),
+            newModule, this.state.table || this.currentTable),
           table: newTableData.title,
+          module: newModule,
         });
         return;
       }
@@ -184,7 +185,7 @@ class Table extends React.Component {
     };
   };
   _initTableData = (dataSource, module, table, type) => {
-    const moduleData = (dataSource.modules || []).filter(mo => mo.name === module)[0];
+    const moduleData = (dataSource.modules || []).filter(mo => mo.name === module)[0] || {};
     let tableData =  (moduleData.entities || []).filter(entity => entity.title === table)[0];
     if (tableData) {
       const fields = (tableData.fields || []).map(field => ({...field, key: `${uuid()}-${field.name}`}));
@@ -643,7 +644,7 @@ class Table extends React.Component {
   };
   /* eslint-disable */
   render() {
-    const { dataTable, codesTabShow } = this.state;
+    const { dataTable = {}, codesTabShow } = this.state;
     const headers = dataTable.headers || [];
     const { prefix = 'pdman', height, dataSource, columnOrder } = this.props;
     const { selectedTrs, module, table } = this.state;
