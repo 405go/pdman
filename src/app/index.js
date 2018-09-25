@@ -283,7 +283,7 @@ export default class App extends React.Component {
               // 判断图片目录是否存在
               ensureDirectoryExistence(`${dir}/${projectName}_files/`);
               writeFile(`${dir}/${projectName}_files/${mo}.png`, dataBuffer).then(() => {
-                imagePaths[mo] = `${mo}-image.png`;
+                imagePaths[mo] = `${mo}.png`;
                 res();
               });
             });

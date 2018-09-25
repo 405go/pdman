@@ -35,7 +35,7 @@ const generateHeader = (dataSource) => {
   const modules = _object.get(dataSource, 'modules', []);
   modules.forEach((module, index) => {
     const entities = module.entities || [];
-    moduleString += `- [<h4 id="module-${module.name}-from">1.${index + 1}. ${module.name}</h4>](#module-${module.name} "${module.name}")\n`;
+    moduleString += `- [<h4 id="module-${module.name}-from">1.${index + 1}. ${module.chnname || module.name}</h4>](#module-${module.name} "${module.name}")\n`;
     moduleString += `\t- [<h5 id="module-${module.name}-relation}-from">1.${index + 1}.1. ${relation}</h5>](#module-${module.name}-relation "${relation}")\n`;
     moduleString += `\t- [<h5 id="module-${module.name}-tableList-from">1.${index + 1}.2. ${tableList}</h5>](#module-${module.name}-tableList "${tableList}")\n`;
     moduleString += `\t- [<h5 id="module-${module.name}-tableColumnList-from">1.${index + 1}.3. ${tableColumnList}</h5>](#module-${module.name}-tableColumnList "${tableColumnList}")\n`;
@@ -141,7 +141,7 @@ const generateModuleBody = (dataSource, images = {}, projectName) => {
   // 生成该模块的表清单
   modules.forEach((module, index) => {
     //modulesString += `<span id="module-${module.name}">\n`;
-    modulesString += ` - [<h4 id="module-${module.name}">1.${index + 1}. ${module.name}</h4>](#module-${module.name}-from)\n`;
+    modulesString += ` - [<h4 id="module-${module.name}">1.${index + 1}. ${module.chnname || module.name}</h4>](#module-${module.name}-from)\n`;
     //modulesString += `</span>\n`;
     // 关系图
     //modulesString += `<span id="module-${module.name}-relation">\n`;
