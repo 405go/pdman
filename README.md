@@ -139,12 +139,12 @@ PDMan是由国内知名金融IT上市公司，内部研发团队设计的一款�
 
 #### 下载
 
--   [码云地址](https://gitee.com/robergroup/pdman-release)
--   [Windows32](http://p9iqvqggq.bkt.clouddn.com/PDMan-win32_v2.0.0.exe)
--   [Windows64](http://p9iqvqggq.bkt.clouddn.com/PDMan-win64_v2.0.0.exe)
--   [Mac](http://p9iqvqggq.bkt.clouddn.com/PDMan-darwin_v2.0.0.dmg)
--   [Linux通用](http://p9iqvqggq.bkt.clouddn.com/PDMan-linux_v2.0.0.AppImage)
--   [Linux-DEB](http://p9iqvqggq.bkt.clouddn.com/PDMan-linux_v2.0.0.deb)(Debian系列如：Unbuntu,LinuxMint)
+-   [码云地址](https://gitee.com/robergroup/pdman)
+-   [Windows32](http://mtain-top-0.oss-cn-hangzhou.aliyuncs.com/PDMan-win32_v2.0.1.exe)
+-   [Windows64](http://mtain-top-0.oss-cn-hangzhou.aliyuncs.com/PDMan-win64_v2.0.1.exe)
+-   [Mac](http://mtain-top-0.oss-cn-hangzhou.aliyuncs.com/PDMan-darwin_v2.0.1.dmg)
+-   [Linux通用](http://mtain-top-0.oss-cn-hangzhou.aliyuncs.com/PDMan-linux_v2.0.1.AppImage)
+-   [Linux-DEB](http://mtain-top-0.oss-cn-hangzhou.aliyuncs.com/PDMan-linux_v2.0.1.deb)
 
 #### 欢迎加钉钉群交流
 ![](https://static.oschina.net/uploads/img/201806/01151807_3YY6.jpg "")
