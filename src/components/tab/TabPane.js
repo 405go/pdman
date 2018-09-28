@@ -6,8 +6,7 @@ class TabPane extends React.Component {
   shouldComponentUpdate(nextProps){
     return (nextProps.height !== this.props.height ||
       nextProps.width !== this.props.width ||
-      nextProps.dataSource !== this.props.dataSource ||
-      ((this.props.show !== nextProps.show) && (nextProps.show === nextProps.id)));
+      nextProps.dataSource !== this.props.dataSource);
   }
   render() {
     const { children, style } = this.props;

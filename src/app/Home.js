@@ -555,7 +555,7 @@ export default class Home extends React.Component{
                 </div>
               </div>
               <div className='pdman-home-right-footer'>
-                <span onClick={() => this._openUrl('https://gitee.com/robergroup/pdman-release')}>官方网站</span>
+                <span onClick={() => this._openUrl('https://gitee.com/robergroup/pdman')}>官方网站</span>
                 {/*<div className='pdman-home-right-footer-config' onClick={this._openDev}>
                   <Icon type='setting'/><span>调试</span>
                 </div>*/}
