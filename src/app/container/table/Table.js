@@ -30,6 +30,9 @@ export default class Table extends React.Component{
       || nextProps.height !== this.props.height
       || nextState.selectedTrs !== this.state.selectedTrs;
   }
+  getData = () => {
+    return this.state.dataTable;
+  };
   _saveData = (data) => {
     this.setState({
       dataTable: data,

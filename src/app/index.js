@@ -729,7 +729,33 @@ export default class App extends React.Component {
         saveProject(`${project}.pdman.json`, data);
       }); break;
       case 'rename': tableUtils.renameTable(module, table, dataSource, (data, dataHistory) => {
-        saveProject(`${project}.pdman.json`, data, null, dataHistory);
+        saveProject(`${project}.pdman.json`, data, () => {
+          const { tabs = [], show } = this.state;
+          let tempShow = show;
+          const newTable = dataHistory.newName;
+          this.setState({
+            tabs: tabs.map((tab) => {
+              const key = tab.key.replace('/', '&').split('&');
+              const module = key[0];
+              const oldTable = key[1];
+              if (oldTable === table) {
+                // 检查当前tab是否已经显示
+                const newKey = `${module}&${newTable}/fa-table`;
+                if (tempShow === tab.key) {
+                  tempShow = newKey;
+                }
+                return {
+                  ...tab,
+                  title: `${module}&${newTable}`,
+                  key: newKey,
+                  value: `entity&${module}&${newTable}`,
+                };
+              }
+              return tab;
+            }),
+            show: show !== tempShow ? tempShow : show,
+          })
+        }, dataHistory);
       }); break;
       case 'delete':
         Modal.confirm(

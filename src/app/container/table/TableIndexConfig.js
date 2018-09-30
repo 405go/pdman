@@ -10,11 +10,43 @@ import ImportFields from './ImportFields';
 export default class TableIndexConfig extends React.Component{
   constructor(props){
     super(props);
+    this.emptyData = [];
     this.state = {
       selectedIndexs: [],
       selectedFields: [],
+      dataTable: this._getDataTable(props),
     };
   }
+  componentWillReceiveProps(nextProps){
+    // 如果当前Tab为刚刚激活的状态，则需要判断dataTable是否需要更新
+    if ((nextProps.tabShow === 'indexs') && (this.props.tabShow !== nextProps.tabShow)) {
+      this.setState({
+        dataTable: {
+          ...this._getDataTable(nextProps),
+          indexs: this.state.dataTable.indexs || [],
+        },
+      });
+    }
+  }
+  shouldComponentUpdate(nextProps, nextState){
+    return (nextState.dataTable !== this.state.dataTable)
+      || (nextState.selectedIndexs !== this.state.selectedIndexs)
+      || (nextState.selectedFields !== this.state.selectedFields)
+      || ((nextState.dataTable.indexs || this.emptyData)
+        !== (this.state.dataTable.indexs || this.emptyData));
+  }
+  getData = () => {
+    return this.state.dataTable.indexs || [];
+  };
+  update = (dataTable) => {
+    this.setState({
+      dataTable,
+    });
+  };
+  _getDataTable = (props) => {
+    const { getDataTable } = props;
+    return getDataTable && getDataTable();
+  };
   _checkUntitledName = (name) => {
     if (!name.split('untitled')[1]) {
       return `${name}1`;
@@ -44,7 +76,7 @@ export default class TableIndexConfig extends React.Component{
     e.preventDefault();
     if (this.status === status) {
       const data = e.dataTransfer.getData('Text');
-      const { dataTable, update } = this.props;
+      const { dataTable } = this.state;
       let tempDatable = {...dataTable};
       if (this.status === 'fields') {
         tempDatable = {
@@ -65,7 +97,7 @@ export default class TableIndexConfig extends React.Component{
           indexs: moveArrayPosition(dataTable.indexs || [], data, index),
         };
       }
-      update && update(tempDatable);
+      this.update(tempDatable);
     }
   };
   _onDragOver = (e) => {
@@ -87,8 +119,7 @@ export default class TableIndexConfig extends React.Component{
     });
   };
   _moveIndex = (type) => {
-    const { dataTable, update } = this.props;
-    const { selectedIndexs } = this.state;
+    const { selectedIndexs, dataTable } = this.state;
     let tempFields = [...(dataTable.indexs || [])];
     const selectedTrsIndex = tempFields
       .map((field, index) => {
@@ -116,15 +147,14 @@ export default class TableIndexConfig extends React.Component{
               return f.key === field.from.key;
             }, type === 'up' ? field.fieldIndex - 1 : field.fieldIndex + 1);
         });
-      update && update({
+      this.update({
         ...dataTable,
         indexs: tempFields,
       });
     }
   };
   _deleteIndex = () => {
-    const { dataTable, update } = this.props;
-    const { selectedIndexs } = this.state;
+    const { selectedIndexs, dataTable } = this.state;
     // 获取上一行
     let tempFields = [...(dataTable.indexs || [])];
     const minIndex = Math.min(...tempFields
@@ -135,7 +165,7 @@ export default class TableIndexConfig extends React.Component{
         return null;
       }).filter(field => field !== null));
     const newFields = (dataTable.indexs || []).filter(fid => !selectedIndexs.includes(fid.key));
-    update && update({
+    this.update({
       ...dataTable,
       indexs: newFields,
     });
@@ -145,8 +175,7 @@ export default class TableIndexConfig extends React.Component{
     });
   };
   _addIndex = () => {
-    const { selectedIndexs } = this.state;
-    const { dataTable, update } = this.props;
+    const { selectedIndexs, dataTable } = this.state;
     const tempIndexs = dataTable.indexs || [];
     const selectedTrsIndex = tempIndexs
       .map((field, index) => {
@@ -171,11 +200,11 @@ export default class TableIndexConfig extends React.Component{
       ...dataTable,
       indexs: tempIndexs,
     };
-    update && update(tempDatable);
+    this.update(tempDatable);
   };
   _inputOnChange = (e, key, type) => {
-    const { dataTable, update } = this.props;
-    update && update({
+    const { dataTable } = this.state;
+    this.update({
       ...dataTable,
       indexs: (dataTable.indexs || []).map((field) => {
         if (field.key === key) {
@@ -189,12 +218,12 @@ export default class TableIndexConfig extends React.Component{
     });
   };
   _importField = (fields, key) => {
-    const { dataTable, update } = this.props;
+    const { dataTable } = this.state;
     openModal(<ImportFields dataTable={dataTable} fields={fields}/>, {
       title: '引入字段',
       onOk: (modal, com) => {
         const newFields = com.getFields();
-        update && update({
+        this.update({
           ...dataTable,
           indexs: (dataTable.indexs || []).map((d) => {
             if (d.key === key) {
@@ -211,7 +240,7 @@ export default class TableIndexConfig extends React.Component{
     });
   };
   _moveField = (type, key) => {
-    const { dataTable, update } = this.props;
+    const { dataTable } = this.state;
     const { selectedFields } = this.state;
     const indexData = (dataTable.indexs || []).filter(d => d.key === key)[0];
     let tempFields = [...((indexData && indexData.fields) || [])];
@@ -242,7 +271,7 @@ export default class TableIndexConfig extends React.Component{
             }, type === 'up' ? field.fieldIndex - 1 : field.fieldIndex + 1);
         });
     }
-    update && update({
+    this.update({
       ...dataTable,
       indexs: (dataTable.indexs || []).map((d) => {
         if (d.key === key) {
@@ -256,8 +285,7 @@ export default class TableIndexConfig extends React.Component{
     });
   };
   _deleteField = (key) => {
-    const { dataTable, update } = this.props;
-    const { selectedFields } = this.state;
+    const { selectedFields, dataTable } = this.state;
     const indexData = (dataTable.indexs || []).filter(d => d.key === key)[0];
     let tempFields = [...((indexData && indexData.fields) || [])];
     // 获取上一行
@@ -269,7 +297,7 @@ export default class TableIndexConfig extends React.Component{
         return null;
       }).filter(field => field !== null));
     const newFields = tempFields.filter(fid => !selectedFields.includes(fid));
-    update && update({
+    this.update({
       ...dataTable,
       indexs: (dataTable.indexs || []).map((d) => {
         if (d.key === key) {
@@ -287,8 +315,8 @@ export default class TableIndexConfig extends React.Component{
     });
   };
   render(){
-    const { selectedIndexs = [], selectedFields = [] } = this.state;
-    const { prefix = 'pdman', dataTable } = this.props;
+    const { selectedIndexs = [], selectedFields = [], dataTable } = this.state;
+    const { prefix = 'pdman' } = this.props;
     const dataFields = dataTable.fields || [];
     // 显示最后点击的索引的字段
     const key = selectedIndexs && selectedIndexs[selectedIndexs.length - 1];
