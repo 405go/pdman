@@ -92,12 +92,14 @@ export default class App extends React.Component {
     };
     document.onkeydown = (evt) => {
       if (evt.ctrlKey || evt.metaKey) {
-        if (evt.code === 'KeyS') {
-          this._saveAll();
-        } else if(evt.code === 'KeyE') {
-          // 关闭当前打开的tab
-          const { show } = this.state;
-          show && this._tabClose(show);
+        if (this.flag) {
+          if (evt.code === 'KeyS') {
+            this._saveAll();
+          } else if(evt.code === 'KeyE') {
+            // 关闭当前打开的tab
+            const { show } = this.state;
+            show && this._tabClose(show);
+          }
         }
       }
     };
