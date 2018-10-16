@@ -20,17 +20,18 @@ const getTableNameByNameTemplate = (entity, title) => {
   if (entity) {
     const nameTemplate = entity.nameTemplate || '{code}[{name}]';
     if (!nameTemplate) {
-      return entity.chnname || entity.title;
+      tempName = entity.chnname || entity.title;
+    } else {
+      tempName = nameTemplate.replace(/\{(\w+)\}/g, (match, key) => {
+        let tempKey = key;
+        if (tempKey === 'code') {
+          tempKey = 'title';
+        } else if (tempKey === 'name') {
+          tempKey = 'chnname';
+        }
+        return entity[tempKey];
+      }) || entity.title;
     }
-    return nameTemplate.replace(/\{(\w+)\}/g, (match, key) => {
-      let tempKey = key;
-      if (tempKey === 'code') {
-        tempKey = 'title';
-      } else if (tempKey === 'name') {
-        tempKey = 'chnname';
-      }
-      return entity[tempKey];
-    }) || entity.title;
   }
   return addCountTableName(tempName, title);
 };
@@ -46,8 +47,8 @@ const  getAllTable = (dataSource, table, moduleName) => {
   }, []).concat(tempTable);
 };
 
-const clearInvalidData = (data, dataSource, moduleName) => {
-  const tables = getAllTable(dataSource, [], moduleName);
+const clearInvalidData = (data, dataSource) => {
+  const tables = getAllTable(dataSource, []);
   const tempNodes = (data.nodes || []).filter(node => tables.includes(node.title.split(':')[0]));
   const tempNodesId = tempNodes.map(node => node.id);
   const tempEdges = (data.edges || []).filter(edge =>
@@ -129,7 +130,7 @@ const getAllTableData = (dataSource) => {
 
 const getData = (dataSource, moduleName, columnOrder) => {
   const module = _object.get(dataSource, 'modules', []).filter(mo => mo.name === moduleName)[0];
-  const data = clearInvalidData(_object.get(module, 'graphCanvas', {}), dataSource, moduleName);
+  const data = clearInvalidData(_object.get(module, 'graphCanvas', {}), dataSource);
   const datatype = _object.get(dataSource, 'dataTypeDomains.datatype', []);
   return {
     ...data,
@@ -172,7 +173,7 @@ const renderRelation = (data, id) => {
       const backRect = group.addShape('rect', {
         attrs: {
           stroke: 'blue',
-          fill: cfg.color,
+          fill: model.moduleName ? '#5D616A': cfg.color,
         },
       });
       // 按顺序初始化列名
@@ -193,7 +194,7 @@ const renderRelation = (data, id) => {
         attrs: {
           x: 0,
           y: 0,
-          text: model.realName,
+          text: model.moduleName ? `<<${model.moduleName}>> ${model.realName}` : model.realName,
           fill: '#1D95E2',
           textBaseline: 'top',
           textAlign: 'center',
@@ -326,6 +327,7 @@ const renderRelation = (data, id) => {
     height: 2000,
     width: 2000,
     fitView: 'autoZoom',
+    grid: null
   });
   net.source(data.nodes, data.edges);
   net.node().color('title', (val) => {
