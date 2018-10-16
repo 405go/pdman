@@ -62,10 +62,15 @@ class DataTable extends React.Component {
     });
   };
   save = (cb) => {
+    const { dataSource } = this.props;
     const dataTable = this._getAllTableData();
     const { title } = dataTable;
     const { module, table } = this.state;
-    if (!title) {
+    // 增加校验表名重复的问题
+    const tables = this._getAllTable(dataSource);
+    if (title !== table && tables.includes(title)) {
+      Modal.error({title: '保存失败', message: `数据表【${title}】已经存在了`, width: 300});
+    } else if (!title) {
       if (cb) {
         cb(`数据表【${this.currentTable}】代码不能为空`);
       } else {
@@ -92,6 +97,11 @@ class DataTable extends React.Component {
           `${module}/entities/${table}`);
       }
     }
+  };
+  _getAllTable = (dataSource) => {
+    return (dataSource.modules || []).reduce((a, b) => {
+      return a.concat((b.entities || []).map(entity => entity.title));
+    }, []);
   };
   _initColumnOrder = (dataTable) => {
     // 初始化列的顺序、列在关系图中的显示
