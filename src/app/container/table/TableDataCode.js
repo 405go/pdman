@@ -33,7 +33,8 @@ export default class TableDataCode extends React.Component{
       || (nextState.dataTable !== this.state.dataTable)
       || (nextState.codesTabShow !== this.state.codesTabShow)
       || (nextState.templateShow !== this.state.templateShow)
-      || (nextProps.height !== this.props.height);
+      || (nextProps.height !== this.props.height)
+      || (nextProps.dataSource.dataTypeDomains !== this.props.dataSource.dataTypeDomains);
   }
   _codesTabClick = (code) => {
     this.setState({

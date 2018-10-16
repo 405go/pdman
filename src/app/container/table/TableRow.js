@@ -69,7 +69,7 @@ export default class TableRow extends React.Component{
   render() {
     const { prefix = 'pdman', field, index, selectedTrs = [],
       headers, columnOrder, dataTypes, setInputInstance,
-      inputOnChange, updateInputPosition } = this.props;
+      inputOnChange, updateInputPosition, dataSource } = this.props;
     return (
       <tr
         onClick={e => this._trClick(e, field.key)}
@@ -112,6 +112,7 @@ export default class TableRow extends React.Component{
               setInputInstance={setInputInstance}
               inputOnChange={inputOnChange}
               updateInputPosition={updateInputPosition}
+              dataSource={dataSource}
             />);
           })
         }

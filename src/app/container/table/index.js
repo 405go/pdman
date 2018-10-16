@@ -45,9 +45,11 @@ class DataTable extends React.Component {
   }
   shouldComponentUpdate(nextProps, nextState){
     // 表数据有变化
+    // 数据类型和数据库有变化
     return (nextState.dataTable !== this.state.dataTable)
       || (nextState.tabShow !== this.state.tabShow)
-      || (nextProps.height !== this.props.height);
+      || (nextProps.height !== this.props.height)
+      || (nextProps.dataSource.dataTypeDomains !== this.props.dataSource.dataTypeDomains);
   }
   promiseSave = (callback) => {
     return new Promise((res, rej) => {
