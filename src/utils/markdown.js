@@ -59,7 +59,7 @@ const generateTableListTable = (dataSource, moduleName) => {
     if (module.name === moduleName) {
       const entities = module.entities || [];
       entities.forEach((entity) => {
-        tableString += `| ${entity.chnname || ''} | ${entity.title} | ${entity.chnname || ''} |\n`;
+        tableString += `| ${entity.chnname || ''} | ${entity.title} | ${entity.remark || ''} |\n`;
       })
     }
   });

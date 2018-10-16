@@ -51,7 +51,7 @@ const generateTableListTable = (dataSource, moduleName) => {
     if (module.name === moduleName) {
       const entities = module.entities || [];
       entities.forEach((entity) => {
-        tableString += `<tr><td>${entity.chnname || ''}</td><td>${entity.title}</td><td>${entity.chnname || ''}</td></tr>\n`;
+        tableString += `<tr><td>${entity.chnname || ''}</td><td>${entity.title}</td><td>${entity.remark || ''}</td></tr>\n`;
       })
     }
   });
