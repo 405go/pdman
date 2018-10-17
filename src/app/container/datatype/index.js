@@ -50,20 +50,19 @@ export default class DataType extends React.Component{
       validate && validate(nameflag && codeflag);
     }
   };
-  _onChange = (e, type) => {
+  _onChange = (e, value, db) => {
     const { onChange } = this.props;
-    if (!type.startsWith('apply_')) {
+    if (value) {
       this.dataType = {
         ...(this.dataType || {}),
-        [type]: e.target.value,
+        [value]: e.target.value,
       };
     } else {
-      const database = type.split('_')[1];
       this.dataType = {
         ...(this.dataType || {}),
         apply: {
           ..._object.get(this.dataType || {}, 'apply', {}),
-          [database]: {
+          [db]: {
             type: e.target.value,
           },
         },
@@ -117,7 +116,7 @@ export default class DataType extends React.Component{
               <div className={`${prefix}-data-type-wrapper-item-component`}>
                 <Input
                   style={{width: '100%'}}
-                  onChange={e => this._onChange(e, `apply_${database.code}`)}
+                  onChange={e => this._onChange(e, null, database.code)}
                   defaultValue={_object.get(value, `apply.${database.code}.type`, '')}
                 />
               </div></div>);
