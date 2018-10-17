@@ -405,6 +405,7 @@ export default class Table extends React.Component{
                     updateInputPosition={this._updateInputPosition}
                     dataSource={dataSource}
                     dataTable={dataTable}
+                    relationNoShowClick={this._relationNoShowClick}
                   />
                 ))
               }

@@ -7,8 +7,10 @@ export default class TableCell extends React.Component{
   shouldComponentUpdate(nextProps){
     // 1.判断field[code]是否发生变化
     // 2.判断dataTypes是否发生变化
+    // 3.修改字段的数据类型的时候需要更新数据库类型这个字段
     return (nextProps.field[nextProps.column.code] !== this.props.field[this.props.column.code])
-      || (nextProps.dataTypes !== this.props.dataTypes);
+      || (nextProps.dataTypes !== this.props.dataTypes
+      || (nextProps.column.code === 'dataType' && nextProps.field.type !== this.props.field.type));
   }
   _openRemark = (value, key) => {
     let tempValue = value;
