@@ -283,15 +283,23 @@ export default class Home extends React.Component{
     // 保存项目
     const { project } = this.state;
     if (path && project) {
-      fileExistPromise(path, true, data).then(() => {
-        this.setState({
-          dataSource: data,
-          changeDataType: 'update',
-          dataHistory,
-        }, () => {
-          cb && cb();
+      if (!data) {
+        // 保存时增加数据为空提示，防止生成空文件
+        Modal.error({
+          title: '保存失败！',
+          message: '保存失败，请重试！',
         });
-      });
+      } else {
+        fileExistPromise(path, true, data).then(() => {
+          this.setState({
+            dataSource: data,
+            changeDataType: 'update',
+            dataHistory,
+          }, () => {
+            cb && cb();
+          });
+        });
+      }
     } else {
       const extensions = [];
       if (process.platform === 'darwin') {
