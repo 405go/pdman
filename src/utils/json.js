@@ -95,26 +95,30 @@ function saveFilePromise(jsonObj, filePath) {
     const saveString = typeof jsonObj !== 'string' ? JSON.stringify(jsonObj, null, 2) : jsonObj;
     hashSave.update(saveString);
     const hashSaveData = hashSave.digest('hex');
-    fs.writeFile(filePath, saveString, (err) => {
-      if (err) {
-        reject(err);
-      } else {
-        // 再次读取文件进行比较
-        fs.readFile(filePath, (error, data) => {
-          if (error) {
-            reject(err);
-          } else {
-            const hashRead = crypto.createHash('md5');
-            hashRead.update(data);
-            if (hashRead.digest('hex') === hashSaveData) {
-              resolve(jsonObj);
+    if (saveString) {
+      fs.writeFile(filePath, saveString, (err) => {
+        if (err) {
+          reject(err);
+        } else {
+          // 再次读取文件进行比较
+          fs.readFile(filePath, (error, data) => {
+            if (error) {
+              reject(err);
             } else {
-              reject(new Error('保存失败'));
+              const hashRead = crypto.createHash('md5');
+              hashRead.update(data);
+              if (hashRead.digest('hex') === hashSaveData) {
+                resolve(jsonObj);
+              } else {
+                reject(new Error('保存失败'));
+              }
             }
-          }
-        });
-      }
-    });
+          });
+        }
+      });
+    } else {
+      reject(new Error('保存失败'));
+    }
   });
 }
 // 异步保存json文件通过回调
