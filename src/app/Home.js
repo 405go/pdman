@@ -283,16 +283,17 @@ export default class Home extends React.Component{
     // 保存项目
     const { project } = this.state;
     if (path && project) {
-      if (!data) {
+      const tempData = {...data};
+      if (!tempData) {
         // 保存时增加数据为空提示，防止生成空文件
         Modal.error({
           title: '保存失败！',
           message: '保存失败，请重试！',
         });
       } else {
-        fileExistPromise(path, true, data).then(() => {
+        fileExistPromise(path, true, tempData).then(() => {
           this.setState({
-            dataSource: data,
+            dataSource: tempData,
             changeDataType: 'update',
             dataHistory,
           }, () => {
