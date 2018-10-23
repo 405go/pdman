@@ -283,17 +283,26 @@ export default class Home extends React.Component{
     // 保存项目
     const { project } = this.state;
     if (path && project) {
-      fileExistPromise(path, true, data).then(() => {
-        this.setState({
-          dataSource: data,
-          changeDataType: 'update',
-          dataHistory,
-        }, () => {
-          cb && cb();
+      const tempData = {...data};
+      if (!tempData) {
+        // 保存时增加数据为空提示，防止生成空文件
+        Modal.error({
+          title: '保存失败！',
+          message: '保存失败，请重试！',
         });
-      }).catch(() => {
-        Message.error({title: '保存失败'});
-      });
+      } else {
+        fileExistPromise(path, true, tempData).then(() => {
+          this.setState({
+            dataSource: tempData,
+            changeDataType: 'update',
+            dataHistory,
+          }, () => {
+            cb && cb();
+          });
+        }).catch(() => {
+          Message.error({title: '保存失败'});
+        });
+      }
     } else {
       const extensions = [];
       if (process.platform === 'darwin') {
@@ -347,6 +356,11 @@ export default class Home extends React.Component{
     });
     ipcRenderer.sendSync('headerType', 'backHome');
   };
+  _getAllTableData = (dataSource) => {
+    return (dataSource.modules || []).reduce((a, b) => {
+      return a.concat((b.entities || []));
+    }, []);
+  };
   _saveProjectSome = (path, data, cb, dataHistory, type) => {
     // 保存部分数据
     const { dataSource } = this.state;
@@ -383,9 +397,10 @@ export default class Home extends React.Component{
           if (module.name === typeArray[0]) {
             const changeEntity = (module.entities || [])
               .filter(entity => entity.title === typeArray[2])[0];
+            const tempNodes = this._updateTableName(_object.get(module, 'graphCanvas.nodes', []), dataHistory);
             const graphCanvas = {
                 ...(module.graphCanvas || {}),
-                nodes: this._updateTableName(_object.get(module, 'graphCanvas.nodes', []), dataHistory),
+                nodes: tempNodes,
               };
             const entities = changeEntity ? (module.entities || []).map((entity) => {
               if (entity.title === typeArray[2]) {
@@ -403,6 +418,23 @@ export default class Home extends React.Component{
           return module;
         }),
       };
+      // 因为存在跨模块的情况，此处需要更新所有的连接线
+      const newData = this._getAllTableData(tempDataSource);
+      const oldData = this._getAllTableData(dataSource);
+      tempDataSource = {
+        ...tempDataSource,
+        modules: (tempDataSource.modules || []).map(m => {
+          const tempEdges = _object.get(m, 'graphCanvas.edges', []);
+          const tempNodes = _object.get(m, 'graphCanvas.nodes', []);
+          return {
+            ...m,
+            graphCanvas: {
+              ...(m.graphCanvas || {}),
+              edges: this._updateEdges(tempNodes, oldData, newData, tempEdges)
+            }
+          }
+        })
+      }
     }
     this._saveProject(path, tempDataSource, cb, dataHistory);
   };
@@ -449,6 +481,57 @@ export default class Home extends React.Component{
       }
       return false;
     });
+  };
+  _getNodeData = (sourceId, targetId, data, nodes) => {
+    const tempNodes =  nodes.map(n => {
+      const table = data.filter(d => d.title === (n.copy || n.title.split(':')[0]))[0];
+      return {
+        ...n,
+        title: (table && table.title) || n.title,
+        fields: ((table && table.fields) || []).filter(f => !f.relationNoShow),
+      };
+    });
+    let sourceNode, targetNode = null;
+    for (let i = 0; i < tempNodes.length; i ++){
+      if (tempNodes[i].id === sourceId) {
+        sourceNode = tempNodes[i];
+      } else if (tempNodes[i].id === targetId) {
+        targetNode = tempNodes[i];
+      }
+    }
+    return {
+      sourceNode,
+      targetNode
+    }
+  };
+  _updateEdges = (nodes = [], oldData = [], data = [], edges = []) => {
+    // 1.过滤掉属性不存在的连接线
+    return edges.map((e) => {
+      const sourceId = e.source;
+      const targetId = e.target;
+      const { sourceNode, targetNode } = this._getNodeData(sourceId, targetId, oldData, nodes);
+      const sourceIndex = parseInt(e.sourceAnchor / 2, 10);
+      const sourceField = sourceNode.fields[sourceIndex];
+      const targetIndex = parseInt(e.targetAnchor / 2, 10);
+      const targetField = targetNode.fields[targetIndex];
+      const newSourceNode = data.filter(d => d.title === (sourceNode && sourceNode.title))[0];
+      const newTargetNode = data.filter(d => d.title === (targetNode && targetNode.title))[0];
+      const newSourceIndex = (newSourceNode && newSourceNode.fields || []).filter(f => !f.relationNoShow)
+        .findIndex(f => f.name === (sourceField && sourceField.name));
+      const newTargetIndex = (newTargetNode && newTargetNode.fields || []).filter(f => !f.relationNoShow)
+        .findIndex(f => f.name === (targetField && targetField.name));
+      if (!sourceField || !targetField || (newSourceIndex < 0) || (newTargetIndex < 0)) {
+        // 属性不存在了则需要移除
+        return null;
+      } else {
+        // 更新坐标
+        return {
+          ...e,
+          sourceAnchor: sourceIndex === newSourceIndex ? e.sourceAnchor : newSourceIndex * 2,
+          targetAnchor: targetIndex === newTargetIndex ? e.targetAnchor : newTargetIndex * 2,
+        }
+      }
+    }).filter(e => !!e);
   };
   _updateTableName = (data = [], dataHistory = {}) => {
     // 将旧表名，替换到新表名
@@ -559,7 +642,7 @@ export default class Home extends React.Component{
                 </div>
               </div>
               <div className='pdman-home-right-footer'>
-                <span onClick={() => this._openUrl('https://gitee.com/robergroup/pdman-release')}>官方网站</span>
+                <span onClick={() => this._openUrl('https://gitee.com/robergroup/pdman')}>官方网站</span>
                 {/*<div className='pdman-home-right-footer-config' onClick={this._openDev}>
                   <Icon type='setting'/><span>调试</span>
                 </div>*/}

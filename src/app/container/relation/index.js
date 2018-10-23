@@ -48,10 +48,11 @@ export default class Relation extends React.Component{
           // 2.修改数据源造成的数据更新，则不需要所有的数据重置
           // 2.1.保存绘图数据，然后重新绘制
           const source = this.net.save().source;
+          const newNodes = this._updateNodes(nextProps.dataSource,
+            this._updateTableName(this.newNodes || source.nodes, nextProps.dataHistory));
           this.graphCanvas = this._clearInvalidData({
-            edges: source.edges,
-            nodes: this._updateNodes(nextProps.dataSource,
-              this._updateTableName(this.newNodes || source.nodes, nextProps.dataHistory)),
+            edges: this._updateEdges(source.nodes, newNodes, source.edges),
+            nodes: newNodes,
           }, nextProps.dataSource);
           this.table = this._updateTableName(this.table, nextProps.dataHistory);
           this.newNodes = null;
@@ -143,12 +144,10 @@ export default class Relation extends React.Component{
         .filter(entity => entity.title === sourceEntity)[0] || sourceNode;
       const targetEntityData = entities
         .filter(entity => entity.title === targetEntity)[0] || targetNode;
-      /*if (!sourceEntityData || !targetEntityData) {
-        //Modal.error({title: '操作失败', message: '该数据表不存在，请先双击编辑保存再操作！', width: 350});
-        return null;
-      }*/
-      const sourceFieldData = (sourceEntityData.fields || [])[parseInt(edge.sourceAnchor / 2, 10)];
-      const targetFieldData = (targetEntityData.fields || [])[parseInt(edge.targetAnchor / 2, 10)];
+      const sourceFieldData = (sourceEntityData.fields || []).filter(f => !f.relationNoShow)
+        [parseInt(edge.sourceAnchor / 2, 10)];
+      const targetFieldData = (targetEntityData.fields || []).filter(f => !f.relationNoShow)
+        [parseInt(edge.targetAnchor / 2, 10)];
       if (!sourceFieldData || !targetFieldData) {
         return null;
       }
@@ -178,6 +177,7 @@ export default class Relation extends React.Component{
   _filterFieldsAndCopy = (graphCanvas) => {
     return {
       ...graphCanvas,
+      edges: this._updateEdges(graphCanvas.nodes, graphCanvas.nodes, graphCanvas.edges),
       nodes: (graphCanvas.nodes || [])
         .map(node => ({..._object.omit(node,
             ['fields', 'headers', 'datatype', 'associations', 'realName', 'edges'])})),
@@ -267,24 +267,56 @@ export default class Relation extends React.Component{
       });
     }
   };
+  _updateEdges = (oldNodes = [], newNodes = [], edges = []) => {
+    // 1.过滤掉属性不存在的连接线
+    return edges.map((e) => {
+      const sourceId = e.source;
+      const targetId = e.target;
+      const sourceNode = oldNodes.filter(n => n.id === sourceId)[0];
+      const targetNode = oldNodes.filter(n => n.id === targetId)[0];
+      const sourceIndex = parseInt(e.sourceAnchor / 2, 10);
+      const sourceField = sourceNode && sourceNode.fields && sourceNode.fields[sourceIndex];
+      const targetIndex = parseInt(e.targetAnchor / 2, 10);
+      const targetField = targetNode && targetNode.fields && targetNode.fields[targetIndex];
+      const newSourceNode = newNodes.filter(n => n.id === sourceId)[0];
+      const newTargetNode = newNodes.filter(n => n.id === targetId)[0];
+      const newSourceIndex = (newSourceNode && newSourceNode.fields || [])
+        .findIndex(f => f.name === (sourceField && sourceField.name));
+      const newTargetIndex = (newTargetNode && newTargetNode.fields || [])
+        .findIndex(f => f.name === (targetField && targetField.name));
+      if (!sourceField || !targetField || (newSourceIndex < 0) || (newTargetIndex < 0)) {
+        // 属性不存在了则需要移除
+        return null;
+      } else {
+        // 更新坐标
+        return {
+          ...e,
+          sourceAnchor: sourceIndex === newSourceIndex ? e.sourceAnchor : newSourceIndex * 2,
+          targetAnchor: targetIndex === newTargetIndex ? e.targetAnchor : newTargetIndex * 2,
+        }
+      }
+    }).filter(e => !!e);
+  };
   _updateNodes = (dataSource, nodes) => {
     const { value } = this.props;
     // 第三步：设置数据
     const moduleName = value.split('map&')[1].split('/')[0];
     const module = _object.get(dataSource, 'modules', []).filter(mo => mo.name === moduleName)[0];
     const datatype = _object.get(dataSource, 'dataTypeDomains.datatype', []);
+    // 需要对箭头进行处理，如果某个字段不存在了，或者不显示了，则需要清除该字段对应的箭头线
+    const allDataTable = this._getAllTableData(dataSource);
     const associations = _object.get(module, 'associations', []);
     return nodes.map((node) => {
-      const dataTable = this._getAllTableData(dataSource)
+      const dataTable = allDataTable
         .filter(entity => entity.title === (node.copy || node.title.split(':')[0]))[0];
+      const fields = _object.get(dataTable, 'fields', []);
       return {
         ...node,
         datatype,
         realName: this._getTableNameByNameTemplate(dataTable, node.title),
         associations,
         headers: this._initColumnOrder(dataTable),
-        fields: _object.get(dataTable, 'fields', [])
-          .filter(field => !field.relationNoShow),
+        fields: fields.filter(field => !field.relationNoShow),
       };
     });
   };

@@ -3,6 +3,13 @@ import React from 'react';
 import './style/index.less';
 
 export default class PDManIcon extends React.Component {
+  shouldComponentUpdate(nextProps){
+    // 阻止图标组件无意义的渲染
+    return (nextProps.type !== this.props.type)
+      || (nextProps.className !== this.props.className)
+      || (nextProps.style !== this.props.style)
+      || (nextProps.onClick !== this.props.onClick);
+  }
   render() {
     const { type, className } = this.props;
     if (type.startsWith('roic-') || type.startsWith('roic_')) {

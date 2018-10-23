@@ -16,12 +16,12 @@ export default class DataType extends React.Component{
       const code = data.code || value.code;
       let codeflag = true;
       let nameflag = true;
-      if (!code || dataTypes.map(dataType => dataType.code)
-        .some(dataTypeCode => dataTypeCode === code)) {
+      if (!code || (dataTypes.map(dataType => dataType.code))
+        .some(dataTypeCode => (dataTypeCode === code) && (value.code !== code))) {
         codeflag = false;
         this.status = {
           ...(this.status || {}),
-          codeMessage: !code ? '数据类型码不能为空' : '数据类型码不能重复',
+          codeMessage: !code ? '数据类型代码不能为空' : '数据类型代码不能重复',
         };
       } else {
         codeflag = true;
@@ -31,11 +31,11 @@ export default class DataType extends React.Component{
         };
       }
       if (!name || dataTypes.map(dataType => dataType.name)
-        .some(dataTypeName => dataTypeName === name)) {
+        .some(dataTypeName => (dataTypeName === name) && (value.name !== name))) {
         nameflag = false;
         this.status = {
           ...(this.status || {}),
-          nameMessage: !name ? '数据类型名不能为空' : '数据类型名不能重复',
+          nameMessage: !name ? '数据类型名称不能为空' : '数据类型名称不能重复',
         };
       } else {
         nameflag = true;
@@ -50,20 +50,19 @@ export default class DataType extends React.Component{
       validate && validate(nameflag && codeflag);
     }
   };
-  _onChange = (e, type) => {
+  _onChange = (e, value, db) => {
     const { onChange } = this.props;
-    if (!type.startsWith('apply_')) {
+    if (value) {
       this.dataType = {
         ...(this.dataType || {}),
-        [type]: e.target.value,
+        [value]: e.target.value,
       };
     } else {
-      const database = type.split('_')[1];
       this.dataType = {
         ...(this.dataType || {}),
         apply: {
           ..._object.get(this.dataType || {}, 'apply', {}),
-          [database]: {
+          [db]: {
             type: e.target.value,
           },
         },
@@ -87,7 +86,7 @@ export default class DataType extends React.Component{
           </div>
         </div>
         <div className={`${prefix}-data-type-wrapper-item-message`}>
-          <span>{this.state && this.state.codeMessage}</span>
+          <span>{this.state && this.state.nameMessage}</span>
         </div>
       </div>
       <div className={`${prefix}-data-type-wrapper-item`}>
@@ -102,7 +101,7 @@ export default class DataType extends React.Component{
           </div>
         </div>
         <div className={`${prefix}-data-type-wrapper-item-message`}>
-          <span>{this.state && this.state.nameMessage}</span>
+          <span>{this.state && this.state.codeMessage}</span>
         </div>
       </div>
       <div className={`${prefix}-data-type-wrapper-item-group`}>
@@ -117,7 +116,7 @@ export default class DataType extends React.Component{
               <div className={`${prefix}-data-type-wrapper-item-component`}>
                 <Input
                   style={{width: '100%'}}
-                  onChange={e => this._onChange(e, `apply_${database.code}`)}
+                  onChange={e => this._onChange(e, null, database.code)}
                   defaultValue={_object.get(value, `apply.${database.code}.type`, '')}
                 />
               </div></div>);

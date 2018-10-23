@@ -38,7 +38,7 @@ export const addDataType = (dataSource, callBack) => {
     onOk: (modal) => {
       // 1.修改dataSource
       if (!tempDataType || !tempDataType.code ||  !tempDataType.name) {
-        Modal.error({title: '新增失败', message: '数据类型名或者数据类型码不能为空'});
+        Modal.error({title: '新增失败', message: '数据类型名称或者数据类型代码不能为空'});
       } else {
         flag && modal && modal.close();
         flag && callBack && callBack({
@@ -89,19 +89,24 @@ export const renameDataType = (dataTypeCode, dataSource, callBack) => {
       },
     };
   };
+  let flag = true;
+  const validate = (result) => {
+    flag = result;
+  };
   openModal(<DataType
     onChange={onChange}
     dataSource={dataSource}
     value={tempDataType}
+    validate={validate}
   />, {
     title: 'PDMan-重命名数据类型',
     onOk: (modal) => {
       // 1.修改dataSource
       if (!tempDataType || !tempDataType.code ||  !tempDataType.name) {
-        Modal.error({title: '重命名失败', message: '数据类型名或者数据类型码不能为空'});
+        Modal.error({title: '重命名失败', message: '数据类型名称或者数据类型代码不能为空'});
       } else {
-        modal && modal.close();
-        callBack && callBack({
+        flag && modal && modal.close();
+        flag && callBack && callBack({
           ...dataSource,
           // 修改所有已经使用的该数据类型的字段的dataType
           modules: (dataSource.modules || []).map(m => ({
