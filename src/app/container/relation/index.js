@@ -870,6 +870,8 @@ export default class Relation extends React.Component{
       }
       if (ev.shiftKey) {
         if (this.net._attrs.mode === 'edit') {
+          // 切换到编辑模式时执行鼠标的松开事件，防止选中框残留
+          this.net.events.mouseup.forEach(m => m());
           const { modeChange } = this.props;
           //this.net.changeMode('drag');
           modeChange && modeChange('drag');
