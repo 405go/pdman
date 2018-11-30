@@ -210,7 +210,7 @@ export default class Relation extends React.Component{
       // 2.缓存当前的net对象
       const dataSource = this.net.save().source;
       // 3.渲染新的关系图
-      this._renderRelation(2000, 2000, dataSource, null, id, 'autoSize');
+      this._renderRelation(2000, 2000, dataSource, null, id, 'autoSize', true);
     }
     setTimeout(() => {
       const graphContainer = this.net.get('graphContainer');
@@ -420,7 +420,7 @@ export default class Relation extends React.Component{
     }
       return clickPoint;
   };
-  _renderRelation = (paintHeight, paintWidth, data, dataSource, id, fitView) => {
+  _renderRelation = (paintHeight, paintWidth, data, dataSource, id, fitView, disableGrid) => {
     const Util = G6.Util;
     const getDefaultDataType = this._getDefaultDataType;
     /* eslint-disable */
@@ -603,7 +603,7 @@ export default class Relation extends React.Component{
       width: paintWidth,
       mode: 'edit',
       fitView: fitView,
-      grid: {
+      grid: disableGrid ? null : {
         forceAlign: true, // 是否支持网格对齐
         cell: 10,         // 网格大小
         line: {         // 网格线样式
