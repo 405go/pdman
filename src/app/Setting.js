@@ -267,7 +267,7 @@ export default class Setting extends React.Component{
   };
   _checkFields = (data) => {
     if (Array.isArray(data)) {
-      const names = ['name', 'type', 'remark', 'chnname', 'pk', 'relationNoShow', 'key', 'notNull'];
+      const names = ['name', 'type', 'remark', 'chnname', 'pk', 'relationNoShow', 'key', 'notNull', 'autoIncrement', 'defaultValue'];
       return data.every(d => d.name && typeof d.name === 'string')
         && data.every(d => Object.keys(d).every(name => names.includes(name)));
     }
