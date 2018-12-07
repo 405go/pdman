@@ -20,6 +20,7 @@ import Relation from './container/relation';
 import DatabaseVersion from './DatabaseVersion';
 import ExportSQL from './ExportSQL';
 import ExportImg from './ExportImg';
+import ReadDB from './container/plugin/dbreverseparse/ReadDB';
 
 import Setting from './Setting';
 
@@ -231,8 +232,14 @@ export default class App extends React.Component {
     });
   };
   _setting = () => {
-    const { columnOrder, dataSource, project } = this.props;
-    openModal(<Setting columnOrder={columnOrder} dataSource={dataSource} project={`${project}.pdman.json`}/>, {
+    const { columnOrder, dataSource, project, register, updateRegister } = this.props;
+    openModal(<Setting
+      columnOrder={columnOrder}
+      dataSource={dataSource}
+      project={`${project}.pdman.json`}
+      register={register}
+      updateRegister={updateRegister}
+    />, {
       title: '配置默认数据',
       onOk: (modal, com) => {
         const { saveProject } = this.props;
@@ -335,17 +342,24 @@ export default class App extends React.Component {
             const defaultPath = ipcRenderer.sendSync('wordPath');
             const templatePath = _object.get(dataSource, 'profile.wordTemplateConfig') || defaultPath;
             generateByJar(dataSource, {
-              jsonFilePath: `${project}.pdman.json`,
-              docTemplatePath: templatePath,
-              imagePath: imagesPath,
-              imageExt: '.png',
-              outputFileName: `${dir}/${projectName}.${postfix}`,
+              pdmanfile: `${project}.pdman.json`,
+              doctpl: templatePath,
+              imgdir: imagesPath,
+              imgext: '.png',
+              out: `${dir}/${projectName}.${postfix}`,
             }, (error, stdout, stderr) => {
+              const result = (stderr || stdout);
+              let tempResult = '';
+              try {
+                tempResult = JSON.parse(result);
+              } catch (e) {
+                tempResult = result;
+              }
               btn && btn.setLoading(false);
-              if (error || stderr) {
+              if (tempResult.status !== 'SUCCESS') {
                 Modal.error({
                   title: `${type}导出失败!请重试！`,
-                  message: `出错原因：${stderr || error}`,
+                  message: `出错原因：${tempResult.body || tempResult}`,
                 });
               } else {
                 Modal.success({
@@ -353,7 +367,7 @@ export default class App extends React.Component {
                   message: `文件存储目录：[${dir}]`
                 });
               }
-            });
+            }, 'gendocx');
           });
         }, (err) => {
           btn && btn.setLoading(false);
@@ -447,6 +461,81 @@ export default class App extends React.Component {
   };
   _exportSQL = () => {
     this._exportFile('SQL');
+  };
+  _readDB = () => {
+    let modal = null;
+    const onClickCancel = () => {
+      modal && modal.close();
+    };
+    const success = (keys, data) => {
+      if (keys.length > 0) {
+        const { project, saveProject, dataSource } = this.props;
+        const dbType = _object.get(data, 'dbType', 'MYSQL');
+        const module = _object.get(data, 'module', {});
+        const datatypeObj = _object.get(data, 'dataTypeMap', {});
+        const currentDataTypes = _object.get(dataSource, 'dataTypeDomains.datatype', []);
+        const currentDataTypeCodes = currentDataTypes.map(t => t.code);
+        const dataTypes = Object.keys(datatypeObj)
+          .map(d => ({
+            name: datatypeObj[d].name,
+            code: datatypeObj[d].code,
+            apply: {
+              [dbType]: {
+                type: datatypeObj[d].type
+              }
+            }
+          })).filter(d => !currentDataTypeCodes.includes(d.code));
+        let tempKeys = [...keys];
+        modal && modal.close();
+        let tempData = {...dataSource};
+        // 1.循环所有已知的数据表
+        let modules = (tempData.modules || []).map(m => ({
+          ...m,
+          entities: (m.entities || []).map(e => {
+            // 执行覆盖操作
+            const dbEntity = keys.filter(k => k.title === e.title)[0];
+            if (dbEntity) {
+              tempKeys = tempKeys.filter(t => t.title !== dbEntity.title);
+            }
+            return dbEntity || e;
+          })
+        }));
+        if (modules.map(m => m.name).includes(module.code)){
+          // 如果该模块已经存在了
+          modules = modules.map(m => {
+            if (m.name === module.code) {
+              return {
+                ...m,
+                entities: (m.entities || []).concat(tempKeys),
+              };
+            }
+            return m;
+          })
+        } else {
+          modules.push({
+            name: module.code,
+            chnname: module.name,
+            entities: tempKeys
+          });
+        }
+        tempData = {
+          ...tempData,
+          modules,
+          dataTypeDomains: {
+            ...(dataSource.dataTypeDomains || {}),
+            datatype: currentDataTypes.concat(dataTypes),
+          },
+        };
+        // 2.将剩余的数据表放置于新模块
+        saveProject(`${project}.pdman.json`, tempData, () => {
+          Message.success({title: '操作成功！'})
+        });
+      }
+    };
+    modal = openModal(<ReadDB {...this.props} success={success}/>, {
+      title: '解析已有数据库',
+      footer: [<Button key="cancel" onClick={onClickCancel}>关闭</Button>]
+    })
   };
   _saveAll = (callBack) => {
     const { project, saveProject, dataSource } = this.props;
@@ -1502,6 +1591,10 @@ export default class App extends React.Component {
               className='tools-content-clickeable'
               onClick={() => this._exportSQL()}
             ><Icon type="fa-database"/>导出SQL</div>
+            <div
+              className='tools-content-clickeable'
+              onClick={() => this._readDB()}
+            ><Icon type="fa-hand-lizard-o"/>解析已有数据库</div>
           </div>
           <div className="tools-content-tab" style={{display: tools === 'dbversion' ? '' : 'none'}}>
             <div

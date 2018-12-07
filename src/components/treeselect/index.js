@@ -13,6 +13,13 @@ export default class TreeSelect extends React.Component{
       checkeds: props.defaultSelecteds || [],
     };
   }
+  componentWillReceiveProps(nextProps) {
+    if (this.props.data !== nextProps.data){
+      this.setState({
+        allKeys: this._initAllKeys(nextProps.data),
+      });
+    }
+  }
   getKeys = () => {
     return this.state.checkeds;
   };
@@ -69,7 +76,7 @@ export default class TreeSelect extends React.Component{
     });
   };
   render() {
-    const { data } = this.props;
+    const { data, titleRender } = this.props;
     const { openKeys, checkeds } = this.state;
     return (<div className='pdman-treeselect'>
       {
@@ -104,7 +111,7 @@ export default class TreeSelect extends React.Component{
                           onChange={e => this._onChange(e, `${d.name}/${c.title}`)}
                           wrapperStyle={{width: 20}}
                         />
-                        <span>{`${c.chnname || c.title}(${c.title})`}</span>
+                        <span>{ titleRender ? titleRender(c) : `${c.chnname || c.title}(${c.title})`}</span>
                       </div>
                     );
                   })

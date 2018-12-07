@@ -7,7 +7,7 @@ import './style/home.less';
 import {Icon, Modal, openModal, Button, Message} from '../components';
 import Header from './Header';
 import CreatePro from './CreatePro';
-import {fileExist, fileExistPromise, readFilePromise, saveFilePromise, writeFile } from '../utils/json';
+import {fileExist, fileExistPromise, readFilePromise, saveFilePromise, writeFile, readFile } from '../utils/json';
 import defaultConfig from '../../profile';
 import App from './index';
 import demo from '../demo';
@@ -37,6 +37,7 @@ export default class Home extends React.Component{
       changeDataType: 'reset',
       error: false,
       closeProject: false,
+      register: {},
     };
   }
   componentDidMount(){
@@ -103,6 +104,14 @@ export default class Home extends React.Component{
         }
       }
     });
+    // 读取注册号
+    readFile(`${this.configPath + this.split}register`).then((data) => {
+      this.setState({
+        register: {
+          code: data.toString(),
+        },
+      });
+    });
   }
   /* eslint-disable */
   componentWillUnmount(){
@@ -114,6 +123,13 @@ export default class Home extends React.Component{
       error: true,
     });
   }
+  _updateRegister = (code) => {
+    this.setState({
+      register: {
+        code: code,
+      },
+    });
+  };
   _openUrl = (url) => {
     shell.openExternal(url);
   };
@@ -681,6 +697,8 @@ export default class Home extends React.Component{
           writeFile={writeFile}
           openDir={this._openDir}
           projectDemo={this.state.projectDemo}
+          register={this.state.register}
+          updateRegister={this._updateRegister}
         />
       </div>);
   }

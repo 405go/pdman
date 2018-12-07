@@ -281,7 +281,7 @@ const generateUpdateSql = (dataSource, changes = [], code, oldDataSource) => {
           separator
         });
       }
-    }).join(`${separator}\n`);
+    }).join('\n');
 
   templateResult += changes
     .filter(c => c.type === 'index')
@@ -322,7 +322,7 @@ const generateUpdateSql = (dataSource, changes = [], code, oldDataSource) => {
         separator
       });
     })
-    .join(`${separator}\n`);
+    .join('\n');
 
   // 3.生成实体的sql
   templateResult += changes
@@ -356,8 +356,8 @@ const generateUpdateSql = (dataSource, changes = [], code, oldDataSource) => {
           separator
         });
       }
-    }).join(`${separator}\n`);
-  return templateResult;
+    }).join('\n');
+  return templateResult.endsWith(separator) ? templateResult : templateResult + separator;
 };
 
 const getCodeByRebuildTableTemplate = (dataSource, changes, code, oldDataSource) => {
@@ -714,18 +714,18 @@ export const getAllDataSQL = (dataSource, code) => {
         index: i,
         separator
       })}`;
-    }).join(`${separator}\n`);
+    }).join('\n');
     return `${getTemplateString(getTemplate('deleteTableTemplate'), {
       module: { name: e.name },
       entity: e,
       separator
-    })}${separator}\n${getTemplateString(getTemplate('createTableTemplate'), {
+    })}\n${getTemplateString(getTemplate('createTableTemplate'), {
       module: { name: e.name },
       entity: e,
       separator
-    })}${indexData ? `${separator}\n${indexData}`: ''}`
-  }).join(`${separator}\n`);
-  return sqlString;
+    })}${indexData}`
+  }).join('\n');
+  return sqlString.endsWith(separator) ? sqlString : sqlString + separator;
 };
 
 export const getAllDataSQLByFilter = (dataSource, code, filter = []) => {
@@ -766,7 +766,7 @@ export const getAllDataSQLByFilter = (dataSource, code, filter = []) => {
         index: i,
         separator
       })}`;
-    }).join(`${separator}\n`);
+    }).join('\n');
     allData.deleteTable = `${getTemplateString(getTemplate('deleteTableTemplate'), {
       module: {name: e.name},
       entity: e,
@@ -783,7 +783,7 @@ export const getAllDataSQLByFilter = (dataSource, code, filter = []) => {
       separator
     })}`;
     filter.forEach(f => {
-      tempData += allData[f] ? `${allData[f]}${separator}\n` : '';
+      tempData += allData[f] ? `${allData[f]}\n` : '';
     });
     return tempData;
   }).join('');

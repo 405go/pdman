@@ -198,7 +198,17 @@ export default class ExportSQL extends React.Component{
     paramArray.push(`separator=${separator}`);
     return paramArray;
   };
-  _connectJDBC = (selectJDBC, cb) => {
+  _parseResult = (stderr, stdout) => {
+    const result = (stderr || stdout);
+    let tempResult = '';
+    try {
+      tempResult = JSON.parse(result);
+    } catch (e) {
+      tempResult = result;
+    }
+    return tempResult;
+  };
+  _connectJDBC = (selectJDBC, cb, cmd) => {
     const configData =  this._getJavaConfig();
     const value = configData.JAVA_HOME;
     const defaultPath = ipcRenderer.sendSync('jarPath');
@@ -207,12 +217,20 @@ export default class ExportSQL extends React.Component{
     execFile(tempValue,
       [
         '-Dfile.encoding=utf-8',
-        '-jar', jar,
+        '-jar', jar, cmd,
         ...this._getParam(selectJDBC),
       ],
       (error, stdout, stderr) => {
-        cb && cb(error, stdout, stderr);
+        cb && cb(this._parseResult(stderr, stdout));
       });
+  };
+  _getProperties = (obj) => {
+    if (typeof obj === 'string') {
+      return obj;
+    } else if (Array.isArray(obj)) {
+      return obj.map(o => `${o[0]}:${o[1]}`).join('\n');
+    }
+    return Object.keys(obj).map(f => `${f}:${obj[f]}`).join('\n');
   };
   _execSql = () => {
     this.setState({
@@ -234,14 +252,12 @@ export default class ExportSQL extends React.Component{
               properties: {
                 ...(dbData.properties || {}),
                 sql: tempPath,
-                versionDesc: '执行SQL',
-                updateVersion: false,
               },
-            }, (error, stdout, stderror) => {
+            }, (result) => {
               this.setState({
                 loading: false,
               });
-              if (!stderror || !error) {
+              if (result.status === 'SUCCESS') {
                 Modal.success({
                   title: '执行成功',
                   message: <div
@@ -281,7 +297,7 @@ export default class ExportSQL extends React.Component{
                         }
                       }}
                       style={{height: 400}}
-                      data={stdout}
+                      data={this._getProperties(result.body || result)}
                     />
                   </div>});
                 if (fileExist(tempPath)) {
@@ -327,13 +343,13 @@ export default class ExportSQL extends React.Component{
                         }
                       }}
                       style={{height: 400}}
-                      data={`${stdout}${error || stderror}`}
+                      data={this._getProperties(result.body || result)}
                     />
                   </div>
                   ,
                 });
               }
-            });
+            }, 'sqlexec');
           } else if (fileExist(tempPath)){
             fs.unlinkSync(tempPath);
           }

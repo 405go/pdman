@@ -15,12 +15,12 @@ const getJavaConfig = (dataSource) => {
 const getParam = (params) => {
   const paramArray = [];
   Object.keys(params).forEach((pro) => {
-    paramArray.push(params[pro]);
+    paramArray.push(`${pro}=${params[pro]}`);
   });
   return paramArray;
 };
 
-export const execJar = (dataSource, params = {}, cb) => {
+export const execJar = (dataSource, params = {}, cb, cmd) => {
   const configData =  getJavaConfig(dataSource);
   const value = configData.JAVA_HOME;
   const split = process.platform === 'win32' ? '\\' : '/';
@@ -30,9 +30,12 @@ export const execJar = (dataSource, params = {}, cb) => {
   execFile(tempValue,
     [
       '-Dfile.encoding=utf-8',
-      '-cp', jar, 'group.rober.pdman.doc.App',
+      '-jar', jar, cmd,
       ...getParam(params),
     ],
+    {
+      maxBuffer: 100 * 1024 * 1024, // 100M
+    },
     (error, stdout, stderr) => {
       cb && cb(error, stdout, stderr);
     });

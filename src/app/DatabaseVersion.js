@@ -172,7 +172,7 @@ class ChangeCode extends React.Component{
               width={width === '50%' ?
                 `${document.body.clientWidth * 0.3}` : `${document.body.clientWidth * 0.7}`}
               mode='mysql'
-              value={data}
+              value={this.data || data}
               onChange={this._valueChange}
               firstLine
             />
@@ -623,19 +623,14 @@ export default class DatabaseVersion extends React.Component{
     return tempArray.splice(0, tempArray.length - 1).join(this.split);
   };
   _getParam = (selectJDBC) => {
-    const { dataSource } = this.props;
     const paramArray = [];
     const properties = _object.get(selectJDBC, 'properties', {});
-    const separator = _object.get(dataSource, 'profile.sqlConfig', '/*SQL@Run*/');
     Object.keys(properties).forEach((pro) => {
-      //paramArray.push(`-${pro}`);
       paramArray.push(`${pro}=${properties[pro]}`);
     });
-    paramArray.push(`separator=${separator}`);
-    //paramArray.push(`'${separator}'`);
     return paramArray;
   };
-  _connectJDBC = (selectJDBC, cb) => {
+  _connectJDBC = (selectJDBC, cb, cmd) => {
     //const { project } = this.props;
     const configData =  this._getJavaConfig();
     const value = configData.JAVA_HOME;
@@ -649,7 +644,7 @@ export default class DatabaseVersion extends React.Component{
     if (selectJDBC.showModal) {
       modal = openModal(<Code
         style={{height: 300}}
-        data={`执行同步命令：${tempValue} -Dfile.encoding=utf-8 -jar ${jar} ${this._getParam(selectJDBC).join(' ')}`}
+        data={`执行同步命令：${tempValue} -Dfile.encoding=utf-8 -jar ${jar} ${cmd} ${this._getParam(selectJDBC).join(' ')}`}
       />, {
         title: '开始同步，同步结束后当前窗口将会自动关闭！',
         footer: [<Button style={{marginTop: 10}} key="ok" onClick={onOk} type="primary">关闭</Button>],
@@ -658,17 +653,43 @@ export default class DatabaseVersion extends React.Component{
     execFile(tempValue,
       [
         '-Dfile.encoding=utf-8',
-        '-jar', jar,
+        '-jar', jar, cmd,
         ...this._getParam(selectJDBC),
       ],
       (error, stdout, stderr) => {
         modal && modal.close();
-        cb && cb(error, stdout, stderr);
+        const result = this._parseResult(stderr, stdout);
+        cb && cb(result);
       });
   };
+  _getProperties = (obj) => {
+    if (typeof obj === 'string') {
+      return obj;
+    } else if (Array.isArray(obj)) {
+      return obj.map(o => `${o[0]}:${o[1]}`).join('\n');
+    }
+    return Object.keys(obj).map(f => `${f}:${obj[f]}`).join('\n');
+  };
+  _getCMD = (updateVersion, onlyUpdateVersion) => {
+    // 一共有三种情况
+    // 1.预同步 执行SQL但是不更新版本号
+    // 2.同步 执行SQL同时更新版本号
+    // 3.标记为同步 只更新版本号
+    let cmd = 'dbsync';
+    if (onlyUpdateVersion) {
+      cmd = 'updateVersion';
+    } else if (updateVersion) {
+      cmd = 'dbsync';
+    } else {
+      cmd = 'sqlexec';
+    }
+    return cmd;
+  };
   _generateSQL = (dbData, version, data, updateVersion, path, cb, onlyUpdateVersion) => {
+    // 判断是否是标记为同步还是同步
+    const cmd = this._getCMD(updateVersion, onlyUpdateVersion);
     // 获取外层目录
-    const { project } = this.props;
+    const { project, dataSource } = this.props;
     const temp = path || app.getPath('temp');
     // 构建文件名
     const proName = this._getProject(project, 'name');
@@ -682,17 +703,24 @@ export default class DatabaseVersion extends React.Component{
           // Message.success({title: `SQL文件生成成功！[${tempPath}]`});
         }
         if (dbData) {
+          const sqlParam = {};
+          if (updateVersion) {
+            sqlParam.version_desc = version.message;
+            sqlParam.version = version.version;
+          }
+          if (!onlyUpdateVersion) {
+            const separator = _object.get(dataSource, 'profile.sqlConfig', '/*SQL@Run*/');
+            sqlParam.sql = tempPath;
+            sqlParam.separator = separator;
+          }
           this._connectJDBC({
             ...dbData,
             properties: {
               ...(dbData.properties || {}),
-              sql: tempPath,
-              versionDesc: version.message,
-              updateVersion,
-              onlyUpdateVersion,
+              ...sqlParam,
             },
             showModal: true,
-          }, (error, stdout, stderror) => {
+          }, (result) => {
             cb && cb();
             this.setState({
               synchronous: {
@@ -700,7 +728,7 @@ export default class DatabaseVersion extends React.Component{
                 [version.version]: false,
               },
             });
-            if (!stderror || !error) {
+            if (result.status === 'SUCCESS') {
               Modal.success({
                 title: '数据库同步成功',
                 message: <div
@@ -740,7 +768,7 @@ export default class DatabaseVersion extends React.Component{
                       }
                     }}
                     style={{height: 400}}
-                    data={stdout}
+                    data={cmd === 'updateVersion' ? '标记成功！' : this._getProperties(result.body || result)}
                   />
                 </div>});
               if (fileExist(tempPath)) {
@@ -789,13 +817,13 @@ export default class DatabaseVersion extends React.Component{
                       }
                     }}
                     style={{height: 400}}
-                    data={`${stdout}${error || stderror}`}
+                    data={cmd === 'updateVersion' ? '标记失败！' : this._getProperties(result.body || result)}
                   />
                 </div>
                 ,
               });
             }
-          });
+          }, cmd);
         } else if (fileExist(tempPath)){
           !path && fs.unlinkSync(tempPath);
         }
@@ -824,6 +852,7 @@ export default class DatabaseVersion extends React.Component{
       Modal.error({
         title: '初始化数据库版本表失败',
         message: '无法获取到数据库信息，请切换尝试数据库'});
+      cb && cb();
     } else {
       this._generateSQL(dbData, version, data, updateDBVersion, null, cb, onlyUpdateDBVersion);
     }
@@ -946,8 +975,8 @@ export default class DatabaseVersion extends React.Component{
             Message.success({title: message || '初始化基线成功'});
             modal && modal.close();
             this._getVersionMessage();
-            // 删除版本表
-            this._dropVersionTable();
+            // 更新版本表
+            this._dropVersionTable(tempValue);
             this._saveNewVersion((changes) => {
               this.setState({
                 changes,
@@ -959,7 +988,7 @@ export default class DatabaseVersion extends React.Component{
       },
     });
   };
-  _dropVersionTable = () => {
+  _dropVersionTable = (version) => {
     const dbData = this._getCurrentDBData();
     if (!dbData) {
       this.setState({
@@ -973,16 +1002,17 @@ export default class DatabaseVersion extends React.Component{
         ...dbData,
         properties: {
           ...(dbData.properties || {}),
-          initBase: true,
+          version: version.version,
+          version_desc: version.message,
         },
-      }, (error, out, outerr) => {
-        if (error || outerr) {
+      }, (result) => {
+        if (result.status !== 'SUCCESS') {
           Message.error({title: '初始化数据表失败'});
         } else {
           Message.success({title: '初始化数据表成功'});
           this._getDBVersion();
         }
-      });
+      }, 'rebaseline');
     }
   };
   _rebuild = () => {
@@ -1415,6 +1445,16 @@ export default class DatabaseVersion extends React.Component{
       },
     });
   };
+  _parseResult = (stderr, stdout) => {
+    const result = (stderr || stdout);
+    let tempResult = '';
+    try {
+      tempResult = JSON.parse(result);
+    } catch (e) {
+      tempResult = result;
+    }
+    return tempResult;
+  };
   _getDBVersion = () => {
     // 模拟返回1.0.1
     this.setState({
@@ -1436,25 +1476,19 @@ export default class DatabaseVersion extends React.Component{
         ...dbData,
         properties: {
           ...(dbData.properties || {}),
-          version: 'new',
         },
-      }, (error, res) => {
-        if (error) {
-          Message.error({title: '数据库版本信息获取失败'});
+      }, (result) => {
+        if (result.status !== 'SUCCESS') {
+          Message.error({title: '数据库版本信息获取失败', message: result.body || result});
         } else {
           Message.success({title: '数据库版本信息获取成功'});
         }
         this.setState({
           versionData: false,
-          dbVersion: error ? '' : this._replace(res),
+          dbVersion: result.status !== 'SUCCESS' ? '' : result.body,
         });
-      });
+      }, 'dbversion');
     }
-  };
-  _replace = (str) => {
-    let resultStr = '';
-    resultStr = str.replace(/[\'\"\\\/\b\f\n\r\t ]/g, ''); //去掉所有的特殊字符
-    return resultStr;
   };
   _getCurrentDBData = () => {
     const { dbs } = this.state;
@@ -1745,7 +1779,8 @@ export default class DatabaseVersion extends React.Component{
             <span
               style={{textAlign: 'center', color: '#2492E6'}}
             >
-              {currentDB ? `当前使用的数据库：【${currentDB}】,当前数据库版本：【${dbVersion}】`
+              {currentDB ? `当前使用的数据库：【${currentDB}】,
+              当前数据库版本：【${dbVersion || '未获取到数据库版本，可能原因是您尚未同步版本到数据库！'}】`
                 : '当前未选择数据库，如需同步到数据库请先配置数据库!'}
             </span>
             <div style={{display: 'flex', justifyContent: 'center',  flexGrow: 1, minHeight: 65}}>

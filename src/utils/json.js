@@ -283,6 +283,18 @@ function getDirNamePromise(filePath) {
   });
 }
 
+function readFile(file) {
+  return new Promise((res, rej) => {
+    fs.readFile(file, (err, data) => {
+      if(err){
+        rej(err);
+      }else{
+        res(data);
+      }
+    });
+  });
+}
+
 function writeFile(file, dataBuffer) {
   return new Promise((res, rej) => {
     fs.writeFile(file, dataBuffer, (err) => {
@@ -318,5 +330,6 @@ export {
   getDirListPromise,
   getDirNamePromise,
   writeFile,
+  readFile,
   copyFileSync,
 };

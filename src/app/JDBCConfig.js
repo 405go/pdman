@@ -2,7 +2,7 @@ import React from 'react';
 import _object from 'lodash/object';
 import electron from 'electron';
 
-import {Input, Icon, Button, Modal, RadioGroup, Select } from '../components';
+import {Input, Icon, Button, Modal, RadioGroup, Select, openModal } from '../components';
 import { uuid } from '../utils/uuid';
 
 import './style/jdbc.less';
@@ -156,6 +156,31 @@ export default class JDBCConfig extends React.Component{
     //console.log(paramArray);
     return paramArray;
   };
+  _getJAVAVersion = (java, cb) => {
+    const minVersion = ['1', '8'];
+    execFile(java, ['-version'],
+      (error, stdout, stderr) => {
+        if (error) {
+          Modal.error({title: '获取JDK版本失败！', message: error.message || error});
+          cb && cb(error);
+        } else {
+          // 1.截取第一行
+          const version = stderr.split('\n')[0];
+          const versionNumber = (version.match(/"(\S+)"/g)[0] || '');
+          console.log(versionNumber);
+          // 2.获取版本号的第一，第二位
+          const currentVersion = (versionNumber.split('.') || []).map(v => v.replace('"', ''));
+          let flag = false;
+          if (currentVersion[0] === minVersion[0]) {
+            // 如果版本号第一位相等
+            flag = currentVersion[1] >= minVersion[1];
+          } else {
+            flag = currentVersion[0] >= minVersion[0];
+          }
+          cb && cb(null, flag, versionNumber);
+        }
+      });
+  };
   _connectJDBC = (selectJDBC) => {
     this.setState({
       loading: true,
@@ -166,27 +191,49 @@ export default class JDBCConfig extends React.Component{
     const defaultPath = ipcRenderer.sendSync('jarPath');
     const jar = configData.DB_CONNECTOR || defaultPath;
     const tempValue = value ? `${value}${this.split}bin${this.split}java` : 'java';
-    execFile(tempValue,
-      [
-        '-Dfile.encoding=utf-8',
-        '-jar', jar,
-        ...this._getParam({
-          ...selectJDBC,
-          properties: {
-            ...(selectJDBC.properties || {}),
-          },
-        }),
-      ],
-      (error, stdout, stderr) => {
-        this.setState({
-          loading: false,
-        });
-        if (error) {
-          Modal.error({title: '连接失败', message: stderr});
+    // 先判断当前的JAVA版本
+    this._getJAVAVersion(tempValue, (versionError, flag, versionNumber) => {
+      if (!versionError) {
+        if (!flag) {
+          Modal.error({
+            title: '当前系统安装的JDK版本过低！',
+            message: `当前版本：${versionNumber}，请安装JDK1.8及以上版本！`,
+          });
+          this.setState({
+            loading: false,
+          });
         } else {
-          Modal.success({title: '连接成功', message: '数据库连接设置配置正确'});
+          execFile(tempValue,
+            [
+              '-Dfile.encoding=utf-8',
+              '-jar', jar, 'ping',
+              ...this._getParam({
+                ...selectJDBC,
+                properties: {
+                  ...(selectJDBC.properties || {}),
+                },
+              }),
+            ],
+            (error, stdout, stderr) => {
+              const result = (stderr || stdout);
+              this.setState({
+                loading: false,
+              });
+              let tempResult = '';
+              try {
+                tempResult = JSON.parse(result);
+              } catch (e) {
+                tempResult = result;
+              }
+              if (tempResult.status !== 'SUCCESS') {
+                Modal.error({title: '连接失败', message: tempResult.body || tempResult});
+              } else {
+                Modal.success({title: '连接成功', message: `${tempResult.body}!数据库连接设置配置正确`});
+              }
+            });
         }
-      });
+      }
+    });
   };
   _defaultDBChange = (value) => {
     const { data } = this.state;
@@ -206,6 +253,33 @@ export default class JDBCConfig extends React.Component{
   _getData = () => {
     const { data } = this.state;
     return data.filter(d => d.defaultDB)[0];
+  };
+  _showHelp = () => {
+    let modal = null;
+    const onClickCancel = () => {
+      modal && modal.close();
+    };
+    const mysqlString = 'jdbc:mysql://IP地址:端口号/数据库名?characterEncoding=UTF-8&useSSL=false&useUnicode=true'; // eslint-disable-line
+    const oracle = 'jdbc:oracle:thin:@IP地址:端口号/数据库名';  // eslint-disable-line
+    modal = openModal(<div>
+      <div style={{border: 'solid 1px green', padding: 5, margin: 5}}>
+        <div style={{color: '#000000'}}>MYSQL配置示例：↓</div>
+        <div style={{color: 'green'}}>driver_class：
+          <span style={{color: 'red', userSelect: 'text'}}>com.mysql.jdbc.Driver</span>
+        </div>
+        <div style={{color: 'green'}}>url：<span style={{color: 'red', userSelect: 'text'}}>{mysqlString}</span></div>
+      </div>
+      <div style={{border: 'solid 1px green', padding: 5, margin: 5}}>
+        <div style={{color: '#000000'}}>ORACLE配置示例：↓</div>
+        <div style={{color: 'green'}}>driver_class：
+          <span style={{color: 'red', userSelect: 'text'}}>oracle.jdbc.driver.OracleDriver</span>
+        </div>
+        <div style={{color: 'green'}}>url：<span style={{color: 'red', userSelect: 'text'}}>{oracle}</span></div>
+      </div>
+    </div>, {
+      title: 'JDBC配置示例',
+      footer: [<Button key="cancel" onClick={onClickCancel} style={{ marginLeft: 10 }}>关闭</Button>],
+    });
   };
   render(){
     const { dataSource } = this.props;
@@ -275,7 +349,15 @@ export default class JDBCConfig extends React.Component{
       <div className='pdman-jdbc-config-right' style={{display: selectedTrs.length > 0 ? '' : 'none'}}>
         <div className='pdman-jdbc-config-right-com'>
           <div className='pdman-jdbc-config-right-com-label'>
-            <span>driver-class:</span>
+            <span>
+              <span
+                onClick={this._showHelp}
+                title='点击查看帮助'
+                style={{marginRight: 10, color: 'green', cursor: 'pointer'}}
+              >
+                ?
+              </span>
+              driver-class:</span>
           </div>
           <div className='pdman-jdbc-config-right-com-input'>
             <input
@@ -286,7 +368,15 @@ export default class JDBCConfig extends React.Component{
         </div>
         <div className='pdman-jdbc-config-right-com'>
           <div className='pdman-jdbc-config-right-com-label'>
-            <span>url:</span>
+            <span>
+              <span
+                onClick={this._showHelp}
+                title='点击查看帮助'
+                style={{marginRight: 10, color: 'green', cursor: 'pointer'}}
+              >
+                ?
+              </span>
+              url:</span>
           </div>
           <div className='pdman-jdbc-config-right-com-input'>
             <input

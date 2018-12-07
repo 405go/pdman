@@ -48,6 +48,6 @@ export const generateWord = (dataSource, images, projectName, dir, callBack) => 
   callBack && callBack();
 };*/
 
-export const generateByJar = (dataSource, params, cb) => {
-  execJar(dataSource, params, cb);
+export const generateByJar = (dataSource, params, cb, cmd) => {
+  execJar(dataSource, params, cb, cmd);
 };
