@@ -424,6 +424,210 @@ export default class Relation extends React.Component{
     const Util = G6.Util;
     const getDefaultDataType = this._getDefaultDataType;
     /* eslint-disable */
+
+
+    G6.registEdge('erdRelation', {
+        stroke: '#666',
+        getShorterPath: function(sA, tA, box, isCross){
+          let margin = 10;
+          let topDistance,bottomDistance;
+          let shorter = 0;
+
+          let path = [];
+
+          if(isCross){
+            topDistance = box.minY-margin - tA.y;
+            bottomDistance = box.maxY+margin - tA.y;
+            let isTop = (Math.abs(topDistance)<Math.abs(bottomDistance))?true:false;
+            if(isTop){
+              shorter = box.minY-margin - sA.y;
+            }else{
+              shorter = box.maxY+margin - sA.y;
+            }
+          }
+
+          return shorter;
+
+        },
+        getPath: function(cfg, group, s, t) {
+          let shorten = 24
+              ,sBox = s.getBBox()
+              ,tBox = t.getBBox()
+              ,points = cfg.points
+              ,s1 = points[0]
+              ,t1 = points[points.length - 1];
+
+          // 箭头方向
+          let sPosition = (sBox.minX == s1.x)?-1:1;
+          let tPosition = (tBox.minX == t1.x)?-1:1;
+
+          // 根据箭头重新固定起点
+          let s2 = {'x':s1.x+sPosition*shorten, 'y':s1.y};
+          let t2 = {'x':t1.x+tPosition*shorten, 'y':t1.y};
+
+
+          let gapX = t2.x-s2.x;
+          let gapY = t2.y-s2.y;
+
+          // 判断线条有没有穿过表
+          let sIsCross = sPosition * gapX < 0;
+          let tIsCross = -tPosition * gapX < 0;
+
+          let path = [['M', s1.x, s1.y]];
+          path.push(['L', s2.x, s2.y]);
+          let ctrlPoints = cfg.origin.controlPoints;
+          if(ctrlPoints && ctrlPoints.length > 2){
+            for (var i = 1; i < ctrlPoints.length - 1; i++) {
+              path.push(['L', ctrlPoints[i].x,ctrlPoints[i].y]);
+            }
+          }else{
+            let sY = this.getShorterPath(s2,t2,sBox,sIsCross);
+            let tY = this.getShorterPath(t2,s2,tBox,tIsCross);
+            if(sY != 0 && tY != 0){
+
+            }
+            if(gapX > 0){
+              // source锚点在左
+              if(sY != 0){
+                path.push(['L', s2.x, s2.y+sY]);
+              }
+              path.push(['L', s2.x+gapX/2, s2.y+sY]);
+              path.push(['L', t2.x-gapX/2, t2.y+tY]);
+              if(tY != 0){
+                path.push(['L', t2.x, t2.y+tY]);
+              }
+            }else{
+              // source锚点在右
+              path.push(['L', s2.x, s2.y+gapY/2]);
+              path.push(['L', t2.x, t2.y-gapY/2]);
+            }
+          }
+          
+
+          path.push(['L', t2.x, t2.y]);
+          path.push(['L', t1.x, t1.y]);
+          return path;
+
+        },
+        draw: function(cfg, group) {
+          // console.log(cfg);
+          let source = cfg.source;
+          let target = cfg.target;
+          // console.log(cfg.getSource());
+          let path = this.getPath(cfg,group,source,target);
+          return group.addShape('path', {
+            attrs: {
+              path,
+              stroke: this.stroke,
+              lineWidth: 1
+            }
+          });
+
+        },
+        afterDraw: function(cfg, group, keyShape) {
+          var points = cfg.points;
+          var s1 = points[0];
+          var e1 = points[points.length - 1];
+          var s2 = keyShape.getPoint(0.01);
+          var e2 = keyShape.getPoint(0.99);
+
+          const r = 4;
+          const x = -15;
+          const y = 0;
+          var relationArrow = {
+            '0,1' : {
+              attrs:{
+                x: 0,
+                y: 0,
+                path: 'M'+x+','+(y-r) +
+                    'a '+r+','+r+',0,1,1,0,'+(2*r)+
+                    'a '+r+','+r+',0,1,1,0,'+(-2*r)+
+                    'M '+(x+r+1)+','+(r+1)+
+                    'L '+(x+r+1)+','+(-r-1)+
+                    'M '+(x+r+1)+',0'+
+                    'L 0,0'+
+                    'z',
+                
+                stroke: this.stroke,
+                fill:'#fff'
+              },
+              class: 'arrow',
+              zIndex: 10
+            },
+            '0,n' : {
+              attrs:{
+                x: 0,
+                y: 0,
+                path: 'M'+x+','+(y-r) +
+                    'a '+r+','+r+',0,1,1,0,'+(2*r)+
+                    'a '+r+','+r+',0,1,1,0,'+(-2*r)+
+                    'M '+(x+r+1)+','+(r+1)+
+                    'L '+(x+r+1)+','+(-r-1)+
+                    'M '+(x+r+1)+','+y+
+                    'L '+y+',-'+r+
+                    'M '+(x+r+1)+','+y+
+                    'L '+y+','+r+
+                    'M '+(x+r+1)+',0'+
+                    'L 0,0'+
+                    'z',
+                
+                stroke: this.stroke,
+                fill:'#fff'
+              },
+              class: 'arrow',
+              zIndex: 10
+            },
+            '1' : {
+              attrs:{
+                x: 0,
+                y: 0,
+                path: 'M '+(x+r+1)+','+(r+1)+
+                    'L '+(x+r+1)+','+(-r-1)+
+                    'M '+(x+r+1)+',0'+
+                    'L 0,0'+
+                    'z',
+                
+                stroke: this.stroke,
+                fill:'#fff'
+              },
+              class: 'arrow',
+              zIndex: 10
+            },
+            'n' : {
+              attrs:{
+                x: 0,
+                y: 0,
+                path: 'M '+(x+r+1)+','+(r+1)+
+                    'L '+(x+r+1)+','+(-r-1)+
+                    'M '+(x+r+1)+','+y+
+                    'L '+y+',-'+r+
+                    'M '+(x+r+1)+','+y+
+                    'L '+y+','+r+
+                    'M '+(x+r+1)+',0'+
+                    'L 0,0'+
+                    'z',
+                
+                stroke: this.stroke,
+                fill:'#fff'
+              },
+              class: 'arrow',
+              zIndex: 10
+            }
+          }
+          if(cfg.origin.relation){
+            var relation = cfg.origin.relation.split(':');
+            if(relation.length == 2){
+              var startArrow = group.addShape('path', relationArrow[relation[1]]);
+              G6.Util.arrowTo(startArrow, s1.x, s1.y, s2.x, s2.y, s1.x, s1.y);
+              var endArrow = group.addShape('path', relationArrow[relation[0]]);
+              G6.Util.arrowTo(endArrow, e1.x, e1.y, e2.x, e2.y, e1.x, e1.y);
+            }
+
+          }
+        }
+    });
+
+
     G6.registerNode('table', {
       draw(cfg, group){
         const x = cfg.x;
@@ -736,7 +940,7 @@ export default class Relation extends React.Component{
       let shape = ev.shape;
       if(shape && shape.hasClass('anchor-point') && !dragging) {
         this.net.beginAdd('edge', {
-          shape: 'polyLineFlow',
+          shape: 'erdRelation',
         });
       }
     });
@@ -1018,7 +1222,10 @@ export default class Relation extends React.Component{
       }
       return '#353B47';
     });
-    this.net.edge().label('relation');
+    this.net.edge().label(['relation'],(a) => {
+      return a;
+    });
+
     this.net.render();
   };
   _tableHasExistAndUpdateName = (graphCanvas, name) => {
