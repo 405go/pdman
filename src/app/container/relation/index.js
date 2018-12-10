@@ -152,7 +152,7 @@ export default class Relation extends React.Component{
         return null;
       }
       return {
-        relation: edge.relation || '',
+        relation: edge.relation || '1:1',
         from: {
           entity: sourceEntity,
           field: sourceFieldData.name,
@@ -502,29 +502,15 @@ export default class Relation extends React.Component{
               path.push(['L', t2.x, t2.y-gapY/2]);
             }
           }
-          
+
 
           path.push(['L', t2.x, t2.y]);
           path.push(['L', t1.x, t1.y]);
           return path;
 
         },
-        draw: function(cfg, group) {
-          // console.log(cfg);
-          let source = cfg.source;
-          let target = cfg.target;
-          // console.log(cfg.getSource());
-          let path = this.getPath(cfg,group,source,target);
-          return group.addShape('path', {
-            attrs: {
-              path,
-              stroke: this.stroke,
-              lineWidth: 1
-            }
-          });
-
-        },
         afterDraw: function(cfg, group, keyShape) {
+          cfg.origin.relation = cfg.origin.relation || '1:1';
           var points = cfg.points;
           var s1 = points[0];
           var e1 = points[points.length - 1];
@@ -547,7 +533,7 @@ export default class Relation extends React.Component{
                     'M '+(x+r+1)+',0'+
                     'L 0,0'+
                     'z',
-                
+
                 stroke: this.stroke,
                 fill:'#fff'
               },
@@ -570,7 +556,7 @@ export default class Relation extends React.Component{
                     'M '+(x+r+1)+',0'+
                     'L 0,0'+
                     'z',
-                
+
                 stroke: this.stroke,
                 fill:'#fff'
               },
@@ -586,14 +572,14 @@ export default class Relation extends React.Component{
                     'M '+(x+r+1)+',0'+
                     'L 0,0'+
                     'z',
-                
+
                 stroke: this.stroke,
                 fill:'#fff'
               },
               class: 'arrow',
               zIndex: 10
             },
-            'n' : {
+            '1,n' : {
               attrs:{
                 x: 0,
                 y: 0,
@@ -606,20 +592,33 @@ export default class Relation extends React.Component{
                     'M '+(x+r+1)+',0'+
                     'L 0,0'+
                     'z',
-                
+
                 stroke: this.stroke,
                 fill:'#fff'
               },
               class: 'arrow',
               zIndex: 10
-            }
-          }
+            },
+            '0' : {
+              attrs:{
+                x: 0,
+                y: 0,
+                path: 'M'+x+','+(y-r) +
+                  'a '+r+','+r+',0,1,1,0,'+(2*r)+
+                  'a '+r+','+r+',0,1,1,0,'+(-2*r),
+                stroke: this.stroke,
+                fill:'#fff'
+              },
+              class: 'arrow',
+              zIndex: 10
+            },
+          };
           if(cfg.origin.relation){
             var relation = cfg.origin.relation.split(':');
-            if(relation.length == 2){
-              var startArrow = group.addShape('path', relationArrow[relation[1]]);
+            if(relation.length == 2 && s2){
+              var startArrow = group.addShape('path', relationArrow[relation[0]]);
               G6.Util.arrowTo(startArrow, s1.x, s1.y, s2.x, s2.y, s1.x, s1.y);
-              var endArrow = group.addShape('path', relationArrow[relation[0]]);
+              var endArrow = group.addShape('path', relationArrow[relation[1]]);
               G6.Util.arrowTo(endArrow, e1.x, e1.y, e2.x, e2.y, e1.x, e1.y);
             }
 
@@ -941,6 +940,7 @@ export default class Relation extends React.Component{
       if(shape && shape.hasClass('anchor-point') && !dragging) {
         this.net.beginAdd('edge', {
           shape: 'erdRelation',
+          relation: '1:1'
         });
       }
     });
@@ -1222,8 +1222,8 @@ export default class Relation extends React.Component{
       }
       return '#353B47';
     });
-    this.net.edge().label(['relation'],(a) => {
-      return a;
+    this.net.edge().label((e) => {
+      return (e.relation || '1:1');
     });
 
     this.net.render();
