@@ -17,7 +17,7 @@ const upgradeVersionTo2 = (dataSource, cb) => {
     'deleteIndexTemplate', 'createIndexTemplate', 'updateTableComment'];
   const dbs = _object.get(dataSource, 'dataTypeDomains.database', []);
   let flag = false;
-  const tempDataSource = {
+  let tempDataSource = {
     ...dataSource,
     dataTypeDomains: {
       ...(dataSource.dataTypeDomains || {}),
@@ -41,6 +41,31 @@ const upgradeVersionTo2 = (dataSource, cb) => {
       }),
     },
   };
+  // 批量更新当前版本的箭头数据
+  tempDataSource = flag ? tempDataSource : dataSource;
+  tempDataSource = {
+    ...tempDataSource,
+    modules: (tempDataSource.modules || []).map((m) => {
+      return {
+        ...m,
+        graphCanvas: {
+          ...(m.graphCanvas || {}),
+          edges: _object.get(m, 'graphCanvas.edges', []).map((e) => {
+            if (e.shape === 'polyLineFlow') {
+              flag = true;
+              return {
+                ...e,
+                shape: 'erdRelation',
+              };
+            }
+            return e;
+          }),
+        },
+      };
+    }),
+  };
+
+
   // 更新结束
   cb && cb(tempDataSource, flag);
 };

@@ -31,13 +31,13 @@
     "dot": "^1.1.2",
     "hoist-non-react-statics": "^2.3.1",
     "lodash": "^4.17.5",
-    "officegen": "^0.4.5",
+    "moment": "^2.22.2",
+    "officegen": "^0.4.7",
     "pdfkit": "^0.8.3",
     "prop-types": "^15.6.1",
     "react": "^16.2.0",
     "react-ace": "^6.1.1",
-    "react-dom": "^16.2.0",
-    "moment": "^2.22.2"
+    "react-dom": "^16.2.0"
   },
   "devDependencies": {
     "autoprefixer": "^7.2.2",
