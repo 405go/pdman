@@ -1,5 +1,6 @@
 /* eslint-disable */
 import React from 'react';
+import _object from 'lodash/object';
 
 import Icon from '../icon';
 
@@ -29,7 +30,8 @@ class TreeNode extends React.Component {
   shouldComponentUpdate(nextProps, nextState) {
     return ((nextState.color.backgroundColor !== this.state.color.backgroundColor)
       || (nextState.rotate !== this.state.rotate) || (nextState.display !== this.state.display)
-      || this._validateChildren(nextProps));
+      || this._validateChildren(nextProps))
+      || this._validateSearchValue(nextProps);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -62,8 +64,36 @@ class TreeNode extends React.Component {
         }
       });
     }
+    const { searchValue } = nextProps;
+    const childrenValue = nextProps.childrenValue
+      .filter(c => c && !c.startsWith('map&') && !c.startsWith('table&')).map(c => c.split('&')[2] || c);
+    if (searchValue !== this.props.searchValue) {
+      if (searchValue && childrenValue.some(c => c && c.includes(searchValue))) {
+        this.setState({
+          rotate: 'rotate(90deg)',
+          display: '',
+        });
+      } else {
+        this.setState({
+          rotate: 'rotate(0deg)',
+          display: 'none',
+        });
+      }
+    }
   }
-
+  _validateSearchValue = (nextProps) => {
+    if (nextProps.searchValue !== this.props.searchValue) {
+      const childrenValue = nextProps.childrenValue
+        .filter(c => c && !c.startsWith('map&') && !c.startsWith('table&')).map(c => c.split('&')[2] || c);
+      const children = _object.get(nextProps, 'name.props.children', []);
+      const flag = ((nextProps.searchValue && childrenValue.some(c => c && c.includes(nextProps.searchValue)))
+        || (nextProps.searchValue && children[1] && children[1].includes(nextProps.searchValue))
+        || (this.props.searchValue && childrenValue.some(c => c && c.includes(this.props.searchValue)))
+        || (this.props.searchValue && children[1] && children[1].includes(this.props.searchValue)));
+      return !!flag;
+    }
+    return false;
+  };
   _validateChildren = (nextProps) => {
     // 校验子节点的数据是否发生了变化
     const { childrenValue } = this.props;
@@ -86,7 +116,7 @@ class TreeNode extends React.Component {
 
   _rightIconOnClick = (e, value, child) => {
     const { rightIconOnClick } = this.props;
-    e.stopPropagation();
+    e && e.stopPropagation();
     rightIconOnClick && rightIconOnClick(e, value, child);
     const { display } = this.state;
     this.setState({
@@ -118,13 +148,15 @@ class TreeNode extends React.Component {
         >{name}</span>
       </span>);
     }
+    const children = _object.get(this.props, 'name.props.children', []);
     return (<span
       style={{ padding: this.state.padding, paddingLeft: (row * (this.state.iconWidth + 5)) + 5 }}
     >
       <span
         style={{
           padding: this.state.padding,
-          color: this.state.color.textColor,
+          color: (this.props.searchValue && children[1] && children[1].includes(this.props.searchValue)) ?
+            'red': this.state.color.textColor,
           verticalAlign: 'middle'
         }}
       >{name}

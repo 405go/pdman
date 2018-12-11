@@ -1086,6 +1086,10 @@ export default class App extends React.Component {
       if (!this.moveUp) {
         this.leftTabInstanceDom.style.width = `${offWidth - (downX - e.clientX)}px`;
         this.instanceDom.style.width = `calc(100% - ${offWidth - (downX - e.clientX)}px)`;
+        if (this.treeInstance) {
+          // 更新树的搜索框的宽度
+          this.treeInstance.updateSearchWidth(offWidth - (downX - e.clientX));
+        }
       } else {
         document.onmousemove = null;
       }
@@ -1313,6 +1317,8 @@ export default class App extends React.Component {
               <div className="tools-left-tab-body-table" style={{display: tab === 'table' ? '' : 'none'}}>
                 {
                   (dataSource.modules || []).length > 0 ? <Tree
+                    showSearch
+                    ref={instance => this.treeInstance = instance}
                     onContextMenu={this._onContextMenu}
                     onDoubleClick={this._onDoubleClick}
                     onDrop={this._onDataTableDrop}
