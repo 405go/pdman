@@ -4,14 +4,15 @@ import './style/index.less';
 // import Immutable from 'immutable';
 
 import TreeNode from './TreeNode';
-import ReactDom from "react-dom";
-import {addOnResize} from "../../utils/listener";
+import { Input } from '../index';
+import { addOnResize } from '../../utils/listener';
 
 class Tree extends React.Component {
 
   static defaultProps = {
     defaultChecked: '',
     defaultExpanded: '',
+    showSearch: false,
   };
 
   static TreeNode = TreeNode;
@@ -23,7 +24,8 @@ class Tree extends React.Component {
       checked: '',
       cancelChecked: '',
       blurChecked: '',
-      height: document.body.clientHeight
+      height: document.body.clientHeight,
+      searchValue: '',
     };
   }
 
@@ -79,7 +81,8 @@ class Tree extends React.Component {
           row: row + 1,
           checked: this.state.checked,
           cancelChecked: this.state.cancelChecked,
-          blurChecked: this.state.blurChecked
+          blurChecked: this.state.blurChecked,
+          searchValue: this.state.searchValue,
         }
       };
     });
@@ -95,9 +98,16 @@ class Tree extends React.Component {
       blurChecked: this.state.checked,
     });
   };
-
+  updateSearchWidth = (width) => {
+    this.searchInstance.style.width = `${width - 10}px`;
+  };
+  _searchChange = (e) => {
+    this.setState({
+      searchValue: e.target.value,
+    });
+  };
   render() {
-    const { children, onDrop, onContextMenu } = this.props;
+    const { children, onDrop, onContextMenu, showSearch } = this.props;
     const { height } = this.state;
     return (<div
       tabIndex="0"
@@ -105,10 +115,24 @@ class Tree extends React.Component {
       onBlur={this._onBlur}
       id="tree"
       style={{
-        height: height - 153,
+        height: height - 155,
       }}
     >
-      <ul>
+      <div
+        ref={instance => this.searchInstance = instance}
+        style={{
+          width: 'calc(20% - 10px)',
+          padding: '5px 5px 5px 10px',
+          position: 'fixed',
+          background: '#FFFFFF',
+          zIndex: 999,
+          minWidth: 190,
+          maxWidth: '80%',
+          display: showSearch ? '' : 'none',
+        }}>
+        <Input onChange={this._searchChange} placeholder='快速搜索数据表(代码/名称)' style={{width: '100%', height: 20}}/>
+      </div>
+      <ul style={{marginTop: showSearch ? 32 : 0}}>
         {[].concat(children).map(item => {
           const childrenData = item.props.children &&
             this._setProps(item, 0, onDrop, onContextMenu);
@@ -125,7 +149,8 @@ class Tree extends React.Component {
               row: 0,
               checked: this.state.checked,
               cancelChecked: this.state.cancelChecked,
-              blurChecked: this.state.blurChecked
+              blurChecked: this.state.blurChecked,
+              searchValue: this.state.searchValue,
             }
           };
         })}
