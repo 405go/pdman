@@ -125,12 +125,12 @@ class Tree extends React.Component {
           padding: '5px 5px 5px 10px',
           position: 'fixed',
           background: '#FFFFFF',
-          zIndex: 999,
+          zIndex: 99,
           minWidth: 190,
           maxWidth: '80%',
           display: showSearch ? '' : 'none',
         }}>
-        <Input onChange={this._searchChange} placeholder='快速搜索数据表(代码/名称)' style={{width: '100%', height: 20}}/>
+        <Input onChange={this._searchChange} placeholder='快速搜索数据表' style={{width: '100%', height: 20}}/>
       </div>
       <ul style={{marginTop: showSearch ? 32 : 0}}>
         {[].concat(children).map(item => {
