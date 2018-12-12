@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDom from 'react-dom';
 import _object from 'lodash/object';
 import electron from 'electron';
-import {Icon, Tree, Context, Tab, Modal, Message, openModal} from '../components';
+import {Icon, Tree, Context, Tab, Modal, Message, openModal, Input} from '../components';
 import { addOnResize } from '../../src/utils/listener';
 import { upgrade } from '../../src/utils/basedataupgrade';
 import { moveArrayPosition } from '../../src/utils/array';
@@ -1102,6 +1102,10 @@ export default class App extends React.Component {
     const { show } = this.state;
     this.relationInstance[show] && this.relationInstance[show].onZoom(zoom);
   };
+  _relationSearch = (e) => {
+    const { show } = this.state;
+    this.relationInstance[show] && this.relationInstance[show].searchNodes(e.target.value);
+  };
   _exportImage = () => {
     openModal(<ExportImg/>, {
       title: '选择图片导出类型',
@@ -1283,6 +1287,14 @@ export default class App extends React.Component {
               className='tools-content-clickeable'
               onClick={() => this._exportImage()}
             ><Icon type="fa-file-image-o"/>导出图片</div>
+            <div
+              className='tools-content-clickeable'
+              style={{flexGrow: 1, textAlign: 'right'}}
+            ><Input
+              onChange={this._relationSearch}
+              style={{margin: '10px 10px 0 0', borderRadius: 3}}
+              placeholder='快速搜索节点'
+            /></div>
           </div>
           <div className="tools-content-tab" style={{display: tabs.length > 0 && tools === 'entity' ? '' : 'none'}}>
             <div

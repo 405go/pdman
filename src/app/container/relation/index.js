@@ -183,6 +183,26 @@ export default class Relation extends React.Component{
             ['fields', 'headers', 'datatype', 'associations', 'realName', 'edges'])})),
     };
   };
+  searchNodes = (value) => {
+    const nodes = this.net.getNodes();
+    nodes.forEach(node => {
+      const realName = _object.get(node, '_attrs.model.realName', '');
+      if (value && realName.includes(value)) {
+        this.net.update(node, {
+          color: 'yellow',
+        });
+      } else {
+        let color = '#353B47';
+        if (realName.includes(':')) {
+          color = '#5D616A';
+        }
+        this.net.update(node, {
+          color
+        });
+      }
+    });
+    //this.net.refresh();
+  };
   promiseSave = () => {
     return new Promise((res) => {
       this.saveData(() => {
