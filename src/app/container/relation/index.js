@@ -186,8 +186,8 @@ export default class Relation extends React.Component{
   searchNodes = (value) => {
     const nodes = this.net.getNodes();
     nodes.forEach(node => {
-      const realName = _object.get(node, '_attrs.model.realName', '');
-      if (value && realName.includes(value)) {
+      const realName = _object.get(node, '_attrs.model.realName', '').toLocaleLowerCase();
+      if (value && realName.includes(value.toLocaleLowerCase())) {
         this.net.update(node, {
           color: 'yellow',
         });
