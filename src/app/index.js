@@ -287,7 +287,7 @@ export default class App extends React.Component {
         saveImage(dataSource, columnOrder, writeFile, (images) => {
           Promise.all(Object.keys(images).map(mo => {
             const base64Data = images[mo].replace(/^data:image\/\w+;base64,/, "");
-            const dataBuffer = new Buffer(base64Data, 'base64');
+            const dataBuffer = Buffer.from(base64Data, 'base64');
             return new Promise((res) => {
               // 判断图片目录是否存在
               ensureDirectoryExistence(`${dir}/${projectName}_files/`);
@@ -329,7 +329,7 @@ export default class App extends React.Component {
           const imagesPath = `${dir}/${projectName}_files/`;
           Promise.all(Object.keys(images).map(mo => {
             const base64Data = images[mo].replace(/^data:image\/\w+;base64,/, "");
-            const dataBuffer = new Buffer(base64Data, 'base64');
+            const dataBuffer = Buffer.from(base64Data, 'base64');
             return new Promise((res) => {
               // 判断图片目录是否存在
               ensureDirectoryExistence(imagesPath);
