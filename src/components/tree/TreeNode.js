@@ -66,9 +66,10 @@ class TreeNode extends React.Component {
     }
     const { searchValue } = nextProps;
     const childrenValue = nextProps.childrenValue
-      .filter(c => c && !c.startsWith('map&') && !c.startsWith('table&')).map(c => c.split('&')[2] || c);
+      .filter(c => c && !c.startsWith('map&') && !c.startsWith('table&'))
+      .map(c => (c.split('&')[2] || c).toLocaleLowerCase());
     if (searchValue !== this.props.searchValue) {
-      if (searchValue && childrenValue.some(c => c && c.includes(searchValue))) {
+      if (searchValue && childrenValue.some(c => c && c.includes(searchValue.toLocaleLowerCase()))) {
         this.setState({
           rotate: 'rotate(90deg)',
           display: '',
@@ -84,12 +85,18 @@ class TreeNode extends React.Component {
   _validateSearchValue = (nextProps) => {
     if (nextProps.searchValue !== this.props.searchValue) {
       const childrenValue = nextProps.childrenValue
-        .filter(c => c && !c.startsWith('map&') && !c.startsWith('table&')).map(c => c.split('&')[2] || c);
-      const children = _object.get(nextProps, 'name.props.children', []);
-      const flag = ((nextProps.searchValue && childrenValue.some(c => c && c.includes(nextProps.searchValue)))
-        || (nextProps.searchValue && children[1] && children[1].includes(nextProps.searchValue))
-        || (this.props.searchValue && childrenValue.some(c => c && c.includes(this.props.searchValue)))
-        || (this.props.searchValue && children[1] && children[1].includes(this.props.searchValue)));
+        .filter(c => c && !c.startsWith('map&') && !c.startsWith('table&'))
+        .map(c => (c.split('&')[2] || c).toLocaleLowerCase());
+      const children = _object.get(nextProps, 'name.props.children', []).map(c => {
+        if (typeof c === 'string') {
+          return c.toLocaleLowerCase();
+        }
+        return c;
+      });
+      const flag = ((nextProps.searchValue && childrenValue.some(c => c && c.includes(nextProps.searchValue.toLocaleLowerCase())))
+        || (nextProps.searchValue && children[1] && children[1].includes(nextProps.searchValue.toLocaleLowerCase()))
+        || (this.props.searchValue && childrenValue.some(c => c && c.includes(this.props.searchValue.toLocaleLowerCase())))
+        || (this.props.searchValue && children[1] && children[1].includes(this.props.searchValue.toLocaleLowerCase())));
       return !!flag;
     }
     return false;
@@ -148,14 +155,20 @@ class TreeNode extends React.Component {
         >{name}</span>
       </span>);
     }
-    const children = _object.get(this.props, 'name.props.children', []);
+    const children = _object.get(this.props, 'name.props.children', [])
+      .map(c => {
+        if (typeof c === 'string') {
+          return c.toLocaleLowerCase();
+        }
+        return c;
+      });
     return (<span
       style={{ padding: this.state.padding, paddingLeft: (row * (this.state.iconWidth + 5)) + 5 }}
     >
       <span
         style={{
           padding: this.state.padding,
-          color: (this.props.searchValue && children[1] && children[1].includes(this.props.searchValue)) ?
+          color: (this.props.searchValue && children[1] && children[1].includes(this.props.searchValue.toLocaleLowerCase())) ?
             'red': this.state.color.textColor,
           verticalAlign: 'middle'
         }}
