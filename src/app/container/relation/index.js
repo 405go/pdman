@@ -236,7 +236,7 @@ export default class Relation extends React.Component{
       const graphContainer = this.net.get('graphContainer');
       const imageType = path.endsWith('.jpg') ? 'jpg' : 'png';
       html2canvas(graphContainer).then(canvas => {
-        const dataBuffer = new Buffer(canvas.toDataURL(`image/${imageType}`).replace(/^data:image\/\w+;base64,/, ""), 'base64');
+        const dataBuffer = Buffer.from(canvas.toDataURL(`image/${imageType}`).replace(/^data:image\/\w+;base64,/, ""), 'base64');
         writeFile(path, dataBuffer).then(() => {
           callback && callback(path);
           this.net = tempNet;
