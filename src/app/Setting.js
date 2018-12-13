@@ -6,7 +6,7 @@ import defaultData from './defaultData';
 import JavaHomeConfig from './JavaHomeConfig';
 import SQLConfig from './SQLConfig';
 import WORDConfig from './WORDConfig';
-import Register from './Register';
+//import Register from './Register';
 
 import './style/setting.less';
 import { uuid } from '../utils/uuid';
@@ -398,10 +398,10 @@ export default class Setting extends React.Component{
           onClick={() => this._tabClick('word')}
           className={`${prefix}-data-table-content-tab${this.state.tabShow === 'word' ? '-selected' : '-unselected'}`}
         >WORD模板配置</div>
-        <div
-          onClick={() => this._tabClick('register')}
-          className={`${prefix}-data-table-content-tab${this.state.tabShow === 'register' ? '-selected' : '-unselected'}`}
-        >注册激活</div>
+        {/*<div*/}
+          {/*onClick={() => this._tabClick('register')}*/}
+          {/*className={`${prefix}-data-table-content-tab${this.state.tabShow === 'register' ? '-selected' : '-unselected'}`}*/}
+        {/*>注册激活</div>*/}
       </div>
       <div className={`${prefix}-data-tab-content`}>
         <div style={{ width: '100%', display: this.state.tabShow === 'fields' ? '' : 'none' }}>
@@ -549,9 +549,9 @@ export default class Setting extends React.Component{
         <div style={{ width: '100%', display: this.state.tabShow === 'word' ? '' : 'none' }}>
           <WORDConfig onChange={this._wordTemplateChange} data={this.wordTemplateConfig}/>
         </div>
-        <div style={{ width: '100%', display: this.state.tabShow === 'register' ? '' : 'none' }}>
-          <Register dataSource={this.props.dataSource} register={register} updateRegister={updateRegister}/>
-        </div>
+        {/*<div style={{ width: '100%', display: this.state.tabShow === 'register' ? '' : 'none' }}>*/}
+          {/*<Register dataSource={this.props.dataSource} register={register} updateRegister={updateRegister}/>*/}
+        {/*</div>*/}
       </div>
     </div>);
   }
