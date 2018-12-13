@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDom from 'react-dom';
-import G6 from '@antv/g6';
+//import G6 from '@antv/g6';
 import _object from 'lodash/object';
 import { Context, openModal, Icon, Modal } from '../../../components';
 import RelationEdit from './RelationEdit';
@@ -8,6 +8,7 @@ import { writeFile } from '../../../utils/json';
 import './style/index.less';
 import { uuid } from '../../../utils/uuid';
 
+/* eslint-disable */
 G6.track(false);
 
 export default class Relation extends React.Component{
@@ -33,7 +34,7 @@ export default class Relation extends React.Component{
     if (nextProps.height !== this.props.height ||
       nextProps.width !== this.props.width ||
       nextProps.dataSource !== this.props.dataSource) {
-      //this.net.changeSize(nextProps.width, nextProps.height);
+      this.net.changeSize(nextProps.width, nextProps.height);
       if (nextProps.dataSource !== this.props.dataSource) {
         //console.log(nextProps.dataHistory);
         if (nextProps.changeDataType === 'reset') {
@@ -230,12 +231,17 @@ export default class Relation extends React.Component{
       // 2.缓存当前的net对象
       const dataSource = this.net.save().source;
       // 3.渲染新的关系图
-      this._renderRelation(2000, 2000, dataSource, null, id, 'autoSize', true);
+      this._renderRelation(2000,
+        2000, dataSource,
+        null, id, 'autoSize',
+        true, true);
     }
     setTimeout(() => {
-      const graphContainer = this.net.get('graphContainer');
+      const tempGraphContainer = this.net.get('graphContainer');
+      // 关闭缩略图
+      this._keyDown({key: 'm'}, true);
       const imageType = path.endsWith('.jpg') ? 'jpg' : 'png';
-      html2canvas(graphContainer).then(canvas => {
+      html2canvas(tempGraphContainer).then(canvas => {
         const dataBuffer = Buffer.from(canvas.toDataURL(`image/${imageType}`).replace(/^data:image\/\w+;base64,/, ""), 'base64');
         writeFile(path, dataBuffer).then(() => {
           callback && callback(path);
@@ -440,12 +446,15 @@ export default class Relation extends React.Component{
     }
       return clickPoint;
   };
-  _renderRelation = (paintHeight, paintWidth, data, dataSource, id, fitView, disableGrid) => {
+  _renderRelation = (paintHeight, paintWidth, data, dataSource, id, fitView, disableGrid, disableMap) => {
     const Util = G6.Util;
     const getDefaultDataType = this._getDefaultDataType;
     /* eslint-disable */
 
-
+    const miniMap = new G6.Plugins['tool.minimap']({
+      width: 180,
+      height: 180,
+    });
     G6.registEdge('erdRelation', {
         stroke: '#666',
         getShorterPath: function(sA, tA, box, isCross){
@@ -822,10 +831,11 @@ export default class Relation extends React.Component{
     });
     this.net = new G6.Net({
       id: id || `paint-${this.props.value}`,      // 容器ID
-      height: paintHeight,
+      height: paintHeight - 20,
       width: paintWidth,
       mode: 'edit',
       fitView: fitView,
+      plugins: disableMap ? [] : [miniMap],
       grid: disableGrid ? null : {
         forceAlign: true, // 是否支持网格对齐
         cell: 10,         // 网格大小
@@ -1485,10 +1495,24 @@ export default class Relation extends React.Component{
       count: this.net.getScale(),
     })
   };
+  _keyDown = (e, close) => {
+    // 按下M键
+    if (e.key === 'm') {
+      const { value } = this.props;
+      const paint = document.getElementById(`paint-${value}`);
+      const navigation = paint && paint.querySelector('.g6-plugins-navigation');
+      if (getComputedStyle(navigation).display === 'none' && !close) {
+        navigation.style.display = 'block';
+      } else {
+        navigation.style.display = 'none';
+      }
+    }
+  };
   render() {
     const { empty = false, count = 1 } = this.state;
     const { prefix = 'pdman', value, width } = this.props;
     return (<div
+      onKeyDown={this._keyDown}
       className={`${prefix}-relation`}
       onDrop={this._onDrop}
       onDragOver={this._onDragOver}
@@ -1517,7 +1541,7 @@ export default class Relation extends React.Component{
       <div
         style={{position: 'fixed', bottom: 10, right: 10, color: '#CCCCCC'}}
       >
-        按住shift可拖动关系图，滑动鼠标可放大缩小关系图
+        按住shift可拖动关系图，滑动鼠标可放大缩小关系图，按下M可打开或者关闭缩略图
       </div>
       <div
         style={{position: 'fixed', top: 135, right: 20, color: 'green'}}
