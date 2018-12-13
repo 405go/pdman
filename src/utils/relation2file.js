@@ -1,6 +1,6 @@
 /* eslint-disable */
 import _object from 'lodash/object';
-import G6 from '@antv/g6/dist/index';
+//import G6 from '@antv/g6/dist/index';
 import { uuid } from './uuid';
 
 let dom = {};
