@@ -18,6 +18,7 @@ export default class Relation extends React.Component{
       empty: false,
       contextDisplay: 'none',
       contextMenus: [],
+      count: 1,
     };
     this.table = [];
     this.graphCanvas = this._getData(props.dataSource);
@@ -862,7 +863,9 @@ export default class Relation extends React.Component{
         }
         this.clickEdgeX = e.x;
         this.clickEdgeY = e.y;
+        this.clickEdge = e.item;
       } else {
+        this.clickEdge = null;
         this.domX = e.domX;
         this.domY = e.domY;
       }
@@ -879,6 +882,7 @@ export default class Relation extends React.Component{
       }*/
     });
     this.net.on('mousewheel', () => {
+      this.pointerDom.style.display = 'none';
       this.setState({
         count: this.net.getScale().toFixed(1)
       })
@@ -988,8 +992,10 @@ export default class Relation extends React.Component{
         const { count } = this.state;
         const activeNodes = (this.net.getNodes() || []).filter(node => node._attrs.actived);
         activeNodes.forEach(activeNode => {
-          const x = activeNode._attrs.model.x;
-          const y = activeNode._attrs.model.y;
+          this.net.hideAnchor(activeNode);
+          const cfg = activeNode.getModel();
+          const x = cfg.x;
+          const y = cfg.y;
           if (ev.keyCode === 37) {
             this.net.update(activeNode, {
               ...activeNode._attrs.model,
@@ -1015,9 +1021,11 @@ export default class Relation extends React.Component{
               y: y + (10 / count),
             })
           }
+          // 先隐藏后显示防止锚点与节点位置不一致
+          this.net.showAnchor(activeNode);
         });
-        // 获取所有选中的边
-        const activeEdge = (this.net.getEdges() || []).filter(edge => edge._attrs.actived)[0];
+        // 获取所有选中的边 或者是上次选中的边
+        const activeEdge = (this.net.getEdges() || []).filter(edge => edge._attrs.actived)[0] || this.clickEdge;
         // 获取鼠标所在的位置
         if (activeEdge) {
           let clickPoint = -1;
@@ -1034,7 +1042,6 @@ export default class Relation extends React.Component{
           // 根据按下的方向键，更新锚点的位置
           if (clickPoint > 0 && ((activeEdge._attrs.model.controlPoints || []).length - 1 !== clickPoint)) {
             if (ev.keyCode === 37) {
-
               this.net.update(activeEdge, {
                 ...activeEdge._attrs.model,
                 controlPoints: (activeEdge._attrs.model.controlPoints || []).map((pt, index) => {
