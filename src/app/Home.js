@@ -527,9 +527,9 @@ export default class Home extends React.Component{
       const targetId = e.target;
       const { sourceNode, targetNode } = this._getNodeData(sourceId, targetId, oldData, nodes);
       const sourceIndex = parseInt(e.sourceAnchor / 2, 10);
-      const sourceField = sourceNode.fields[sourceIndex];
+      const sourceField = sourceNode && sourceNode.fields[sourceIndex];
       const targetIndex = parseInt(e.targetAnchor / 2, 10);
-      const targetField = targetNode.fields[targetIndex];
+      const targetField = targetNode && targetNode.fields[targetIndex];
       const newSourceNode = data.filter(d => d.title === (sourceNode && sourceNode.title))[0];
       const newTargetNode = data.filter(d => d.title === (targetNode && targetNode.title))[0];
       const newSourceIndex = (newSourceNode && newSourceNode.fields || []).filter(f => !f.relationNoShow)
