@@ -237,7 +237,7 @@ const renderRelation = (data, id) => {
 
     },
     afterDraw: function(cfg, group, keyShape) {
-      cfg.origin.relation = cfg.origin.relation || '1:1';
+      cfg.origin.relation = cfg.origin.relation || '0:0,n';
       var points = cfg.points;
       var s1 = points[0];
       var e1 = points[points.length - 1];
