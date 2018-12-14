@@ -162,11 +162,17 @@ export const cutDataType = (dataTypeCode, dataSource) => {
 };
 
 export const pasteDataType = (dataSource, callBack) => {
+  const copyDataTypeDataCode = [];
+  const copyDataTypeDataName = [];
   let data = [];
   try {
     data = JSON.parse(clipboard.readText());
   } catch (err) {
     console.log('数据格式错误，无法粘贴', err);
+  }
+  if (data.datatype) {
+    // 提供多选复制支持
+    data = data.datatype || [];
   }
   if (Array.isArray(data) && data.every(dataType => validateDataType(dataType))) {
     const tempsData = data.filter(d => d.rightType === 'cut').map(d => d.code);
@@ -178,11 +184,19 @@ export const pasteDataType = (dataSource, callBack) => {
       ...dataSource,
       dataTypeDomains: {
         ...(dataSource.dataTypeDomains || {}),
-        datatype: hasExistData.concat(data.map(dataType => ({
+        datatype: hasExistData.concat(data.map((dataType) => {
+          const code = validateDataTypeCodeAndName(hasExistDataCode.concat(copyDataTypeDataCode),
+            dataType.code);
+          const name = validateDataTypeCodeAndName(hasExistDataName.concat(copyDataTypeDataName),
+            dataType.name);
+          copyDataTypeDataCode.push(code);
+          copyDataTypeDataName.push(name);
+          return {
             ..._object.omit(dataType, ['rightType']),
-            name: validateDataTypeCodeAndName(hasExistDataName, dataType.name),
-            code: validateDataTypeCodeAndName(hasExistDataCode, dataType.code),
-          }))),
+            name,
+            code,
+          };
+          })),
       },
     });
   }

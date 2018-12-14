@@ -21,6 +21,8 @@ import DatabaseVersion from './DatabaseVersion';
 import ExportSQL from './ExportSQL';
 import ExportImg from './ExportImg';
 import ReadDB from './container/plugin/dbreverseparse/ReadDB';
+import MultipleUtils from './container/multipleopt/MultipleUtils';
+
 
 import Setting from './Setting';
 
@@ -818,78 +820,87 @@ export default class App extends React.Component {
       }
     }
   };
-  _onContextMenu = (e, value) => {
+  _onContextMenu = (e, value, checked) => {
     let contextMenus = [];
-    if (value.startsWith('module&')) {
-      contextMenus = contextMenus.concat(menus.map((menu) => {
-        return {
-          ...menu,
-          name: <span>{menu.icon}{menu.key === 'new' ? '新增模块' : menu.name}</span>,
-          key: `${menu.key}&${value}`,
-        };
-      }).filter(menu => !menu.key.startsWith('open&')));
-    } else if (value.startsWith('map&')) {
-      contextMenus = contextMenus.concat(menus.map((menu) => {
-        return {
-          ...menu,
-          name: <span>{menu.icon}打开关系图</span>,
-          key: `${menu.key}&${value}`,
-        };
-      }).filter(menu => menu.key.startsWith('open&')));
-    } else if (value.startsWith('table&')) {
-      contextMenus = contextMenus.concat(menus.map((menu) => {
-        return {
-          ...menu,
-          name: <span>{
-            menu.key === 'new' ? <Icon type='fa-table' style={{color: '#008000', marginRight: 5}}/> : menu.icon
-          }{menu.key === 'new' ? '新增数据表' : menu.name}</span>,
-          key: `${menu.key}&${value}`,
-        };
-      }).filter(menu => !menu.key.startsWith('open&') &&
-        !menu.key.startsWith('delete&') && !menu.key.startsWith('rename&')));
-    } else if (value.startsWith('datatype&data&')){
-      contextMenus = contextMenus.concat(menus.map((menu) => {
-        return {
-          ...menu,
-          name: <span>{menu.icon}{menu.key === 'new' ? '新增数据类型' : menu.name}</span>,
-          key: `${menu.key}&${value}`,
-        };
-      }).filter(menu => !menu.key.startsWith('open&')));
-    } else if (value.startsWith('database&data&')) {
-      contextMenus = contextMenus.concat(menus.map((menu) => {
-        return {
-          ...menu,
-          name: <span>{menu.icon}{menu.key === 'new' ? '新增数据库' : menu.name}</span>,
-          key: `${menu.key}&${value}`,
-        };
-      }).filter(menu => !menu.key.startsWith('open&')));
-    } else if (value.startsWith('entity&')) {
-      contextMenus = contextMenus.concat(menus.map((menu) => {
-        return {
-          ...menu,
-          name: <span>{
-            menu.key === 'new' ? <Icon type='fa-table' style={{color: '#008000', marginRight: 5}}/> : menu.icon
-          }
-            {menu.key === 'new' ? '新增数据表' : menu.name}</span>,
-          key: `${menu.key}&${value}`,
-        };
-      }).filter(menu => !menu.key.startsWith('open&')));
-    } else if (value.startsWith('datatype&')) {
-      contextMenus = contextMenus.concat(menus.map((menu) => {
-        return {
-          ...menu,
-          name: <span>{menu.icon}{menu.key === 'new' ? '新增数据类型' : menu.name}</span>,
-          key: `${menu.key}&${value}`,
-        };
-      }).filter(menu => !menu.key.startsWith('open&') && !menu.key.startsWith('rename&')));
-    } else if (value.startsWith('database&')) {
-      contextMenus = contextMenus.concat(menus.map((menu) => {
-        return {
-          ...menu,
-          name: <span>{menu.icon}{menu.key === 'new' ? '新增数据库' : menu.name}</span>,
-          key: `${menu.key}&${value}`,
-        };
-      }).filter(menu => !menu.key.startsWith('open&') && !menu.key.startsWith('rename&')));
+    // 计算需要复制的内容
+    if (checked.length > 1) {
+      contextMenus = [{
+        name: <span><Icon type='copy1' style={{color: '#0078D7', marginRight: 5}}/>复制</span>,
+        key: `multiple&copy&${value}`,
+        checked
+        }]
+    } else {
+      if (value.startsWith('module&')) {
+        contextMenus = contextMenus.concat(menus.map((menu) => {
+          return {
+            ...menu,
+            name: <span>{menu.icon}{menu.key === 'new' ? '新增模块' : menu.name}</span>,
+            key: `${menu.key}&${value}`,
+          };
+        }).filter(menu => !menu.key.startsWith('open&')));
+      } else if (value.startsWith('map&')) {
+        contextMenus = contextMenus.concat(menus.map((menu) => {
+          return {
+            ...menu,
+            name: <span>{menu.icon}打开关系图</span>,
+            key: `${menu.key}&${value}`,
+          };
+        }).filter(menu => menu.key.startsWith('open&')));
+      } else if (value.startsWith('table&')) {
+        contextMenus = contextMenus.concat(menus.map((menu) => {
+          return {
+            ...menu,
+            name: <span>{
+              menu.key === 'new' ? <Icon type='fa-table' style={{color: '#008000', marginRight: 5}}/> : menu.icon
+            }{menu.key === 'new' ? '新增数据表' : menu.name}</span>,
+            key: `${menu.key}&${value}`,
+          };
+        }).filter(menu => !menu.key.startsWith('open&') &&
+          !menu.key.startsWith('delete&') && !menu.key.startsWith('rename&')));
+      } else if (value.startsWith('datatype&data&')){
+        contextMenus = contextMenus.concat(menus.map((menu) => {
+          return {
+            ...menu,
+            name: <span>{menu.icon}{menu.key === 'new' ? '新增数据类型' : menu.name}</span>,
+            key: `${menu.key}&${value}`,
+          };
+        }).filter(menu => !menu.key.startsWith('open&')));
+      } else if (value.startsWith('database&data&')) {
+        contextMenus = contextMenus.concat(menus.map((menu) => {
+          return {
+            ...menu,
+            name: <span>{menu.icon}{menu.key === 'new' ? '新增数据库' : menu.name}</span>,
+            key: `${menu.key}&${value}`,
+          };
+        }).filter(menu => !menu.key.startsWith('open&')));
+      } else if (value.startsWith('entity&')) {
+        contextMenus = contextMenus.concat(menus.map((menu) => {
+          return {
+            ...menu,
+            name: <span>{
+              menu.key === 'new' ? <Icon type='fa-table' style={{color: '#008000', marginRight: 5}}/> : menu.icon
+            }
+              {menu.key === 'new' ? '新增数据表' : menu.name}</span>,
+            key: `${menu.key}&${value}`,
+          };
+        }).filter(menu => !menu.key.startsWith('open&')));
+      } else if (value.startsWith('datatype&')) {
+        contextMenus = contextMenus.concat(menus.map((menu) => {
+          return {
+            ...menu,
+            name: <span>{menu.icon}{menu.key === 'new' ? '新增数据类型' : menu.name}</span>,
+            key: `${menu.key}&${value}`,
+          };
+        }).filter(menu => !menu.key.startsWith('open&') && !menu.key.startsWith('rename&')));
+      } else if (value.startsWith('database&')) {
+        contextMenus = contextMenus.concat(menus.map((menu) => {
+          return {
+            ...menu,
+            name: <span>{menu.icon}{menu.key === 'new' ? '新增数据库' : menu.name}</span>,
+            key: `${menu.key}&${value}`,
+          };
+        }).filter(menu => !menu.key.startsWith('open&') && !menu.key.startsWith('rename&')));
+      }
     }
     this.setState({
       left: e.clientX,
@@ -904,7 +915,7 @@ export default class App extends React.Component {
       contextDisplay: 'none',
     });
   };
-  _contextClick = (e, key) => {
+  _contextClick = (e, key, menu) => {
     // 右键菜单的所有出口
     // key: new&module&name
     // 1.根据&裁剪
@@ -924,6 +935,9 @@ export default class App extends React.Component {
         // open&map&qqq/关系图
         // map&qqq/关系图
         this._onDoubleClick(key.split('open&')[1]);
+      } else {
+        // 多选复制
+        MultipleUtils.opt(key, menu, this.props.dataSource);
       }
     }
     // console.log(key);

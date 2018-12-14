@@ -35,25 +35,18 @@ class TreeNode extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.blurChecked === this.props.value) {
+    if (nextProps.blurChecked.includes(this.props.value)) {
       this.setState({
         color: {
           textColor: defaultTextColor,
           backgroundColor: blurColor
         }
       });
-    } else if (nextProps.checked === this.props.value) {
+    } else if (nextProps.checked.includes(this.props.value)) {
       this.setState({
         color: {
           textColor: selectTextColor,
           backgroundColor: selectColor
-        }
-      });
-    } else if (nextProps.checked === this.props.value) {
-      this.setState({
-        color: {
-          textColor: defaultTextColor,
-          backgroundColor: blurColor
         }
       });
     } else {
@@ -112,8 +105,8 @@ class TreeNode extends React.Component {
 
   _checkChildrenChange = (nextProps) => {
     const { childrenValue, cancelChecked, checked } = nextProps;
-    const checkChildren = childrenValue.includes(checked);
-    const cancelCheckedChildren = childrenValue.includes(cancelChecked);
+    const checkChildren = childrenValue.some(v => checked.includes(v));
+    const cancelCheckedChildren = childrenValue.some(v => cancelChecked.includes(v));
     return checkChildren || cancelCheckedChildren;
   };
 
@@ -180,15 +173,22 @@ class TreeNode extends React.Component {
   _onContextMenu = (e, value) => {
     e.preventDefault();
     e.stopPropagation();
-    const { onContextMenu } = this.props;
-    onContextMenu && onContextMenu(e, value);
-    this._onClick(e, value);
+    e.persist();
+    const { onContextMenu, checked } = this.props;
+    if (checked.length < 2) {
+      // 如果是多选则不需要先选中再失去焦点
+      this._onClick(e, value, () => {
+        onContextMenu && onContextMenu(e, value);
+      });
+    } else {
+      onContextMenu && onContextMenu(e, value);
+    }
   };
 
-  _onClick = (e, value) => {
+  _onClick = (e, value, cb) => {
     e.stopPropagation();
     const { onClick } = this.props;
-    onClick && onClick(value);
+    onClick && onClick(e, value, cb);
   };
 
   _onDoubleClick = (e, value, children) => {

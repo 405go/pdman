@@ -204,6 +204,8 @@ export const cutModule = (name, dataSource) => {
 };
 
 export const pasteModule = (dataSource, cb) => {
+  const copyTables = [];
+  const copyModules = [];
   // 粘贴模块
   let data = {};
   try {
@@ -211,24 +213,39 @@ export const pasteModule = (dataSource, cb) => {
   } catch (err) {
     console.log('数据格式错误，无法粘贴', err);
   }
-  // 判断粘贴板的数据是否符合模块的格式
-  if (validateModule(data)) {
-    cb && cb({
-      ...dataSource,
-      modules: (dataSource.modules || [])
-        .filter(module => !(data.rightType === 'cut' && module.name === data.name))
+  const paste = (d, modules) => {
+    // 判断粘贴板的数据是否符合模块的格式
+    if (validateModule(d)) {
+      const name = validateModuleAndNewName(
+        (dataSource.modules || []).map(module => module.name)
+          .filter(module => !(d.rightType === 'cut' && module === d.name)).concat(copyModules), d.name);
+      copyModules.push(name);
+      return modules.filter(module => !(d.rightType === 'cut' && module.name === d.name))
         .concat({
-        ..._object.omit(data, ['rightType']),
-        name: validateModuleAndNewName(
-          (dataSource.modules || []).map(module => module.name)
-            .filter(module => !(data.rightType === 'cut' && module === data.name)), data.name),
-        entities: (data.entities || []).map(entity => ({
-          ...entity,
-          title: validateModuleAndNewName(getAllTable(dataSource), entity.title),
-        })),
-      }),
-    });
-  } else {
+          ..._object.omit(d, ['rightType']),
+          name,
+          entities: (d.entities || []).map((entity) => {
+            const newTitle =
+              validateModuleAndNewName(getAllTable(dataSource).concat(copyTables), entity.title);
+            copyTables.push(newTitle);
+            return {
+              ...entity,
+              title: newTitle,
+            };
+          }),
+        });
+    }
     console.log('无效的数据格式');
+    return modules;
+  };
+  if (data.__temp__) {
+    data = Object.keys(_object.omit(data, ['__temp__'])).map(name => data[name]);
+  } else {
+    data = [].concat(data);
   }
+  let modules = [...(dataSource.modules || [])];
+  data.forEach((d) => {
+    modules =  paste(d, modules);
+  });
+  cb && cb({...dataSource, modules});
 };
