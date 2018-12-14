@@ -182,11 +182,16 @@ export const cutDatabase = (databaseCode, dataSource) => {
 };
 
 export const pasteDatabase = (dataSource, callback) => {
+  const copyDatabaseData = [];
   let data = [];
   try {
     data = JSON.parse(clipboard.readText());
   } catch (err) {
     console.log('数据格式错误，无法粘贴', err);
+  }
+  if (data.database) {
+    // 提供多选复制支持
+    data = data.database || [];
   }
   if (Array.isArray(data) && data.every(database => validateDatabase(database))) {
     const tempsData = data.filter(d => d.rightType === 'cut').map(d => d.code);
@@ -197,10 +202,15 @@ export const pasteDatabase = (dataSource, callback) => {
       ...dataSource,
       dataTypeDomains: {
         ...(dataSource.dataTypeDomains || {}),
-        database: checkDatabase(hasExistData.concat(data.map(database => ({
-          ..._object.omit(database, ['rightType', 'defaultDatabase']),
-          code: validateDatabaseAndNewName(hasExistDataCode, database.code),
-        })))),
+        database: checkDatabase(hasExistData.concat(data.map((database) => {
+          const code = validateDatabaseAndNewName(
+            hasExistDataCode.concat(copyDatabaseData), database.code);
+          copyDatabaseData.push(code);
+          return {
+            ..._object.omit(database, ['rightType', 'defaultDatabase']),
+            code: code,
+          };
+        }))),
       },
     });
   }

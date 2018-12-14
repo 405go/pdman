@@ -76,9 +76,9 @@ class Context extends React.Component {
     });
   };
 
-  _onClick = (e, key) => {
+  _onClick = (e, key, item) => {
     const { onClick, closeContextMenu } = this.props;
-    onClick && onClick(e, key);
+    onClick && onClick(e, key, item);
     closeContextMenu && closeContextMenu();
   };
 
@@ -125,7 +125,7 @@ class Context extends React.Component {
                 color: _object.get(this.state.menus, [item.key] + '.textColor',
                   this.state.defaultTextColor)
               }}
-              onClick={(e) => this._onClick(e, item.key)}
+              onClick={(e) => this._onClick(e, item.key, item)}
             >
               {item.name}
             </li>);

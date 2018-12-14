@@ -21,9 +21,9 @@ class Tree extends React.Component {
     super(props);
     this.flag = true;
     this.state = {
-      checked: '',
-      cancelChecked: '',
-      blurChecked: '',
+      checked: [],
+      cancelChecked: [],
+      blurChecked: [],
       height: document.body.clientHeight,
       searchValue: '',
     };
@@ -41,14 +41,35 @@ class Tree extends React.Component {
     })
   };
 
-  _onClick = (value) => {
+  _onClick = (e, value, cb) => {
     const { onClick } = this.props;
+    const { cancelChecked } = this.state;
+    const { checked } = this.state;
+    let tempChecked = [...checked];
+    let tempCancelChecked = [...cancelChecked];
     document.getElementById('tree').focus();
     onClick && onClick(value);
+    // 判断是否按住了shift
+    if (e.shiftKey) {
+      if (tempChecked.includes(value)) {
+        tempChecked = tempChecked.filter(c => c !== value);
+        tempCancelChecked = [value];
+      } else {
+        tempCancelChecked = [];
+        tempChecked.push(value);
+      }
+    } else {
+      tempCancelChecked = tempChecked;
+      tempChecked = [value];
+    }
+    // 去重
     this.setState({
-      cancelChecked: this.state.checked,
-      checked: value,
-      blurChecked: ''
+      cancelChecked: [...new Set(tempCancelChecked)],
+      checked: [...new Set(tempChecked)],
+      blurChecked: []
+    }, () => {
+      // 点击后渲染结束回调
+      cb && cb();
     });
   };
 
@@ -95,7 +116,7 @@ class Tree extends React.Component {
   _onBlur = () => {
     // 调整选中树节点的背景色
     this.setState({
-      blurChecked: this.state.checked,
+      blurChecked: [...new Set(this.state.checked)],
     });
   };
   updateSearchWidth = (width) => {
@@ -106,8 +127,12 @@ class Tree extends React.Component {
       searchValue: e.target.value,
     });
   };
+  _onContextMenu = (e, value) => {
+    const { onContextMenu } = this.props;
+    onContextMenu && onContextMenu(e, value, this.state.checked);
+  };
   render() {
-    const { children, onDrop, onContextMenu, showSearch } = this.props;
+    const { children, onDrop, showSearch } = this.props;
     const { height } = this.state;
     return (<div
       tabIndex="0"
@@ -135,14 +160,14 @@ class Tree extends React.Component {
       <ul style={{marginTop: showSearch ? 32 : 0}}>
         {[].concat(children).map(item => {
           const childrenData = item.props.children &&
-            this._setProps(item, 0, onDrop, onContextMenu);
+            this._setProps(item, 0, onDrop, this._onContextMenu);
           return {
             ...item,
             props: {
               ...item.props,
               onClick: this._onClick,
               onDrop,
-              onContextMenu,
+              onContextMenu: this._onContextMenu,
               onDoubleClick: this._onDoubleClick,
               children: childrenData && childrenData.component,
               childrenValue: (childrenData && childrenData.value) || [],

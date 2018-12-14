@@ -177,11 +177,15 @@ export const cutTable = (moduleName, tableName, dataSource) => {
 
 export const pasteTable = (moduleName, dataSource, cb) => {
   // 粘贴模块
+  const copyTables = [];
   let data = [];
   try {
     data = JSON.parse(clipboard.readText());
   } catch (err) {
     console.log('数据格式错误，无法粘贴', err);
+  }
+  if (data.__temp__) {
+    data = _object.get(data, '__temp__.entities');
   }
   // 判断粘贴板的数据是否符合模块的格式
   if (Array.isArray(data) && data.every(table => validateTable(table))) {
@@ -195,13 +199,17 @@ export const pasteTable = (moduleName, dataSource, cb) => {
               ...module,
               entities: (module.entities || [])
                 .filter(entity => !tempsData.includes(entity.title))
-                .concat(data.map(da => ({
-                  ..._object.omit(da, ['rightType']),
-                  title: validateTableAndNewName(
+                .concat(data.map((da) => {
+                  const title = validateTableAndNewName(
                     getAllTable(dataSource)
-                      .filter(entity => !tempsData.includes(entity)),
-                    da.title),
-              }))),
+                      .filter(entity => !tempsData.includes(entity)).concat(copyTables),
+                    da.title);
+                  copyTables.push(title);
+                  return {
+                    ..._object.omit(da, ['rightType']),
+                    title,
+                  };
+                })),
             };
           }
           return module;
