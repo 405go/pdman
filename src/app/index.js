@@ -276,14 +276,20 @@ export default class App extends React.Component {
     const tempArray = tempItem.split('/');
     return tempArray[tempArray.length - 1];
   };
-  _showExportMessage = () => {
+  _showExportMessage = (path) => {
     let modal = null;
     const { dataSource } = this.props;
     const allTable = (dataSource.modules || []).reduce((a, b) => {
       return a.concat((b.entities || []).map(entity => entity.title));
     }, []);
     if (allTable.length > 50) {
-      modal = Modal.success({title: '导出提示', message: `当前导出的数据表较多，共【${allTable.length}】张表，请耐心等待！`})
+      modal = Modal.success({
+        title: '导出提示',
+        message: `当前导出的数据表较多，
+        共【${allTable.length}】张表，请耐心等待！
+        文档将导出到目录【${path}】，导出结束后弹窗将自动关闭！`,
+        footer: [],
+      })
     }
     return modal;
   };
@@ -294,7 +300,7 @@ export default class App extends React.Component {
       // 选择目录
       openDir((dir) => {
         // 保存图片
-        const modal = this._showExportMessage();
+        const modal = this._showExportMessage(dir);
         btn && btn.setLoading(true);
         const imagePaths = {};
         const projectName = projectDemo || this._getProjectName(project);
@@ -339,7 +345,7 @@ export default class App extends React.Component {
       const postfix = type === 'Word' ? 'doc' : 'pdf';
       openDir((dir) => {
         // 保存图片
-        const modal = this._showExportMessage();
+        const modal = this._showExportMessage(dir);
         btn && btn.setLoading(true);
         const projectName = projectDemo || this._getProjectName(project);
         saveImage(dataSource, columnOrder, writeFile, (images) => {
@@ -399,7 +405,7 @@ export default class App extends React.Component {
     } else if (type === 'Html') {
       openDir((dir) => {
         // 保存图片
-        const modal = this._showExportMessage();
+        const modal = this._showExportMessage(dir);
         btn && btn.setLoading(true);
         const projectName = projectDemo || this._getProjectName(project);
         saveImage(dataSource, columnOrder, writeFile, (images) => {

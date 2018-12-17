@@ -4,7 +4,7 @@ import openModal from './ModalWrapper';
 import Button from '../button/Button';
 import Icon from '../icon';
 
-export const error = ({title, message, width}) => {
+export const error = ({title, message, width, footer}) => {
   let modal = null;
   const onOk = () => {
     modal && modal.close();
@@ -13,7 +13,7 @@ export const error = ({title, message, width}) => {
     {
       title: <span><Icon type="closecircle" style={{color: 'red', marginRight: 5}}/>{title}</span>,
       customerIcon: true,
-      footer: [<Button key="ok" onClick={onOk} type="primary">确定</Button>],
+      footer: footer || [<Button key="ok" onClick={onOk} type="primary">确定</Button>],
       width,
       zIndex: 999,
       autoFocus: true,
@@ -21,7 +21,7 @@ export const error = ({title, message, width}) => {
   return modal;
 };
 
-export const success = ({title, message, width}) => {
+export const success = ({title, message, width, footer}) => {
   let modal = null;
   const onOk = () => {
     modal && modal.close();
@@ -30,7 +30,7 @@ export const success = ({title, message, width}) => {
     {
       title: <span><Icon type="checkcircle" style={{color: 'green', marginRight: 5}}/>{title}</span>,
       customerIcon: true,
-      footer: [<Button key="ok" onClick={onOk} type="primary">关闭</Button>],
+      footer: footer || [<Button key="ok" onClick={onOk} type="primary">关闭</Button>],
       width,
       zIndex: 999,
       autoFocus: true,
@@ -38,7 +38,7 @@ export const success = ({title, message, width}) => {
   return modal;
 };
 
-export const confirm = ({title, message, width, onOk, onCancel}) => {
+export const confirm = ({title, message, width, onOk, onCancel, footer}) => {
   let modal = null;
   const onOKClick = () => {
     onOk(modal);
@@ -51,7 +51,7 @@ export const confirm = ({title, message, width, onOk, onCancel}) => {
     {
       title: <span><Icon type="infocirlce" style={{color: '#FFCE43', marginRight: 5}}/>{title}</span>,
       customerIcon: true,
-      footer: [
+      footer: footer || [
         <Button key="ok" onClick={onOKClick} type="primary" style={{marginRight: 10}}>确定</Button>,
         <Button key="cancel" onClick={onCancelClick}>取消</Button>,
       ],
