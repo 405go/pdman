@@ -276,6 +276,15 @@ export default class App extends React.Component {
     const tempArray = tempItem.split('/');
     return tempArray[tempArray.length - 1];
   };
+  _showExportMessage = () => {
+    const { dataSource } = this.props;
+    const allTable = (dataSource.modules || []).reduce((a, b) => {
+      return a.concat((b.entities || []).map(entity => entity.title));
+    }, []);
+    if (allTable.length > 50) {
+      Modal.success({title: '导出提示', message: `当前导出的数据表较多，共【${allTable.length}】张表，请耐心等待！`})
+    }
+  };
   _exportFile = (type, btn) => {
     const { dataSource, columnOrder, writeFile, openDir, project, projectDemo } = this.props;
     if (type === 'Markdown') {
@@ -283,6 +292,7 @@ export default class App extends React.Component {
       // 选择目录
       openDir((dir) => {
         // 保存图片
+        this._showExportMessage();
         btn && btn.setLoading(true);
         const imagePaths = {};
         const projectName = projectDemo || this._getProjectName(project);
@@ -325,6 +335,7 @@ export default class App extends React.Component {
       const postfix = type === 'Word' ? 'doc' : 'pdf';
       openDir((dir) => {
         // 保存图片
+        this._showExportMessage();
         btn && btn.setLoading(true);
         const projectName = projectDemo || this._getProjectName(project);
         saveImage(dataSource, columnOrder, writeFile, (images) => {
@@ -382,6 +393,7 @@ export default class App extends React.Component {
     } else if (type === 'Html') {
       openDir((dir) => {
         // 保存图片
+        this._showExportMessage();
         btn && btn.setLoading(true);
         const projectName = projectDemo || this._getProjectName(project);
         saveImage(dataSource, columnOrder, writeFile, (images) => {

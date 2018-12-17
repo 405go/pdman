@@ -261,6 +261,8 @@ export default class JDBCConfig extends React.Component{
     };
     const mysqlString = 'jdbc:mysql://IP地址:端口号/数据库名?characterEncoding=UTF-8&useSSL=false&useUnicode=true'; // eslint-disable-line
     const oracle = 'jdbc:oracle:thin:@IP地址:端口号/数据库名';  // eslint-disable-line
+    const SQLServer = 'jdbc:sqlserver://IP地址:端口号;DatabaseName=数据库名';
+    const postgresql = 'jdbc:postgresql://IP地址:端口号/数据库名';
     modal = openModal(<div>
       <div style={{border: 'solid 1px green', padding: 5, margin: 5}}>
         <div style={{color: '#000000'}}>MYSQL配置示例：↓</div>
@@ -275,6 +277,20 @@ export default class JDBCConfig extends React.Component{
           <span style={{color: 'red', userSelect: 'text'}}>oracle.jdbc.driver.OracleDriver</span>
         </div>
         <div style={{color: 'green'}}>url：<span style={{color: 'red', userSelect: 'text'}}>{oracle}</span></div>
+      </div>
+      <div style={{border: 'solid 1px green', padding: 5, margin: 5}}>
+        <div style={{color: '#000000'}}>SQLServer配置示例：↓</div>
+        <div style={{color: 'green'}}>driver_class：
+          <span style={{color: 'red', userSelect: 'text'}}>com.microsoft.sqlserver.jdbc.SQLServerDriver</span>
+        </div>
+        <div style={{color: 'green'}}>url：<span style={{color: 'red', userSelect: 'text'}}>{SQLServer}</span></div>
+      </div>
+      <div style={{border: 'solid 1px green', padding: 5, margin: 5}}>
+        <div style={{color: '#000000'}}>PostgreSQL配置示例：↓</div>
+        <div style={{color: 'green'}}>driver_class：
+          <span style={{color: 'red', userSelect: 'text'}}>org.postgresql.Driver</span>
+        </div>
+        <div style={{color: 'green'}}>url：<span style={{color: 'red', userSelect: 'text'}}>{postgresql}</span></div>
       </div>
     </div>, {
       title: 'JDBC配置示例',
