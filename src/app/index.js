@@ -277,13 +277,15 @@ export default class App extends React.Component {
     return tempArray[tempArray.length - 1];
   };
   _showExportMessage = () => {
+    let modal = null;
     const { dataSource } = this.props;
     const allTable = (dataSource.modules || []).reduce((a, b) => {
       return a.concat((b.entities || []).map(entity => entity.title));
     }, []);
     if (allTable.length > 50) {
-      Modal.success({title: '导出提示', message: `当前导出的数据表较多，共【${allTable.length}】张表，请耐心等待！`})
+      modal = Modal.success({title: '导出提示', message: `当前导出的数据表较多，共【${allTable.length}】张表，请耐心等待！`})
     }
+    return modal;
   };
   _exportFile = (type, btn) => {
     const { dataSource, columnOrder, writeFile, openDir, project, projectDemo } = this.props;
@@ -292,7 +294,7 @@ export default class App extends React.Component {
       // 选择目录
       openDir((dir) => {
         // 保存图片
-        this._showExportMessage();
+        const modal = this._showExportMessage();
         btn && btn.setLoading(true);
         const imagePaths = {};
         const projectName = projectDemo || this._getProjectName(project);
@@ -314,6 +316,7 @@ export default class App extends React.Component {
               // 将数据保存到文件
               writeFile(`${dir}/${projectName}.md`, dataSource).then(() => {
                 // md保存成功
+                modal && modal.close();
                 btn && btn.setLoading(false);
                 Modal.success({
                   title: `${type}导出成功！`,
@@ -323,6 +326,7 @@ export default class App extends React.Component {
             });
           });
         }, (err) => {
+          modal && modal.close();
           btn && btn.setLoading(false);
           Modal.error({
             title: `${type}导出失败!请重试！`,
@@ -335,7 +339,7 @@ export default class App extends React.Component {
       const postfix = type === 'Word' ? 'doc' : 'pdf';
       openDir((dir) => {
         // 保存图片
-        this._showExportMessage();
+        const modal = this._showExportMessage();
         btn && btn.setLoading(true);
         const projectName = projectDemo || this._getProjectName(project);
         saveImage(dataSource, columnOrder, writeFile, (images) => {
@@ -369,6 +373,7 @@ export default class App extends React.Component {
                 tempResult = result;
               }
               btn && btn.setLoading(false);
+              modal && modal.close();
               if (tempResult.status !== 'SUCCESS') {
                 Modal.error({
                   title: `${type}导出失败!请重试！`,
@@ -383,6 +388,7 @@ export default class App extends React.Component {
             }, 'gendocx');
           });
         }, (err) => {
+          modal && modal.close();
           btn && btn.setLoading(false);
           Modal.error({
             title: `${type}导出失败!请重试！`,
@@ -393,20 +399,23 @@ export default class App extends React.Component {
     } else if (type === 'Html') {
       openDir((dir) => {
         // 保存图片
-        this._showExportMessage();
+        const modal = this._showExportMessage();
         btn && btn.setLoading(true);
         const projectName = projectDemo || this._getProjectName(project);
         saveImage(dataSource, columnOrder, writeFile, (images) => {
           generateHtml(dataSource, images, projectName, (dataSource) => {
             writeFile(`${dir}/${projectName}.html`, dataSource).then(() => {
+              modal && modal.close();
               btn && btn.setLoading(false);
               Message.success({title: `html导出成功！导出目录：[${dir}]`});
             }).catch(() => {
-              Message.success({title: 'SQL文件导出失败！'});
+              modal && modal.close();
+              Message.success({title: 'html导出成功导出失败！'});
               btn && btn.setLoading(false);
             });
           });
         }, (err) => {
+          modal && modal.close();
           btn && btn.setLoading(false);
           Modal.error({
             title: `${type}导出失败!请重试！`,

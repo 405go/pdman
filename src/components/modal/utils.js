@@ -18,6 +18,7 @@ export const error = ({title, message, width}) => {
       zIndex: 999,
       autoFocus: true,
     });
+  return modal;
 };
 
 export const success = ({title, message, width}) => {
@@ -34,6 +35,7 @@ export const success = ({title, message, width}) => {
       zIndex: 999,
       autoFocus: true,
     });
+  return modal;
 };
 
 export const confirm = ({title, message, width, onOk, onCancel}) => {
@@ -56,4 +58,5 @@ export const confirm = ({title, message, width, onOk, onCancel}) => {
       width,
       zIndex: 999,
     });
+  return modal;
 };
