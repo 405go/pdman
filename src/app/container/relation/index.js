@@ -154,7 +154,7 @@ export default class Relation extends React.Component{
         return null;
       }
       return {
-        relation: edge.relation || '0:0,n',
+        relation: edge.relation || '0,n:1',
         from: {
           entity: sourceEntity,
           field: sourceFieldData.name,
@@ -540,7 +540,7 @@ export default class Relation extends React.Component{
 
         },
         afterDraw: function(cfg, group, keyShape) {
-          cfg.origin.relation = cfg.origin.relation || '0:0,n';
+          cfg.origin.relation = cfg.origin.relation || '0,n:1';
           var points = cfg.points;
           var s1 = points[0];
           var e1 = points[points.length - 1];
@@ -974,7 +974,7 @@ export default class Relation extends React.Component{
       if(shape && shape.hasClass('anchor-point') && !dragging) {
         this.net.beginAdd('edge', {
           shape: 'erdRelation',
-          relation: '0:0,n'
+          relation: '0,n:1'
         });
       }
     });
@@ -1258,9 +1258,6 @@ export default class Relation extends React.Component{
         return '#5D616A'
       }
       return '#353B47';
-    });
-    this.net.edge().label((e) => {
-      return (e.relation || '0:0,n');
     });
 
     this.net.render();

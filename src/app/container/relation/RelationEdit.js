@@ -47,6 +47,9 @@ export default class RelationEdit extends React.Component{
         onChange={e => this._valueChange(e, 'to')}>
         <option value='0' key='0'>0</option>
         <option value='1' key='1'>1</option>
+        <option value='0,1' key='0,1'>0,1</option>
+        <option value='0,n' key='0,n'>0,n</option>
+        <option value='1,n' key='1,n'>1,n</option>
         <option value='' key='__empty'>请选择</option>
       </Select>
     </div>);
