@@ -2628,6 +2628,12 @@
           },
           "ORACLE": {
             "type": "NVARCHAR2(32)"
+          },
+          "SQLServer": {
+            "type": "NVARCHAR(32)"
+          },
+          "PostgreSQL": {
+            "type": "VARCHAR(32)"
           }
         }
       },
@@ -2643,6 +2649,33 @@
           },
           "MYSQL": {
             "type": "VARCHAR(32)"
+          },
+          "SQLServer": {
+            "type": "VARCHAR(32)"
+          },
+          "PostgreSQL": {
+            "type": "VARCHAR(32)"
+          }
+        }
+      },
+      {
+        "name": "标识号-长",
+        "code": "LongKey",
+        "apply": {
+          "MYSQL": {
+            "type": "VARCHAR(64)"
+          },
+          "ORACLE": {
+            "type": "VARCHAR2(64)"
+          },
+          "JAVA": {
+            "type": "String"
+          },
+          "SQLServer": {
+            "type": "VARCHAR(64)"
+          },
+          "PostgreSQL": {
+            "type": "VARCHAR(64)"
           }
         }
       },
@@ -2658,6 +2691,12 @@
           },
           "ORACLE": {
             "type": "NVARCHAR2(128)"
+          },
+          "SQLServer": {
+            "type": "NVARCHAR(128)"
+          },
+          "PostgreSQL": {
+            "type": "VARCHAR(128)"
           }
         }
       },
@@ -2673,6 +2712,12 @@
           },
           "ORACLE": {
             "type": "NVARCHAR2(512)"
+          },
+          "SQLServer": {
+            "type": "NVARCHAR(512)"
+          },
+          "PostgreSQL": {
+            "type": "VARCHAR(512)"
           }
         }
       },
@@ -2688,6 +2733,12 @@
           },
           "ORACLE": {
             "type": "NVARCHAR2(128)"
+          },
+          "SQLServer": {
+            "type": "NVARCHAR(128)"
+          },
+          "PostgreSQL": {
+            "type": "VARCHAR(128)"
           }
         }
       },
@@ -2703,6 +2754,12 @@
           },
           "ORACLE": {
             "type": "NVARCHAR2(1024)"
+          },
+          "SQLServer": {
+            "type": "NVARCHAR(1024)"
+          },
+          "PostgreSQL": {
+            "type": "VARCHAR(1024)"
           }
         }
       },
@@ -2714,10 +2771,16 @@
             "type": "String"
           },
           "ORACLE": {
-            "type": "NVARCHAR2(3120)"
+            "type": "NVARCHAR2(3072)"
           },
           "MYSQL": {
-            "type": "VARCHAR(3120)"
+            "type": "VARCHAR(3072)"
+          },
+          "SQLServer": {
+            "type": "NVARCHAR(3072)"
+          },
+          "PostgreSQL": {
+            "type": "VARCHAR(3072)"
           }
         }
       },
@@ -2733,6 +2796,12 @@
           },
           "ORACLE": {
             "type": "CLOB"
+          },
+          "SQLServer": {
+            "type": "NTEXT"
+          },
+          "PostgreSQL": {
+            "type": "TEXT"
           }
         }
       },
@@ -2744,10 +2813,16 @@
             "type": "Double"
           },
           "MYSQL": {
-            "type": "DECIMAL(64,16)"
+            "type": "DECIMAL(32,10)"
           },
           "ORACLE": {
-            "type": "NUMBER(64,16)"
+            "type": "NUMBER(32,10)"
+          },
+          "SQLServer": {
+            "type": "DECIMAL(32,10)"
+          },
+          "PostgreSQL": {
+            "type": "DECIMAL(32,10)"
           }
         }
       },
@@ -2756,13 +2831,19 @@
         "code": "Ratio",
         "apply": {
           "MYSQL": {
-            "type": "DECIMAL(2,2)"
+            "type": "DECIMAL(4,2)"
           },
           "JAVA": {
             "type": "Double"
           },
           "ORACLE": {
-            "type": "NUMBER(2,2)"
+            "type": "NUMBER(4,2)"
+          },
+          "SQLServer": {
+            "type": "DECIMAL(4,2)"
+          },
+          "PostgreSQL": {
+            "type": "DECIMAL(4,2)"
           }
         }
       },
@@ -2778,6 +2859,33 @@
           },
           "ORACLE": {
             "type": "INT"
+          },
+          "SQLServer": {
+            "type": "INT"
+          },
+          "PostgreSQL": {
+            "type": "INT"
+          }
+        }
+      },
+      {
+        "name": "大整数",
+        "code": "BigInt",
+        "apply": {
+          "MYSQL": {
+            "type": "BIGINT"
+          },
+          "JAVA": {
+            "type": "Long"
+          },
+          "ORACLE": {
+            "type": "NUMBER"
+          },
+          "SQLServer": {
+            "type": "BIGINT"
+          },
+          "PostgreSQL": {
+            "type": "BIGINT"
           }
         }
       },
@@ -2793,6 +2901,12 @@
           },
           "ORACLE": {
             "type": "NUMBER(32,8)"
+          },
+          "SQLServer": {
+            "type": "DECIMAL(32,8)"
+          },
+          "PostgreSQL": {
+            "type": "DECIMAL(32,8)"
           }
         }
       },
@@ -2808,6 +2922,12 @@
           },
           "ORACLE": {
             "type": "VARCHAR2(1)"
+          },
+          "SQLServer": {
+            "type": "VARCHAR(1)"
+          },
+          "PostgreSQL": {
+            "type": "VARCHAR(1)"
           }
         }
       },
@@ -2823,6 +2943,12 @@
           },
           "ORACLE": {
             "type": "VARCHAR2(32)"
+          },
+          "SQLServer": {
+            "type": "VARCHAR(32)"
+          },
+          "PostgreSQL": {
+            "type": "VARCHAR(32)"
           }
         }
       },
@@ -2834,10 +2960,16 @@
             "type": "Date"
           },
           "MYSQL": {
-            "type": "Date"
+            "type": "DATE"
           },
           "ORACLE": {
-            "type": "Date"
+            "type": "DATE"
+          },
+          "SQLServer": {
+            "type": "DATE"
+          },
+          "PostgreSQL": {
+            "type": "DATE"
           }
         }
       },
@@ -2849,10 +2981,37 @@
             "type": "Date"
           },
           "MYSQL": {
-            "type": "DateTime"
+            "type": "DATETIME"
           },
           "ORACLE": {
-            "type": "Date"
+            "type": "DATE"
+          },
+          "SQLServer": {
+            "type": "DATE"
+          },
+          "PostgreSQL": {
+            "type": "DATETIME"
+          }
+        }
+      },
+      {
+        "name": "单字符",
+        "code": "Char",
+        "apply": {
+          "MYSQL": {
+            "type": "CHAR(1)"
+          },
+          "ORACLE": {
+            "type": "CHAR(1)"
+          },
+          "JAVA": {
+            "type": "String"
+          },
+          "SQLServer": {
+            "type": "CHAR(1)"
+          },
+          "PostgreSQL": {
+            "type": "CHAR(1)"
           }
         }
       }
@@ -2885,6 +3044,23 @@
         "deleteIndexTemplate": "DROP INDEX {{=it.entity.title}}.{{=it.index.name}};{{=it.separator}}\r\n$blankline",
         "createIndexTemplate": "CREATE{{? it.index.isUnique}} UNIQUE{{?}} INDEX {{=it.index.name}} ON {{=it.entity.title}}({{=it.func.join(it.index.fields,',')}});{{=it.separator}}\r\n$blankline",
         "updateTableComment": "{{? it.entity.chnname || it.entity.remark}}COMMENT ON TABLE {{=it.entity.title}} IS {{? it.entity.remark}}'{{=it.entity.remark}}'{{??}}'{{=it.entity.chnname}}'{{?}};{{=it.separator}}{{?}}\r\n$blankline"
+      },
+      {
+        "code": "SQLServer",
+        "createTableTemplate": "CREATE TABLE {{=it.entity.title}}(\n{{ pkList = [] ; }}\n{{~it.entity.fields:field:index}}\n    {{? field.pk }}{{ pkList.push(field.name) }}{{?}}\n    {{=field.name}} {{=field.type}} {{= field.notNull ? 'NOT NULL' : '' }} {{= field.autoIncrement ? 'INDENTITY(1,1)' : '' }} {{= field.defaultValue ? it.func.join('DEFAULT',field.defaultValue,' ') : '' }}  {{= index < it.entity.fields.length-1 ? ',' : ( pkList.length>0 ? ',' :'' ) }}\n{{~}}\n{{? pkList.length >0 }}\n    CONSTRAINT PK_{{=it.entity.title}} PRIMARY KEY CLUSTERED ({{~pkList:pkName:i}}{{= pkName }} ASC {{= i<pkList.length-1 ? ',' : '' }}{{~}}) ON [PRIMARY] \n{{?}}\n) ;{{=it.separator}}\n\n$blankline\n--{{? it.entity.chnname || it.entity.remark}}COMMENT ON TABLE {{=it.entity.title}} IS {{? it.entity.remark}}'{{=it.entity.remark}}'{{??}}'{{=it.entity.chnname}}'{{?}};{{?}}\n{{~it.entity.fields:field:index}}\n{{? field.chnname || field.remark}}COMMENT ON COLUMN {{=it.entity.title}}.{{=field.name}} IS {{? field.remark}}'{{=field.remark}}'{{??}}'{{=field.chnname}}'{{?}};{{=it.separator}}{{?}}\n{{~}}\n"
+      },
+      {
+        "code": "PostgreSQL",
+        "template": "DROP TABLE {{=it.entity.title}};\n$blankline\nCREATE TABLE {{=it.entity.title}}(\n{{ pkList = [] ; }}\n{{~it.entity.fields:field:index}}\n    {{? field.pk }}{{ pkList.push(field.name) }}{{?}}\n    {{=field.name}} {{=field.type}} {{= field.pk ? 'NOT NULL' : '' }} COMMENT '{{=it.func.join(field.chnname,field.remark,';')}}' {{= index < it.entity.fields.length-1 ? ',' : ( pkList.length>0 ? ',' :'' ) }}\n{{~}}\n{{? pkList.length >0 }}\n    PRIMARY KEY ({{~pkList:pkName:i}}{{= pkName }}{{= i<pkList.length-1 ? ',' : '' }}{{~}})\n{{?}}\n) COMMENT = '{{=it.func.join(it.entity.chnname,it.entity.remark,';') }}'",
+        "createTableTemplate": "CREATE TABLE {{=it.entity.title}}(\n{{ pkList = [] ; }}\n{{~it.entity.fields:field:index}}\n    {{? field.pk }}{{ pkList.push(field.name) }}{{?}}\n    {{=field.name}} {{=field.type}} {{= field.notNull ? 'NOT NULL' : '' }} {{= field.autoIncrement ? 'AUTO_INCREMENT' : '' }} {{= field.defaultValue ? it.func.join('DEFAULT',field.defaultValue,' ') : '' }} COMMENT '{{=it.func.join(field.chnname,field.remark,' ')}}' {{= index < it.entity.fields.length-1 ? ',' : ( pkList.length>0 ? ',' :'' ) }}\n{{~}}\n{{? pkList.length >0 }}\n    PRIMARY KEY ({{~pkList:pkName:i}}{{= pkName }}{{= i<pkList.length-1 ? ',' : '' }}{{~}})\n{{?}}\n) COMMENT = '{{=it.func.join(it.entity.chnname,it.entity.remark,' ') }}';",
+        "deleteTableTemplate": "DROP TABLE {{=it.entity.title}};/*SkipError*/",
+        "rebuildTableTemplate": "create table PDMAN_UP_{{=it.oldEntity.title}}\nas select * from {{=it.oldEntity.title}};{{=it.separator}}\n$blankline\n\ndrop table {{=it.oldEntity.title}};{{=it.separator}}\n$blankline\n\nCREATE TABLE {{=it.newEntity.title}}(\n{{ pkList = [] ; }}\n{{~it.newEntity.fields:field:index}}\n    {{? field.pk }}{{ pkList.push(field.name) }}{{?}}\n    {{=field.name}} {{=field.type}} {{= field.notNull ? 'NOT NULL' : '' }} COMMENT '{{=it.func.join(field.chnname,field.remark,';')}}' {{= index < it.newEntity.fields.length-1 ? ',' : ( pkList.length>0 ? ',' :'' ) }}\n{{~}}\n{{? pkList.length >0 }}\n    PRIMARY KEY ({{~pkList:pkName:i}}{{= pkName }}{{= i<pkList.length-1 ? ',' : '' }}{{~}})\n{{?}}\n) COMMENT = '{{=it.func.join(it.newEntity.chnname,it.newEntity.remark,';') }}';{{=it.separator}}\n$blankline\n\n{{ sameCols = it.func.intersect(it.newEntity.fields,it.newEntity.fields) ;}}\ninsert into {{=it.newEntity.title}}(\n{{~sameCols:field:index}}\n    {{=field.name}}{{? index<it.newEntity.fields.length-1}},{{?}}\n{{~}}\n) \nvalues\nselect \n{{~sameCols:field:index}}\n    {{=field.name}}{{? index<it.oldEntity.fields.length-1}},{{?}}\n{{~}}\nfrom PDMAN_UP_{{=it.oldEntity.title}};{{=it.separator}}\n$blankline\n\ndrop table PDMAN_UP_{{=it.oldEntity.title}};{{=it.separator}}",
+        "createFieldTemplate": "ALTER TABLE {{=it.entity.title}} ADD COLUMN {{=it.field.name}} {{=it.field.type}} {{? it.field.notNull}}NOT NULL{{?}} {{? ''!=it.field.defaultValue}}DEFAULT {{? null==it.field.defaultValue}}NULL{{??}}'{{=it.field.defaultValue}}'{{?}}{{?}} {{? it.field.autoIncrement}}AUTO_INCREMENT{{?}} {{? it.field.pk}}PRIMARY KEY{{?}} {{? it.field.chnname}}COMMENT '{{=it.field.chnname}}'{{?}} {{? it.field.addAfter}}AFTER {{=it.field.addAfter}}{{?}};",
+        "updateFieldTemplate": "ALTER TABLE {{=it.entity.title}} MODIFY COLUMN {{=it.field.name}} {{=it.field.type}} {{? it.field.notNull}}NOT NULL{{?}} {{? ''!=it.field.defaultValue}}DEFAULT {{? null==it.field.defaultValue}}NULL{{??}}'{{=it.field.defaultValue}}'{{?}}{{?}} {{? it.field.autoIncrement}}AUTO_INCREMENT{{?}} {{? it.field.chnname}}COMMENT '{{=it.field.chnname}}'{{?}};",
+        "deleteFieldTemplate": "ALTER TABLE {{=it.entity.title}} DROP {{=it.field.name}};",
+        "deleteIndexTemplate": "ALTER TABLE {{=it.entity.title}} DROP INDEX {{=it.index.name}};",
+        "createIndexTemplate": "ALTER TABLE {{=it.entity.title}} ADD {{? it.index.isUnique}}UNIQUE{{?}} {{=it.index.name}}({{=it.func.join(...it.index.fields,',')}});",
+        "updateTableComment": "ALTER TABLE {{=it.entity.title}} COMMENT '{{=it.entity.chnname}}';"
       },
       {
         "code": "JAVA",

@@ -1603,7 +1603,7 @@ export default class App extends React.Component {
             ><Input
               onChange={this._relationSearch}
               style={{margin: '10px 10px 0 0', borderRadius: 3}}
-              placeholder='快速搜索节点'
+              placeholder='在图上找表'
             /></div>
           </div>
           <div className="tools-content-tab" style={{display: tabs.length > 0 && tools === 'entity' ? '' : 'none'}}>
