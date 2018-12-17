@@ -410,7 +410,7 @@ export default class App extends React.Component {
               Message.success({title: `html导出成功！导出目录：[${dir}]`});
             }).catch(() => {
               modal && modal.close();
-              Message.success({title: 'html导出成功导出失败！'});
+              Message.success({title: 'html导出失败！'});
               btn && btn.setLoading(false);
             });
           });
