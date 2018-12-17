@@ -237,7 +237,7 @@ const renderRelation = (data, id) => {
 
     },
     afterDraw: function(cfg, group, keyShape) {
-      cfg.origin.relation = cfg.origin.relation || '0:0,n';
+      cfg.origin.relation = cfg.origin.relation || '0,n:1';
       var points = cfg.points;
       var s1 = points[0];
       var e1 = points[points.length - 1];
@@ -535,7 +535,6 @@ const renderRelation = (data, id) => {
     }
     return '#353B47';
   });
-  net.edge().label('relation');
   net.render();
   return net;
 };
