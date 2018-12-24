@@ -1,16 +1,18 @@
 const _http = require('http');
+const os = require('os');
 
 const version = {
   version: '2.0.1',
   date: '2018.8',
 };
 
-const defaultUrl = 'http://www.pdman.cn/latest-version.json';
+const defaultUrl = `http://www.pdman.cn/launch/${os.platform()}/${version.version}`;
 //const defaultUrl = 'http://127.0.0.1/latest-version.json';
 
 export const getCurrentVersion = () => {
   return version;
 };
+
 
 export const getVersion = (callback) => {
   _http.get(defaultUrl, (req) => {
