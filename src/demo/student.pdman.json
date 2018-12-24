@@ -127,6 +127,22 @@
             {
               "fieldName": "relationNoShow",
               "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
             }
           ],
           "chnname": "用户信息",
@@ -232,6 +248,22 @@
             {
               "fieldName": "relationNoShow",
               "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
             }
           ],
           "chnname": "用户账号"
@@ -342,6 +374,22 @@
             {
               "fieldName": "relationNoShow",
               "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
             }
           ],
           "chnname": "用户行为"
@@ -434,6 +482,22 @@
             {
               "fieldName": "relationNoShow",
               "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
             }
           ],
           "chnname": "用户属性"
@@ -568,6 +632,22 @@
             {
               "fieldName": "relationNoShow",
               "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
             }
           ],
           "chnname": "部门机构"
@@ -659,6 +739,22 @@
             },
             {
               "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
               "relationNoShow": true
             }
           ],
@@ -757,6 +853,22 @@
             },
             {
               "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
               "relationNoShow": true
             }
           ],
@@ -874,6 +986,22 @@
             {
               "fieldName": "relationNoShow",
               "relationNoShow": true
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
             }
           ],
           "chnname": "角色信息"
@@ -959,6 +1087,22 @@
             },
             {
               "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
               "relationNoShow": true
             }
           ],
@@ -1047,6 +1191,22 @@
             {
               "fieldName": "relationNoShow",
               "relationNoShow": true
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
             }
           ],
           "chnname": "角色权限"
@@ -1133,6 +1293,22 @@
             {
               "fieldName": "relationNoShow",
               "relationNoShow": true
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
             }
           ],
           "chnname": "用户直接权限"
@@ -1184,13 +1360,6 @@
           },
           {
             "shape": "table",
-            "title": "AUTH_USER_ROLE",
-            "x": 890,
-            "y": 310,
-            "id": "add59545"
-          },
-          {
-            "shape": "table",
             "title": "AUTH_ROLE",
             "x": 1250,
             "y": 80,
@@ -1206,7 +1375,7 @@
           {
             "shape": "table",
             "title": "AUTH_ROLE_PERMIT",
-            "x": 1580,
+            "x": 1600,
             "y": 160,
             "id": "e1f62571"
           },
@@ -1223,50 +1392,22 @@
             "x": 990,
             "y": 1110,
             "id": "5deddee1"
+          },
+          {
+            "shape": "table",
+            "title": "AUTH_USER_ROLE",
+            "x": 900,
+            "y": 20,
+            "id": "add59545"
           }
         ],
         "edges": [
           {
-            "shape": "polyLineFlow",
-            "source": "b8699936",
-            "target": "02bd0be0",
-            "id": "6eee7351",
-            "controlPoints": [
-              {
-                "x": 842.5615234375,
-                "y": 892.3382352941177
-              },
-              {
-                "x": 718.6552734375,
-                "y": 892.1136363636364
-              }
-            ],
-            "sourceAnchor": 2,
-            "targetAnchor": 1
-          },
-          {
-            "shape": "polyLineFlow",
-            "source": "d0d16163",
-            "target": "02bd0be0",
-            "id": "ada207b3",
-            "controlPoints": [
-              {
-                "x": 353.0185546875,
-                "y": 892.5227272727273
-              },
-              {
-                "x": 441.3447265625,
-                "y": 892.1136363636364
-              }
-            ],
-            "sourceAnchor": 3,
-            "targetAnchor": 0
-          },
-          {
-            "shape": "polyLineFlow",
+            "shape": "erdRelation",
+            "relation": "0,n:1",
             "source": "49537dcc",
             "target": "d764e0e8",
-            "id": "f8e7a5bc",
+            "id": "4f2c3889",
             "controlPoints": [
               {
                 "x": 325.765625,
@@ -1281,22 +1422,23 @@
             "targetAnchor": 0
           },
           {
-            "shape": "polyLineFlow",
+            "shape": "erdRelation",
+            "relation": "0,n:1",
             "source": "730ae5d1",
             "target": "d764e0e8",
-            "id": "670fecb6",
+            "id": "5e064046",
             "controlPoints": [
               {
                 "x": 431.3447265625,
                 "y": 602.4772727272727
               },
               {
-                "x": 340,
+                "x": 360,
                 "y": 600
               },
               {
-                "x": 340,
-                "y": 20
+                "x": 360,
+                "y": 60
               },
               {
                 "x": 399.3447265625,
@@ -1307,14 +1449,15 @@
             "targetAnchor": 0
           },
           {
-            "shape": "polyLineFlow",
+            "shape": "erdRelation",
+            "relation": "0,n:1",
             "source": "add59545",
             "target": "d764e0e8",
-            "id": "281ff0a5",
+            "id": "e47aab3b",
             "controlPoints": [
               {
-                "x": 749.560546875,
-                "y": 302.4423076923077
+                "x": 759.560546875,
+                "y": 12.442307692307693
               },
               {
                 "x": 700.6552734375,
@@ -1325,32 +1468,15 @@
             "targetAnchor": 1
           },
           {
-            "shape": "polyLineFlow",
-            "source": "add59545",
-            "target": "730ae5d1",
-            "id": "54041e8a",
-            "controlPoints": [
-              {
-                "x": 749.560546875,
-                "y": 342.75
-              },
-              {
-                "x": 708.6552734375,
-                "y": 482.1136363636364
-              }
-            ],
-            "sourceAnchor": 6,
-            "targetAnchor": 1
-          },
-          {
-            "shape": "polyLineFlow",
+            "shape": "erdRelation",
+            "relation": "0,n:1",
             "source": "add59545",
             "target": "5a939458",
-            "id": "aecfedb9",
+            "id": "33e3441f",
             "controlPoints": [
               {
-                "x": 1030.439453125,
-                "y": 322.5961538461538
+                "x": 1040.439453125,
+                "y": 32.59615384615384
               },
               {
                 "x": 1084.5673828125,
@@ -1361,64 +1487,11 @@
             "targetAnchor": 0
           },
           {
-            "shape": "polyLineFlow",
-            "source": "e1f62571",
-            "target": "5a939458",
-            "id": "f3e1512a",
-            "controlPoints": [
-              {
-                "x": 1462.1064453125,
-                "y": 122.30263157894737
-              },
-              {
-                "x": 1415.4326171875,
-                "y": -27.870689655172413
-              }
-            ],
-            "sourceAnchor": 2,
-            "targetAnchor": 1
-          },
-          {
-            "shape": "polyLineFlow",
-            "source": "e1f62571",
-            "target": "d04ae19c",
-            "id": "ad41ec2b",
-            "controlPoints": [
-              {
-                "x": 1462.1064453125,
-                "y": 142.4078947368421
-              },
-              {
-                "x": 1471.0947265625,
-                "y": 342.1973684210526
-              }
-            ],
-            "sourceAnchor": 4,
-            "targetAnchor": 0
-          },
-          {
-            "shape": "polyLineFlow",
-            "source": "6a57c00e",
-            "target": "d04ae19c",
-            "id": "4bd18953",
-            "controlPoints": [
-              {
-                "x": 1205.0888671875,
-                "y": 502.8611111111111
-              },
-              {
-                "x": 1471.0947265625,
-                "y": 342.1973684210526
-              }
-            ],
-            "sourceAnchor": 5,
-            "targetAnchor": 0
-          },
-          {
-            "shape": "polyLineFlow",
+            "shape": "erdRelation",
+            "relation": "0,n:1",
             "source": "6a57c00e",
             "target": "730ae5d1",
-            "id": "cd487210",
+            "id": "1109f0ae",
             "controlPoints": [
               {
                 "x": 974.9111328125,
@@ -1433,14 +1506,157 @@
             "targetAnchor": 1
           },
           {
-            "shape": "polyLineFlow",
+            "shape": "erdRelation",
+            "relation": "0,n:1",
+            "source": "add59545",
+            "target": "730ae5d1",
+            "id": "b4904062",
+            "controlPoints": [
+              {
+                "x": 759.560546875,
+                "y": 52.75
+              },
+              {
+                "x": 730,
+                "y": 60
+              },
+              {
+                "x": 730,
+                "y": 450
+              },
+              {
+                "x": 708.6552734375,
+                "y": 482.1136363636364
+              }
+            ],
+            "sourceAnchor": 6,
+            "targetAnchor": 1
+          },
+          {
+            "shape": "erdRelation",
+            "relation": "0,n:1",
+            "source": "6a57c00e",
+            "target": "d04ae19c",
+            "id": "92d790dc",
+            "controlPoints": [
+              {
+                "x": 1205.0888671875,
+                "y": 502.8611111111111
+              },
+              {
+                "x": 1455.3264465335951,
+                "y": 352.9359653125
+              },
+              {
+                "x": 1471.0947265625,
+                "y": 342.1973684210526
+              }
+            ],
+            "sourceAnchor": 5,
+            "targetAnchor": 0
+          },
+          {
+            "shape": "erdRelation",
+            "relation": "0,n:1",
+            "source": "e1f62571",
+            "target": "d04ae19c",
+            "id": "5ceec8a2",
+            "controlPoints": [
+              {
+                "x": 1482.1064453125,
+                "y": 142.4078947368421
+              },
+              {
+                "x": 1440,
+                "y": 140
+              },
+              {
+                "x": 1440,
+                "y": 330
+              },
+              {
+                "x": 1471.0947265625,
+                "y": 342.1973684210526
+              }
+            ],
+            "sourceAnchor": 4,
+            "targetAnchor": 0
+          },
+          {
+            "shape": "erdRelation",
+            "relation": "0,n:1",
+            "source": "e1f62571",
+            "target": "5a939458",
+            "id": "efb1e974",
+            "controlPoints": [
+              {
+                "x": 1482.1064453125,
+                "y": 122.30263157894737
+              },
+              {
+                "x": 1440,
+                "y": 120
+              },
+              {
+                "x": 1440,
+                "y": -30
+              },
+              {
+                "x": 1415.4326171875,
+                "y": -27.870689655172413
+              }
+            ],
+            "sourceAnchor": 2,
+            "targetAnchor": 1
+          },
+          {
+            "shape": "erdRelation",
+            "relation": "0,n:1",
+            "source": "d0d16163",
+            "target": "02bd0be0",
+            "id": "d265397e",
+            "controlPoints": [
+              {
+                "x": 353.0185546875,
+                "y": 892.5227272727273
+              },
+              {
+                "x": 441.3447265625,
+                "y": 892.1136363636364
+              }
+            ],
+            "sourceAnchor": 3,
+            "targetAnchor": 0
+          },
+          {
+            "shape": "erdRelation",
+            "relation": "0,n:1",
             "source": "5deddee1",
             "target": "02bd0be0",
-            "id": "86d96919",
+            "id": "35394a33",
             "controlPoints": [
               {
                 "x": 846.900390625,
                 "y": 1092.3833333333334
+              },
+              {
+                "x": 718.6552734375,
+                "y": 892.1136363636364
+              }
+            ],
+            "sourceAnchor": 2,
+            "targetAnchor": 1
+          },
+          {
+            "shape": "erdRelation",
+            "relation": "0,n:1",
+            "source": "b8699936",
+            "target": "02bd0be0",
+            "id": "4d7c1f71",
+            "controlPoints": [
+              {
+                "x": 842.5615234375,
+                "y": 892.3382352941177
               },
               {
                 "x": 718.6552734375,
@@ -1454,29 +1670,7 @@
       },
       "associations": [
         {
-          "relation": "",
-          "from": {
-            "entity": "AUTH_USER_BEHAVIOR",
-            "field": "USER_ID"
-          },
-          "to": {
-            "entity": "AUTH_USER",
-            "field": "ID"
-          }
-        },
-        {
-          "relation": "",
-          "from": {
-            "entity": "AUTH_USER_PROPERTY",
-            "field": "USER_ID"
-          },
-          "to": {
-            "entity": "AUTH_USER",
-            "field": "ID"
-          }
-        },
-        {
-          "relation": "",
+          "relation": "0,n:1",
           "from": {
             "entity": "AUTH_ORG_PROPERTY",
             "field": "ORG_ID"
@@ -1487,7 +1681,7 @@
           }
         },
         {
-          "relation": "",
+          "relation": "0,n:1",
           "from": {
             "entity": "AUTH_USER",
             "field": "ORG_ID"
@@ -1498,7 +1692,7 @@
           }
         },
         {
-          "relation": "",
+          "relation": "0,n:1",
           "from": {
             "entity": "AUTH_USER_ROLE",
             "field": "ORG_ID"
@@ -1509,18 +1703,7 @@
           }
         },
         {
-          "relation": "",
-          "from": {
-            "entity": "AUTH_USER_ROLE",
-            "field": "USER_ID"
-          },
-          "to": {
-            "entity": "AUTH_USER",
-            "field": "ID"
-          }
-        },
-        {
-          "relation": "",
+          "relation": "0,n:1",
           "from": {
             "entity": "AUTH_USER_ROLE",
             "field": "ROLE_ID"
@@ -1531,40 +1714,7 @@
           }
         },
         {
-          "relation": "",
-          "from": {
-            "entity": "AUTH_ROLE_PERMIT",
-            "field": "ROLE_ID"
-          },
-          "to": {
-            "entity": "AUTH_ROLE",
-            "field": "ID"
-          }
-        },
-        {
-          "relation": "",
-          "from": {
-            "entity": "AUTH_ROLE_PERMIT",
-            "field": "PERMIT_CODE"
-          },
-          "to": {
-            "entity": "AUTH_PERMIT",
-            "field": "CODE"
-          }
-        },
-        {
-          "relation": "",
-          "from": {
-            "entity": "AUTH_USER_PERMIT",
-            "field": "PERMIT_CODE"
-          },
-          "to": {
-            "entity": "AUTH_PERMIT",
-            "field": "CODE"
-          }
-        },
-        {
-          "relation": "",
+          "relation": "0,n:1",
           "from": {
             "entity": "AUTH_USER_PERMIT",
             "field": "USER_ID"
@@ -1575,9 +1725,75 @@
           }
         },
         {
-          "relation": "",
+          "relation": "0,n:1",
+          "from": {
+            "entity": "AUTH_USER_ROLE",
+            "field": "USER_ID"
+          },
+          "to": {
+            "entity": "AUTH_USER",
+            "field": "ID"
+          }
+        },
+        {
+          "relation": "0,n:1",
+          "from": {
+            "entity": "AUTH_USER_PERMIT",
+            "field": "PERMIT_CODE"
+          },
+          "to": {
+            "entity": "AUTH_PERMIT",
+            "field": "CODE"
+          }
+        },
+        {
+          "relation": "0,n:1",
+          "from": {
+            "entity": "AUTH_ROLE_PERMIT",
+            "field": "PERMIT_CODE"
+          },
+          "to": {
+            "entity": "AUTH_PERMIT",
+            "field": "CODE"
+          }
+        },
+        {
+          "relation": "0,n:1",
+          "from": {
+            "entity": "AUTH_ROLE_PERMIT",
+            "field": "ROLE_ID"
+          },
+          "to": {
+            "entity": "AUTH_ROLE",
+            "field": "ID"
+          }
+        },
+        {
+          "relation": "0,n:1",
+          "from": {
+            "entity": "AUTH_USER_PROPERTY",
+            "field": "USER_ID"
+          },
+          "to": {
+            "entity": "AUTH_USER",
+            "field": "ID"
+          }
+        },
+        {
+          "relation": "0,n:1",
           "from": {
             "entity": "AUTH_USER_ACCOUNT",
+            "field": "USER_ID"
+          },
+          "to": {
+            "entity": "AUTH_USER",
+            "field": "ID"
+          }
+        },
+        {
+          "relation": "0,n:1",
+          "from": {
+            "entity": "AUTH_USER_BEHAVIOR",
             "field": "USER_ID"
           },
           "to": {
@@ -1685,6 +1901,22 @@
             {
               "fieldName": "relationNoShow",
               "relationNoShow": true
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
             }
           ],
           "chnname": "学院"
@@ -1789,6 +2021,22 @@
             },
             {
               "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
               "relationNoShow": true
             }
           ],
@@ -1992,6 +2240,22 @@
             {
               "fieldName": "relationNoShow",
               "relationNoShow": true
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
             }
           ],
           "chnname": "学生"
@@ -2084,6 +2348,22 @@
             },
             {
               "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
               "relationNoShow": true
             }
           ],
@@ -2178,6 +2458,22 @@
             {
               "fieldName": "relationNoShow",
               "relationNoShow": true
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
             }
           ],
           "chnname": "教师"
@@ -2259,6 +2555,22 @@
             {
               "fieldName": "relationNoShow",
               "relationNoShow": true
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
             }
           ],
           "chnname": "授课",
@@ -2335,6 +2647,22 @@
             {
               "fieldName": "relationNoShow",
               "relationNoShow": true
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
             }
           ],
           "chnname": "课程"
@@ -2358,23 +2686,16 @@
           },
           {
             "shape": "table",
-            "title": "SIMS_STUDENT",
-            "x": 1200,
-            "y": 510,
-            "id": "00d8557e"
-          },
-          {
-            "shape": "table",
             "title": "SIMS_MAJOR",
             "x": 320,
-            "y": 430,
+            "y": 450,
             "id": "baf114f5"
           },
           {
             "shape": "table",
             "title": "SIMS_TEACHER",
             "x": 70,
-            "y": 690,
+            "y": 718.5714285714287,
             "id": "648a2afa"
           },
           {
@@ -2390,14 +2711,68 @@
             "x": 510,
             "y": 930,
             "id": "7960c89f"
+          },
+          {
+            "shape": "table",
+            "title": "SIMS_STUDENT",
+            "x": 1200,
+            "y": 450,
+            "id": "00d8557e"
           }
         ],
         "edges": [
           {
-            "shape": "polyLineFlow",
+            "shape": "erdRelation",
+            "relation": "0,n:1",
+            "source": "00d8557e",
+            "target": "c6f5e944",
+            "id": "6fd1ce9d",
+            "controlPoints": [
+              {
+                "x": 1014.5458984375,
+                "y": 212.09745762711864
+              },
+              {
+                "x": 880.6826171875,
+                "y": 212.28703703703704
+              }
+            ],
+            "sourceAnchor": 2,
+            "targetAnchor": 5
+          },
+          {
+            "shape": "erdRelation",
+            "relation": "0,n:1",
+            "source": "53ab8034",
+            "target": "c6f5e944",
+            "id": "dcd7f21d",
+            "controlPoints": [
+              {
+                "x": 648.9052734375,
+                "y": 682.4078947368421
+              },
+              {
+                "x": 920,
+                "y": 680
+              },
+              {
+                "x": 930,
+                "y": 270
+              },
+              {
+                "x": 880.6826171875,
+                "y": 212.28703703703704
+              }
+            ],
+            "sourceAnchor": 5,
+            "targetAnchor": 5
+          },
+          {
+            "shape": "erdRelation",
+            "relation": "0,n:1",
             "source": "c6f5e944",
             "target": "f356194d",
-            "id": "367c33d7",
+            "id": "594bff17",
             "controlPoints": [
               {
                 "x": 579.3173828125,
@@ -2412,10 +2787,11 @@
             "targetAnchor": 1
           },
           {
-            "shape": "polyLineFlow",
+            "shape": "erdRelation",
+            "relation": "0,n:1",
             "source": "c6f5e944",
             "target": "baf114f5",
-            "id": "7ccb8e18",
+            "id": "a708a4fd",
             "controlPoints": [
               {
                 "x": 579.3173828125,
@@ -2423,21 +2799,76 @@
               },
               {
                 "x": 458.6552734375,
-                "y": 352.1630434782609
+                "y": 372.1630434782609
               }
             ],
             "sourceAnchor": 2,
             "targetAnchor": 1
           },
           {
-            "shape": "polyLineFlow",
+            "shape": "erdRelation",
+            "relation": "0,n:1",
+            "source": "53ab8034",
+            "target": "648a2afa",
+            "id": "f25b5d07",
+            "controlPoints": [
+              {
+                "x": 371.0947265625,
+                "y": 662.3026315789474
+              },
+              {
+                "x": 208.9052734375,
+                "y": 660.8214285714287
+              }
+            ],
+            "sourceAnchor": 2,
+            "targetAnchor": 3
+          },
+          {
+            "shape": "erdRelation",
+            "relation": "0,n:1",
+            "source": "53ab8034",
+            "target": "7960c89f",
+            "id": "878368f7",
+            "controlPoints": [
+              {
+                "x": 371.0947265625,
+                "y": 702.5131578947369
+              },
+              {
+                "x": 330,
+                "y": 700
+              },
+              {
+                "x": 330,
+                "y": 880
+              },
+              {
+                "x": 371.3447265625,
+                "y": 882.2205882352941
+              }
+            ],
+            "sourceAnchor": 6,
+            "targetAnchor": 0
+          },
+          {
+            "shape": "erdRelation",
+            "relation": "0,n:1",
             "source": "648a2afa",
             "target": "f356194d",
-            "id": "d10c9113",
+            "id": "3082422f",
             "controlPoints": [
               {
                 "x": -68.9052734375,
-                "y": 612.1630434782609
+                "y": 640.7344720496895
+              },
+              {
+                "x": -120,
+                "y": 640
+              },
+              {
+                "x": -110,
+                "y": 80
               },
               {
                 "x": 138.560546875,
@@ -2446,151 +2877,12 @@
             ],
             "sourceAnchor": 0,
             "targetAnchor": 0
-          },
-          {
-            "shape": "polyLineFlow",
-            "source": "53ab8034",
-            "target": "648a2afa",
-            "id": "09799869",
-            "controlPoints": [
-              {
-                "x": 371.0947265625,
-                "y": 662.3026315789474
-              },
-              {
-                "x": 208.9052734375,
-                "y": 632.25
-              }
-            ],
-            "sourceAnchor": 2,
-            "targetAnchor": 3
-          },
-          {
-            "shape": "polyLineFlow",
-            "source": "53ab8034",
-            "target": "c6f5e944",
-            "id": "92cbf18f",
-            "controlPoints": [
-              {
-                "x": 648.9052734375,
-                "y": 682.4078947368421
-              },
-              {
-                "x": 920,
-                "y": 680
-              },
-              {
-                "x": 920,
-                "y": 240
-              },
-              {
-                "x": 880.6826171875,
-                "y": 212.28703703703704
-              }
-            ],
-            "sourceAnchor": 5,
-            "targetAnchor": 5
-          },
-          {
-            "shape": "polyLineFlow",
-            "source": "00d8557e",
-            "target": "c6f5e944",
-            "id": "97638fd9",
-            "controlPoints": [
-              {
-                "x": 1014.5458984375,
-                "y": 272.0974576271186
-              },
-              {
-                "x": 930,
-                "y": 220
-              },
-              {
-                "x": 880.6826171875,
-                "y": 212.28703703703704
-              }
-            ],
-            "sourceAnchor": 2,
-            "targetAnchor": 5
-          },
-          {
-            "shape": "polyLineFlow",
-            "source": "53ab8034",
-            "target": "7960c89f",
-            "id": "5a0af5b2",
-            "controlPoints": [
-              {
-                "x": 371.0947265625,
-                "y": 682.4078947368421
-              },
-              {
-                "x": 371.3447265625,
-                "y": 882.2205882352941
-              }
-            ],
-            "sourceAnchor": 4,
-            "targetAnchor": 0
           }
         ]
       },
       "associations": [
         {
-          "relation": "",
-          "from": {
-            "entity": "SIMS_CLASS",
-            "field": "COLLEGE_ID"
-          },
-          "to": {
-            "entity": "SIMS_COLLEGE",
-            "field": "ID"
-          }
-        },
-        {
-          "relation": "",
-          "from": {
-            "entity": "SIMS_CLASS",
-            "field": "MAJOR_ID"
-          },
-          "to": {
-            "entity": "SIMS_MAJOR",
-            "field": "ID"
-          }
-        },
-        {
-          "relation": "",
-          "from": {
-            "entity": "SIMS_TEACHER",
-            "field": "COLLEGE_ID"
-          },
-          "to": {
-            "entity": "SIMS_COLLEGE",
-            "field": "ID"
-          }
-        },
-        {
-          "relation": "",
-          "from": {
-            "entity": "SIMS_INSTRUCT",
-            "field": "TEACHER_ID"
-          },
-          "to": {
-            "entity": "SIMS_TEACHER",
-            "field": "ID"
-          }
-        },
-        {
-          "relation": "",
-          "from": {
-            "entity": "SIMS_INSTRUCT",
-            "field": "CLASS_ID"
-          },
-          "to": {
-            "entity": "SIMS_CLASS",
-            "field": "ID"
-          }
-        },
-        {
-          "relation": "",
+          "relation": "0,n:1",
           "from": {
             "entity": "SIMS_STUDENT",
             "field": "CLASS_ID"
@@ -2601,13 +2893,68 @@
           }
         },
         {
-          "relation": "",
+          "relation": "0,n:1",
           "from": {
             "entity": "SIMS_INSTRUCT",
             "field": "CLASS_ID"
           },
           "to": {
+            "entity": "SIMS_CLASS",
+            "field": "ID"
+          }
+        },
+        {
+          "relation": "0,n:1",
+          "from": {
+            "entity": "SIMS_CLASS",
+            "field": "COLLEGE_ID"
+          },
+          "to": {
+            "entity": "SIMS_COLLEGE",
+            "field": "ID"
+          }
+        },
+        {
+          "relation": "0,n:1",
+          "from": {
+            "entity": "SIMS_CLASS",
+            "field": "MAJOR_ID"
+          },
+          "to": {
+            "entity": "SIMS_MAJOR",
+            "field": "ID"
+          }
+        },
+        {
+          "relation": "0,n:1",
+          "from": {
+            "entity": "SIMS_INSTRUCT",
+            "field": "TEACHER_ID"
+          },
+          "to": {
+            "entity": "SIMS_TEACHER",
+            "field": "ID"
+          }
+        },
+        {
+          "relation": "0,n:1",
+          "from": {
+            "entity": "SIMS_INSTRUCT",
+            "field": "LESSON_ID"
+          },
+          "to": {
             "entity": "SIMS_LESSON",
+            "field": "ID"
+          }
+        },
+        {
+          "relation": "0,n:1",
+          "from": {
+            "entity": "SIMS_TEACHER",
+            "field": "COLLEGE_ID"
+          },
+          "to": {
+            "entity": "SIMS_COLLEGE",
             "field": "ID"
           }
         }
@@ -3022,7 +3369,7 @@
         "template": "DROP TABLE {{=it.entity.title}};\n$blankline\nCREATE TABLE {{=it.entity.title}}(\n{{ pkList = [] ; }}\n{{~it.entity.fields:field:index}}\n    {{? field.pk }}{{ pkList.push(field.name) }}{{?}}\n    {{=field.name}} {{=field.type}} {{= field.pk ? 'NOT NULL' : '' }} COMMENT '{{=it.func.join(field.chnname,field.remark,';')}}' {{= index < it.entity.fields.length-1 ? ',' : ( pkList.length>0 ? ',' :'' ) }}\n{{~}}\n{{? pkList.length >0 }}\n    PRIMARY KEY ({{~pkList:pkName:i}}{{= pkName }}{{= i<pkList.length-1 ? ',' : '' }}{{~}})\n{{?}}\n) COMMENT = '{{=it.func.join(it.entity.chnname,it.entity.remark,';') }}'",
         "fileShow": true,
         "defaultDatabase": true,
-        "createTableTemplate": "CREATE TABLE {{=it.entity.title}}(\n{{ pkList = [] ; }}\n{{~it.entity.fields:field:index}}\n    {{? field.pk }}{{ pkList.push(field.name) }}{{?}}\n    {{=field.name}} {{=field.type}} {{= field.notNull ? 'NOT NULL' : '' }} {{= field.autoIncrement ? 'AUTO_INCREMENT' : '' }} {{= field.defaultValue ? it.func.join('DEFAULT',field.defaultValue,' ') : '' }} COMMENT '{{=it.func.join(field.chnname,field.remark,' ')}}' {{= index < it.entity.fields.length-1 ? ',' : ( pkList.length>0 ? ',' :'' ) }}\n{{~}}\n{{? pkList.length >0 }}\n    PRIMARY KEY ({{~pkList:pkName:i}}{{= pkName }}{{= i<pkList.length-1 ? ',' : '' }}{{~}})\n{{?}}\n) COMMENT = '{{=it.func.join(it.entity.chnname,it.entity.remark,' ') }}';",
+        "createTableTemplate": "CREATE TABLE {{=it.entity.title}}(\n{{ pkList = [] ; }}\n{{~it.entity.fields:field:index}}\n    {{? field.pk }}{{ pkList.push(field.name) }}{{?}}\n    {{=field.name}} {{=field.type}} {{= field.notNull ? 'NOT NULL' : '' }} {{= field.autoIncrement ? 'AUTO_INCREMENT' : '' }} {{= field.defaultValue ? it.func.join('DEFAULT',field.defaultValue,' ') : '' }} COMMENT '{{=it.func.join(field.chnname,field.remark,' ')}}' {{= index < it.entity.fields.length-1 ? ',' : ( pkList.length>0 ? ',' :'' ) }}\n{{~}}\n{{? pkList.length >0 }}\n    PRIMARY KEY ({{~pkList:pkName:i}}{{= pkName }}{{= i<pkList.length-1 ? ',' : '' }}{{~}})\n{{?}}\n) COMMENT = '{{=it.func.join(it.entity.chnname,it.entity.remark,' ') }}';{{=it.separator}}",
         "deleteTableTemplate": "DROP TABLE {{=it.entity.title}};{{=it.separator}}/*SkipError*/",
         "rebuildTableTemplate": "create table PDMAN_UP_{{=it.oldEntity.title}}\nas select * from {{=it.oldEntity.title}};{{=it.separator}}\n$blankline\n\ndrop table {{=it.oldEntity.title}};{{=it.separator}}\n$blankline\n\nCREATE TABLE {{=it.newEntity.title}}(\n{{ pkList = [] ; }}\n{{~it.newEntity.fields:field:index}}\n    {{? field.pk }}{{ pkList.push(field.name) }}{{?}}\n    {{=field.name}} {{=field.type}} {{= field.notNull ? 'NOT NULL' : '' }} COMMENT '{{=it.func.join(field.chnname,field.remark,';')}}' {{= index < it.newEntity.fields.length-1 ? ',' : ( pkList.length>0 ? ',' :'' ) }}\n{{~}}\n{{? pkList.length >0 }}\n    PRIMARY KEY ({{~pkList:pkName:i}}{{= pkName }}{{= i<pkList.length-1 ? ',' : '' }}{{~}})\n{{?}}\n) COMMENT = '{{=it.func.join(it.newEntity.chnname,it.newEntity.remark,';') }}';{{=it.separator}}\n$blankline\n\n{{ sameCols = it.func.intersect(it.newEntity.fields,it.oldEntity.fields) ;}}\ninsert into {{=it.newEntity.title}}(\n{{~sameCols:field:index}}\n    {{=field.name}}{{? index<sameCols.length-1}},{{?}}\n{{~}}\n) \nselect \n{{~sameCols:field:index}}\n    {{=field.name}}{{? index<sameCols.length-1}},{{?}}\n{{~}}\nfrom PDMAN_UP_{{=it.oldEntity.title}};{{=it.separator}}\n$blankline\n\ndrop table PDMAN_UP_{{=it.oldEntity.title}};{{=it.separator}}",
         "createFieldTemplate": "ALTER TABLE {{=it.entity.title}} ADD COLUMN {{=it.field.name}} {{=it.field.type}} {{? it.field.notNull}}NOT NULL{{?}} {{? ''!=it.field.defaultValue}}DEFAULT {{? null==it.field.defaultValue}}NULL{{??}}'{{=it.field.defaultValue}}'{{?}}{{?}} {{? it.field.autoIncrement}}AUTO_INCREMENT{{?}} {{? it.field.pk}}PRIMARY KEY{{?}} {{? it.field.chnname}}COMMENT '{{=it.field.chnname}}'{{?}} {{? it.field.addAfter}}AFTER {{=it.field.addAfter}}{{?}};{{=it.separator}}",
