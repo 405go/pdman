@@ -98,9 +98,6 @@ export default class Input extends React.Component{
       delete otherProps.defaultValue;
     }
     const { prefix = 'pdman', style, defaultValue, wrapperStyle, value, autoFocus, suffix, placeholder, disabled } = otherProps;
-    if (suffix) {
-      style.float = 'left';
-    }
     return (<div className={`${prefix}-input-wrapper`}  style={wrapperStyle}>
       <input
         onKeyDown={e => this._onKeyDown(e)}
@@ -112,7 +109,7 @@ export default class Input extends React.Component{
         onBlur={this._onBlur}
         className={`${prefix}-input`}
         onChange={this._onChange}
-        style={style}
+        style={{...style, float: suffix ? 'left' : 'inherit'}}
         defaultValue={defaultValue}
         value={value}
         onSelect={this._onSelect}
