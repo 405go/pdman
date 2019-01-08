@@ -649,12 +649,6 @@ export default class Home extends React.Component{
                   >
                     <span>打开项目</span>
                   </div>
-                  <div
-                    className='pdman-home-right-opts-names-name'
-                    onClick={this._cloneProject}
-                  >
-                    <span>从远程获取</span>
-                  </div>
                 </div>
               </div>
               <div className='pdman-home-right-footer'>
