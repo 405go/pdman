@@ -491,6 +491,9 @@ export default class App extends React.Component {
   _exportSQL = () => {
     this._exportFile('SQL');
   };
+  _readPDMfile = () => {
+    Message.error({title: '此功能正在玩命开发中，敬请期待...'});
+  };
   _readDB = () => {
     let modal = null;
     const onClickCancel = () => {
@@ -1651,7 +1654,11 @@ export default class App extends React.Component {
             <div
               className='tools-content-clickeable'
               onClick={() => this._readDB()}
-            ><Icon type="fa-hand-lizard-o"/>解析已有数据库</div>
+            ><Icon type="fa-hand-lizard-o"/>从数据库解析</div>
+            <div
+              className='tools-content-clickeable'
+              onClick={() => this._readPDMfile()}
+            ><Icon type="fa-file" />解析PDM文件</div>
           </div>
           <div className="tools-content-tab" style={{display: tools === 'dbversion' ? '' : 'none'}}>
             <div
