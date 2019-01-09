@@ -11,6 +11,7 @@ export default class ReadDB extends React.Component{
     this.dbs = _object.get(this.props.dataSource, 'profile.dbs', []);
     this.state = {
       currentDB: this._getCurrentDB(this.dbs),
+      dataFormat: '1',
     };
   }
   _getCurrentDB = (dbs) => {
@@ -23,6 +24,11 @@ export default class ReadDB extends React.Component{
   _dbChange = (e) => {
     this.setState({
       currentDB: e.target.value,
+    });
+  };
+  _dataFormatChange = (e) => {
+    this.setState({
+      dataFormat: e.target.value,
     });
   };
   _selectDBNext = () => {
@@ -45,16 +51,24 @@ export default class ReadDB extends React.Component{
     }
   };
   render() {
-    const { currentDB } = this.state;
+    const { currentDB, dataFormat } = this.state;
     return (
       <div className='pdman-readdb'>
         <div className='pdman-readdb-db-select'>
-          <span className='pdman-readdb-db-select'>请选择需要解析的数据库：</span>
+          <span className='pdman-readdb-db-select-span'>请选择需要解析的数据库：</span>
           <Select value={currentDB} style={{minWidth: 200}} onChange={this._dbChange}>
             <option key='' value=''>-请选择-</option>
             {
               this.dbs.map(db => (<option key={db.name} value={db.name}>{db.name}</option>))
             }
+          </Select>
+        </div>
+        <div className='pdman-readdb-db-select-dataFormat'>
+          <span className='pdman-readdb-db-select-dataFormat-span'>逻辑名格式：</span>
+          <Select value={dataFormat} onChange={this._dataFormatChange}>
+            <option value='1'>全大写</option>
+            <option value='2'>全小写</option>
+            <option value='3'>不处理</option>
           </Select>
         </div>
         <div className='pdman-readdb-db-continue'>
