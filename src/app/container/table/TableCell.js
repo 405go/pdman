@@ -24,7 +24,7 @@ export default class TableCell extends React.Component{
         onChange={e => remarkChange(e)}
       />,
       {
-        title: '备注详情',
+        title: '说明详情',
         onOk: (modal) => {
           modal && modal.close();
           this._inputOnChange({

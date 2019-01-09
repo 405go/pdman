@@ -1513,7 +1513,7 @@ export default class App extends React.Component {
                     'menu-tools-edit-active' : 'tools-content-enable-click'}`}
                   onClick={() =>this._menuClick('plug')}
                 >
-                  <span><u>插</u>件</span>
+                  <span><u>导</u>入导出</span>
                 </li>
                 <li
                   className={`other-options-menu-tools ${tools === 'dbversion' ?

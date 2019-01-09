@@ -58,7 +58,7 @@ export default class TableSummary extends React.Component{
     return (
       <React.Fragment>
         <div>
-          <span>名称</span>
+          <span>表名</span>
           <Input
             wrapperStyle={{width: 'calc(100% - 80px)'}}
             style={{height: 23, width: '100%'}}
@@ -67,7 +67,7 @@ export default class TableSummary extends React.Component{
           />
         </div>
         <div>
-          <span>代码</span>
+          <span>逻辑名</span>
           <Input
             wrapperStyle={{width: 'calc(100% - 80px)'}}
             style={{height: 23, width: '100%'}}
@@ -76,7 +76,7 @@ export default class TableSummary extends React.Component{
           />
         </div>
         <div>
-          <span>名字模板</span>
+          <span>显示方式</span>
           <Input
             wrapperStyle={{width: 'calc(100% - 80px)'}}
             style={{height: 23, width: '100%'}}
@@ -85,7 +85,7 @@ export default class TableSummary extends React.Component{
           />
         </div>
         <div>
-          <span>备注</span>
+          <span>说明</span>
           <TextArea
             wrapperStyle={{width: 'calc(100% - 80px)'}}
             style={{height: 150, width: '100%'}}
