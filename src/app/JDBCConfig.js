@@ -164,10 +164,7 @@ export default class JDBCConfig extends React.Component{
           Modal.error({title: '获取JDK版本失败！', message: error.message || error});
           cb && cb(error);
         } else {
-          // 1.截取第一行
-          const version = stderr.split('\n')[0];
-          const versionNumber = (version.match(/"(\S+)"/g)[0] || '');
-          console.log(versionNumber);
+          const versionNumber = (stderr.match(/"(\S+)"/g)[0] || '');
           // 2.获取版本号的第一，第二位
           const currentVersion = (versionNumber.split('.') || []).map(v => v.replace('"', ''));
           let flag = false;
