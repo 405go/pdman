@@ -12,7 +12,7 @@ import './style/setting.less';
 import { uuid } from '../utils/uuid';
 import { moveArrayPositionByFuc, moveArrayPosition } from '../utils/array';
 
-const { Modal, openModal, TextArea } = Com;
+const { Modal, openModal, TextArea, Select } = Com;
 const clipboard = require('electron').clipboard;
 
 export default class Setting extends React.Component{
@@ -23,6 +23,7 @@ export default class Setting extends React.Component{
       selectedTrs: [],
       height: 'calc(100% - 110px)',
       fields: this._initFields(_object.get(props.dataSource, 'profile.defaultFields', defaultData.profile.defaultFields)),
+      defaultFieldsType: _object.get(props.dataSource, 'profile.defaultFieldsType', '1'),
     };
     this.inputInstance = [];
     this.javaConfig = _object.get(props.dataSource, 'profile.javaConfig', {});
@@ -40,11 +41,12 @@ export default class Setting extends React.Component{
   getDataSource = () => {
     // 返回整个dataSource
     const { dataSource } = this.props;
-    const { fields } = this.state;
+    const { fields, defaultFieldsType } = this.state;
     return {
       ...dataSource,
       profile: {
         defaultFields: fields.map(field => _object.omit(field, ['key'])),
+        defaultFieldsType,
         javaConfig: this.javaConfig,
         sqlConfig: this.sqlConfig,
         dbs: this.dbs,
@@ -366,6 +368,24 @@ export default class Setting extends React.Component{
       tabShow,
     });
   };
+  _defaultFieldsTypeChange = (e) => {
+    const type = e.target.value;
+    this.setState({
+      defaultFieldsType: type,
+      fields: this.state.fields.map(f => {
+        let name = f.name;
+        if (type === '1') {
+          name = name.toLocaleUpperCase();
+        } else if (type === '2') {
+          name = name.toLocaleLowerCase();
+        }
+        return {
+          ...f,
+          name,
+        }
+      }),
+    });
+  };
   _javaHomeChange = (data) => {
     this.javaConfig = data;
   };
@@ -376,7 +396,7 @@ export default class Setting extends React.Component{
     this.wordTemplateConfig = data;
   };
   render(){
-    const { height, selectedTrs, fields } = this.state;
+    const { height, selectedTrs, fields, defaultFieldsType } = this.state;
     const { prefix = 'pdman', columnOrder, dataSource, project, register, updateRegister } = this.props;
     const dataTypes = _object.get(dataSource, 'dataTypeDomains.datatype', []);
     return (<div className={`${prefix}-data-table-content`} ref={instance => this.instance = instance}>
@@ -431,6 +451,19 @@ export default class Setting extends React.Component{
               className={`${prefix}-data-table-content-table-normal-icon`}
               type="fa-plus"
             />
+            <span className={`${prefix}-setting-defaultfieldstype`}>
+              <Select
+                value={defaultFieldsType}
+                onChange={this._defaultFieldsTypeChange}>
+              >
+                <option value='1'>逻辑名大写</option>
+                <option value='2'>逻辑名小写</option>
+              </Select>
+            </span>
+            <span
+              className={`${prefix}-warring`}
+            >（注意：修改默认属性数据后只会对后续新建的数据表生效，对已经存在的数据表无效）
+            </span>
           </div>
           <div style={{height: height, overflow: 'auto'}}>
             <table
