@@ -1780,7 +1780,7 @@ export default class DatabaseVersion extends React.Component{
               style={{textAlign: 'center', color: '#2492E6'}}
             >
               {currentDB ? `当前使用的数据库：【${currentDB}】,
-              当前数据库版本：【${dbVersion || '未获取到数据库版本，可能原因是您尚未同步版本到数据库！'}】`
+              当前数据库版本：【${dbVersion || '未获取到数据库版本，请先初始化基线或者同步当前版本！'}】`
                 : '当前未选择数据库，如需同步到数据库请先配置数据库!'}
             </span>
             <div style={{display: 'flex', justifyContent: 'center',  flexGrow: 1, minHeight: 65}}>
