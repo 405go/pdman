@@ -632,9 +632,6 @@ export default class Home extends React.Component{
                   <div className='pdman-home-right-opts-icons-icon'>
                     <div className='pdman-home-right-opts-icons-icon2'/>
                   </div>
-                  <div className='pdman-home-right-opts-icons-icon'>
-                    <div className='pdman-home-right-opts-icons-icon3'/>
-                  </div>
                 </div>
                 <div className='pdman-home-right-opts-names'>
                   <div
