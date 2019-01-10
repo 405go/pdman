@@ -4,6 +4,12 @@ import _object from 'lodash/object';
 import { openModal, TextArea } from '../../../components';
 
 export default class TableCell extends React.Component{
+  componentWillReceiveProps(nextProps) {
+    const { index, rowIndex, column : { com }, setInputInstance } = nextProps;
+    if (com === 'Input' && (index !== this.props.index || rowIndex !== this.props.rowIndex)) {
+      setInputInstance && setInputInstance(index, rowIndex, this.instance);
+    }
+  }
   shouldComponentUpdate(nextProps){
     // 1.判断field[code]是否发生变化
     // 2.判断dataTypes是否发生变化
@@ -40,12 +46,14 @@ export default class TableCell extends React.Component{
     const { inputOnChange } = this.props;
     inputOnChange && inputOnChange(e, key, type);
   };
-  _onFocus = (trIndex, tdIndex) => {
-    const { updateInputPosition } = this.props;
-    updateInputPosition && updateInputPosition({
-      x: tdIndex,
-      y: trIndex,
-    });
+  _onFocus = () => {
+    const { updateInputPosition, index, rowIndex, column : { com } } = this.props;
+    if (com === 'Input') {
+      updateInputPosition && updateInputPosition({
+        x: rowIndex,
+        y: index,
+      });
+    }
   };
   _getDefaultDataType = (type) => {
     const { dataSource } = this.props;
@@ -83,11 +91,12 @@ export default class TableCell extends React.Component{
           suffix={column.code === 'remark' ?
             <span onClick={() => this._openRemark(field[column.code], field.key)}>...</span> : ''}
           ref={(instance) => {
-            if (column.com === 'Input') {
+            if (column.com === 'Input' && instance) {
+              this.instance = instance;
               setInputInstance && setInputInstance(index, rowIndex, instance);
             }
           }}
-          onFocus={() => column.com === 'Input' && this._onFocus(index, rowIndex)}
+          onFocus={this._onFocus}
           onChange={e => this._inputOnChange(e, field.key, column.code)}
           value={column.code === 'dataType' ?
             this._getDefaultDataType(field.type) : field[column.code]}
