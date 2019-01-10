@@ -202,6 +202,11 @@ export default class Table extends React.Component{
       }, code);
     }
   };
+  _deleteInputInstance = (indexs) => {
+    this.inputInstance =
+      this.inputInstance
+        .filter((instances, index) => !indexs.includes(index));
+  };
   _setInputInstance = (index, rowIndex, instance) => {
     if (!this.inputInstance[index]) {
       this.inputInstance[index] = [];
@@ -254,19 +259,21 @@ export default class Table extends React.Component{
     const { dataTable, selectedTrs } = this.state;
     // 获取上一行
     let tempFields = [...(dataTable.fields || [])];
-    const minIndex = Math.min(...tempFields
+    const allIndex = tempFields
       .map((field, index) => {
         if (selectedTrs.includes(field.key)) {
           return index;
         }
         return null;
-      }).filter(field => field !== null));
+      }).filter(field => field !== null);
+    const minIndex = Math.min(...allIndex);
     const newFields = (dataTable.fields || []).filter(fid => !selectedTrs.includes(fid.key));
     this._saveData({
       ...dataTable,
       fields: newFields,
     });
     const selectField = newFields[(minIndex - 1) < 0 ? 0 : minIndex - 1];
+    this._deleteInputInstance(allIndex);
     this.setState({
       selectedTrs: (selectField && [selectField.key]) || [],
     });
@@ -398,6 +405,7 @@ export default class Table extends React.Component{
                     headers={headers}
                     columnOrder={columnOrder}
                     selectedTrs={selectedTrs}
+                    deleteInputInstance={this._deleteInputInstance}
                     setInputInstance={this._setInputInstance}
                     updateSelectedTrs={this._updateSelectedTrs}
                     saveData={this._saveData}
