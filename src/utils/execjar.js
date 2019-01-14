@@ -15,7 +15,9 @@ const getJavaConfig = (dataSource) => {
 const getParam = (params) => {
   const paramArray = [];
   Object.keys(params).forEach((pro) => {
-    paramArray.push(`${pro}=${params[pro]}`);
+    const param = params[pro] || '';
+    const value = param.includes(' ') ? `"${param}"` : param;
+    paramArray.push(`${pro}=${value}`);
   });
   return paramArray;
 };
