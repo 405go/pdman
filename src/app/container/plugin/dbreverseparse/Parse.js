@@ -15,9 +15,10 @@ export default class Parse extends React.Component{
     };
   }
   componentDidMount() {
-    const { dataSource, db = {} } = this.props;
+    const { dataSource, db = {}, dataFormat } = this.props;
     generateByJar(dataSource, {
       ...db.properties,
+      flag: dataFormat,
     }, (error, stdout, stderr) => {
       const result = (stderr || stdout);
       let tempResult = '';

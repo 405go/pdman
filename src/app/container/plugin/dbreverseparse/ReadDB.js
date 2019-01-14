@@ -11,7 +11,7 @@ export default class ReadDB extends React.Component{
     this.dbs = _object.get(this.props.dataSource, 'profile.dbs', []);
     this.state = {
       currentDB: this._getCurrentDB(this.dbs),
-      dataFormat: '1',
+      dataFormat: 'UPPERCASE',
     };
   }
   _getCurrentDB = (dbs) => {
@@ -33,12 +33,12 @@ export default class ReadDB extends React.Component{
   };
   _selectDBNext = () => {
     const { success, dataSource } = this.props;
-    const { currentDB } = this.state;
+    const { currentDB, dataFormat } = this.state;
     const db = this.dbs.filter(d => d.name === currentDB)[0];
     if (!db) {
       Modal.error({title: '操作失败！', message: '请先选择数据库'});
     } else {
-      openModal(<Parse db={db} dataSource={dataSource}/>, {
+      openModal(<Parse db={db} dataSource={dataSource} dataFormat={dataFormat}/>, {
         title: '获取数据库信息',
         onOk: (m, c) => {
           c.getSelectedEntity((keys, data) => {
@@ -66,9 +66,9 @@ export default class ReadDB extends React.Component{
         <div className='pdman-readdb-db-select-dataFormat'>
           <span className='pdman-readdb-db-select-dataFormat-span'>逻辑名格式：</span>
           <Select value={dataFormat} onChange={this._dataFormatChange}>
-            <option value='1'>全大写</option>
-            <option value='2'>全小写</option>
-            <option value='3'>不处理</option>
+            <option value='UPPERCASE'>全大写</option>
+            <option value='LOWCASE'>全小写</option>
+            <option value='DEFAULT'>不处理</option>
           </Select>
         </div>
         <div className='pdman-readdb-db-continue'>

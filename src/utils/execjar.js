@@ -30,6 +30,8 @@ export const execJar = (dataSource, params = {}, cb, cmd) => {
   execFile(tempValue,
     [
       '-Dfile.encoding=utf-8',
+      '-Xms1024m',
+      '-Xmx1024m',
       '-jar', jar, cmd,
       ...getParam(params),
     ],
