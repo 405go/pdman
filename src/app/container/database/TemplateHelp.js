@@ -112,7 +112,7 @@ export default class TemplateHelp extends React.Component{
           onClick={() => this._templateTabClick('createIndexTemplate')}
           className={`${prefix}-data-table-content-tab${this.state.templateShow === 'createIndexTemplate' ? '-selected' : '-unselected'}`}
         >
-          新建索引
+          创建索引
         </div>
         <div
           onClick={() => this._templateTabClick('updateTableComment')}
