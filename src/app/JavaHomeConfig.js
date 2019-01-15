@@ -134,22 +134,23 @@ export default class JavaHomeConfig extends React.Component {
           <Button style={{marginLeft: 5}} onClick={this._execFile}>测试</Button>
         </div>
       </div>
-      {<div className='pdman-config-java-config'>
+      <div className='pdman-config-java-config'>
         <div className='pdman-config-java-config-label'>
           <span>JDBC驱动(JAR包):</span>
         </div>
         <div className='pdman-config-java-config-input'>
-          <input
+          该功能正在开发中，敬请期待。。。
+          {/*<input
             onChange={e => this._onChange(e, 'DB_DRIVE')}
             value={data.DB_DRIVE}
             placeholder='不填写则使用系统默认的驱动(谨慎修改)'
-          />
+          />*/}
         </div>
-        <div className='pdman-config-java-config-button'>
+        {/*<div className='pdman-config-java-config-button'>
           <Button onClick={() => this._iconClick('DB_DRIVE')} title='点击选择jar包'>...</Button>
           <Button style={{marginLeft: 5}} onClick={this._connectJDBC}>测试</Button>
-        </div>
-      </div>}
+        </div>*/}
+      </div>
     </div>);
   }
 }
