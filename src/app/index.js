@@ -505,7 +505,13 @@ export default class App extends React.Component {
         const dbType = _object.get(data, 'dbType', 'MYSQL');
         const module = _object.get(data, 'module', {});
         const datatypeObj = _object.get(data, 'dataTypeMap', {});
-        const currentDataTypes = _object.get(dataSource, 'dataTypeDomains.datatype', []);
+        let currentDataTypes = _object.get(dataSource, 'dataTypeDomains.datatype', []);
+        const database = _object.get(dataSource, 'dataTypeDomains.database', []);
+        if (!database.some(d => d.code === dbType)) {
+          database.push({
+            code: dbType
+          });
+        }
         const currentDataTypeCodes = currentDataTypes.map(t => t.code);
         const dataTypes = Object.keys(datatypeObj)
           .map(d => ({
@@ -517,6 +523,20 @@ export default class App extends React.Component {
               }
             }
           })).filter(d => !currentDataTypeCodes.includes(d.code));
+        currentDataTypes = currentDataTypes.map(c => {
+          if (datatypeObj[c.code]) {
+            return {
+              ...c,
+              apply: {
+                ...(c.apply || {}),
+                [dbType]: {
+                  type: datatypeObj[c.code].type
+                }
+              }
+            }
+          }
+          return c;
+        });
         let tempKeys = [...keys];
         modal && modal.close();
         let tempData = {...dataSource};
@@ -556,6 +576,7 @@ export default class App extends React.Component {
           dataTypeDomains: {
             ...(dataSource.dataTypeDomains || {}),
             datatype: currentDataTypes.concat(dataTypes),
+            database,
           },
         };
         // 2.将剩余的数据表放置于新模块
