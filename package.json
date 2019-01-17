@@ -1,6 +1,6 @@
 {
   "name": "PDMan",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Model design tool",
   "main": "build/main.js",
   "scripts": {
@@ -18,7 +18,7 @@
     "type": "git",
     "url": "https://gitee.com/robergroup/pdman"
   },
-  "homepage": "https://gitee.com/robergroup/pdman-release",
+  "homepage": "http://www.pdman.cn",
   "author": {
     "name": "robergroup",
     "email": "qliu@405go.cn"
