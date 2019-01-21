@@ -140,11 +140,11 @@ PDMan是由国内知名金融IT上市公司，内部研发团队设计的一款�
 #### 下载
 
 -   [码云地址](https://gitee.com/robergroup/pdman)
--   [Windows32](http://mtain-top-0.oss-cn-hangzhou.aliyuncs.com/PDMan-win32_v2.0.1.exe)
--   [Windows64](http://mtain-top-0.oss-cn-hangzhou.aliyuncs.com/PDMan-win64_v2.0.1.exe)
--   [Mac](http://mtain-top-0.oss-cn-hangzhou.aliyuncs.com/PDMan-darwin_v2.0.1.dmg)
--   [Linux通用](http://mtain-top-0.oss-cn-hangzhou.aliyuncs.com/PDMan-linux_v2.0.1.AppImage)
--   [Linux-DEB](http://mtain-top-0.oss-cn-hangzhou.aliyuncs.com/PDMan-linux_v2.0.1.deb)
+-   [Windows32](https://share.weiyun.com/5Ejtel5)
+-   [Windows64](https://share.weiyun.com/5StB5ZD)
+-   [Mac](https://share.weiyun.com/52sLSNt)
+-   [Linux通用](https://share.weiyun.com/55PBxrg)
+-   [Linux-DEB](https://share.weiyun.com/5iDMFQz)(Debian系列如：Unbuntu,LinuxMint)
 
 #### 欢迎加钉钉群交流
 ![](https://static.oschina.net/uploads/img/201806/01151807_3YY6.jpg "")
