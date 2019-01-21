@@ -2,7 +2,7 @@ const _http = require('http');
 const os = require('os');
 
 const version = {
-  version: '2.1.1',
+  version: '2.1.2',
   date: '2019.1',
 };
 
