@@ -212,7 +212,7 @@ export default class JDBCConfig extends React.Component{
               }),
             ],
             (error, stdout, stderr) => {
-              const result = (stderr || stdout);
+              const result = (stdout || stderr);
               this.setState({
                 loading: false,
               });

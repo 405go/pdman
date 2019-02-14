@@ -371,7 +371,7 @@ export default class App extends React.Component {
               imgext: '.png',
               out: `${dir}/${projectName}.${postfix}`,
             }, (error, stdout, stderr) => {
-              const result = (stderr || stdout);
+              const result = (stdout || stderr);
               let tempResult = '';
               try {
                 tempResult = JSON.parse(result);

@@ -1446,7 +1446,7 @@ export default class DatabaseVersion extends React.Component{
     });
   };
   _parseResult = (stderr, stdout) => {
-    const result = (stderr || stdout);
+    const result = (stdout || stderr);
     let tempResult = '';
     try {
       tempResult = JSON.parse(result);

@@ -20,7 +20,7 @@ export default class Parse extends React.Component{
       ...db.properties,
       flag: dataFormat,
     }, (error, stdout, stderr) => {
-      const result = (stderr || stdout);
+      const result = (stdout || stderr);
       let tempResult = '';
       try {
         tempResult = JSON.parse(result);
