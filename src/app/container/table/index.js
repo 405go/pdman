@@ -233,6 +233,7 @@ class DataTable extends React.Component {
               dataSource={dataSource}
               project={this.props.project}
               getDataTable={this._getDataTable}
+              module={module}
             />
           </div>
           <div style={{display: this.state.tabShow === 'indexs' ? '' : 'none', height: '100%'}}>
