@@ -1,13 +1,13 @@
 export const compareStringVersion = (v1 = '', v2 = '') => {
   // 该方法会忽略参数中的非数字
   const checkVersion = (version1, version2, index, maxLength) => {
-    let checkFlag = false;
+    let checkFlag = -1;
     const tempVersion1 = version1[index] || 0;
     const tempVersion2 = version2[index] || 0;
     if ((tempVersion1 === tempVersion2) && (index + 1 < maxLength)) {
       checkFlag = checkVersion(version1, version2, index + 1, maxLength);
     } else {
-      checkFlag = tempVersion1 > tempVersion2;
+      checkFlag = tempVersion1 - tempVersion2;
     }
     return checkFlag;
   };

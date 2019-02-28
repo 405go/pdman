@@ -107,7 +107,7 @@ class ChangeCode extends React.Component{
       <div className='pdman-change-code-context' style={{width: width}}>
         <span className='pdman-change-code-context-header'>
           {
-            version ? `变化脚本(${!compareStringVersion(version, dbVersion) ?
+            version ? `变化脚本(${compareStringVersion(version, dbVersion) <= 0 ?
               '已同步' : '未同步'})` : '变化脚本'
           }
         </span>
@@ -140,7 +140,7 @@ class ChangeCode extends React.Component{
               title='会更新数据库中的版本号'
               style={{
                 marginLeft: 10,
-                display: (version && compareStringVersion(version, dbVersion)) ? '' : 'none',
+                display: (version && compareStringVersion(version, dbVersion) > 0) ? '' : 'none',
               }}
               onClick={() => this._execSQL(true, 'synchronous')}
             >
@@ -151,7 +151,7 @@ class ChangeCode extends React.Component{
               title='更新数据库的版本号，不会执行差异化的SQL'
               style={{
                 marginLeft: 10,
-                display: (version && compareStringVersion(version, dbVersion)) ? '' : 'none',
+                display: (version && compareStringVersion(version, dbVersion) > 0) ? '' : 'none',
               }}
               onClick={() => this._execSQL(true, 'flagSynchronous')}
             >
@@ -161,7 +161,7 @@ class ChangeCode extends React.Component{
               loading={again}
               title='不会更新数据库中的版本号'
               style={{
-                display: version && !compareStringVersion(version, dbVersion) ? '' : 'none',
+                display: version && compareStringVersion(version, dbVersion) <= 0 ? '' : 'none',
                 marginLeft: 10,
               }}
               onClick={() => this._execSQL(false, 'again')}
@@ -208,7 +208,7 @@ class CustomerVersionCheck extends React.Component{
     const { versions = [] } = this.props;
     if (!dbVersion.initVersion || !dbVersion.incrementVersion){
       Modal.error({title: '比较失败', message: '请选择你要比较的两个版本'});
-    } if (!compareStringVersion(dbVersion.incrementVersion, dbVersion.initVersion)) {
+    } if (compareStringVersion(dbVersion.incrementVersion, dbVersion.initVersion) <= 0) {
       Modal.error({title: '比较失败', message: '增量脚本的版本号不能小于或等于初始版本的版本号'});
     } else {
       // 读取两个版本下的数据信息
@@ -319,7 +319,7 @@ class DatabaseVersionContext extends React.Component{
           disabled={versionReadonly}
           style={{width: '100%'}}
           defaultValue={defaultVersion || this.getNewVersion()}
-          placeholder='例如：v1.0.0'
+          placeholder='例如：v1.0.0【请勿低于系统默认的数据库版本v0.0.0】'
           onChange={e => this.onChange(e, 'version')}/>
       </div>
       <div className='pdman-db-version-context-item'>
@@ -837,11 +837,11 @@ export default class DatabaseVersion extends React.Component{
     if (!dbVersion) {
       lowVersions = versions;
     } else {
-      lowVersions = versions.filter(v => compareStringVersion(v.version, dbVersion));
+      lowVersions = versions.filter(v => compareStringVersion(v.version, dbVersion) > 0);
     }
     return lowVersions
       .filter(v => v.version !== version.version)
-      .some(v => !compareStringVersion(v.version, version.version));
+      .some(v => compareStringVersion(v.version, version.version) <= 0);
   };
   _execSQL = (data, version, updateDBVersion, cb, onlyUpdateDBVersion) => {
     const dbData = this._getCurrentDBData();
@@ -988,7 +988,7 @@ export default class DatabaseVersion extends React.Component{
       },
     });
   };
-  _dropVersionTable = (version) => {
+  _dropVersionTable = () => {
     const dbData = this._getCurrentDBData();
     if (!dbData) {
       this.setState({
@@ -1002,8 +1002,8 @@ export default class DatabaseVersion extends React.Component{
         ...dbData,
         properties: {
           ...(dbData.properties || {}),
-          version: version.version,
-          version_desc: version.message,
+          version: 'v0.0.0',
+          version_desc: '默认版本，新增的版本不能低于此版本',
         },
       }, (result) => {
         if (result.status !== 'SUCCESS') {
@@ -1245,7 +1245,7 @@ export default class DatabaseVersion extends React.Component{
               } else if (this.state.versions.map(v => v.version).includes(tempValue.version)) {
                 Modal.error({title: '操作失败', message: '该版本号已经存在了', width: 200});
               } else if (this.state.versions[0] &&
-                !compareStringVersion(tempValue.version, this.state.versions[0].version)) {
+                compareStringVersion(tempValue.version, this.state.versions[0].version) <= 0) {
                 Modal.error({title: '操作失败', message: '新版本不能小于或等于已经存在的版本'});
               } else {
                 const newVersionPath = `${this.basePathDir}${name}-${tempValue.version}.pdman.json`;
@@ -1466,7 +1466,7 @@ export default class DatabaseVersion extends React.Component{
         dbVersion: '',
       });
       Message.error({
-        title: '获取数据库版本信息失败,无法获取到数据库信息,请切换尝试数据库！',
+        title: '获取数据库信息失败,无法获取到数据库信息,请切换尝试数据库！',
         });
       this.setState({
         versionData: false,
@@ -1479,9 +1479,9 @@ export default class DatabaseVersion extends React.Component{
         },
       }, (result) => {
         if (result.status !== 'SUCCESS') {
-          Message.error({title: '数据库版本信息获取失败', message: result.body || result});
+          Message.error({title: '数据库链接失败', message: result.body || result});
         } else {
-          Message.success({title: '数据库版本信息获取成功'});
+          Message.success({title: '数据库链接成功'});
         }
         this.setState({
           versionData: false,
@@ -1614,7 +1614,7 @@ export default class DatabaseVersion extends React.Component{
         } else if (tempVersions.map(v => v.version).includes(tempValue.version)) {
           Modal.error({title: '操作失败', message: '该版本号已经存在了', width: 200});
         } else if (tempVersions[0] &&
-          !compareStringVersion(tempValue.version, tempVersions[0].version)) {
+          compareStringVersion(tempValue.version, this.state.versions[0].version) <= 0) {
           Modal.error({title: '操作失败', message: '新版本不能小于或等于已经存在的版本'});
         } else {
           this._updateVersionFile(tempValue, version, 'update', () => {
@@ -1780,7 +1780,7 @@ export default class DatabaseVersion extends React.Component{
               style={{textAlign: 'center', color: '#2492E6'}}
             >
               {currentDB ? `当前使用的数据库：【${currentDB}】,
-              当前数据库版本：【${dbVersion || '未获取到数据库版本，请先初始化基线或者同步当前版本！'}】`
+              当前数据库版本：【${dbVersion === 'v0.0.0' ? `数据库默认初始版本:${dbVersion}` : dbVersion || '当前数据库版本暂未生成，请先初始化基线或者同步当前版本！'}】`
                 : '当前未选择数据库，如需同步到数据库请先配置数据库!'}
             </span>
             <div style={{display: 'flex', justifyContent: 'center',  flexGrow: 1, minHeight: 65}}>
@@ -1828,10 +1828,10 @@ export default class DatabaseVersion extends React.Component{
                     <div className='pdman-db-version-list-item-line'>
                       <div>{}</div>
                       <span
-                        className={`pdman-db-version-list-item-line-${!compareStringVersion(v.version, dbVersion) ?
+                        className={`pdman-db-version-list-item-line-${compareStringVersion(v.version, dbVersion) <= 0 ?
                           'success' : 'error'}`}
                       >
-                        { !compareStringVersion(v.version, dbVersion) ? <Icon type='check'/> : <Icon type='minus'/> }
+                        { compareStringVersion(v.version, dbVersion) <= 0 ? <Icon type='check'/> : <Icon type='minus'/> }
                       </span>
                     </div>
                     <div className='pdman-db-version-list-item-tag'>
@@ -1839,16 +1839,16 @@ export default class DatabaseVersion extends React.Component{
                       </div>
                       <div
                         onClick={() => this._readDb(
-                          !compareStringVersion(v.version, dbVersion),
+                          compareStringVersion(v.version, dbVersion) <= 0,
                           v,
                           versions[index + 1] || v, v.changes,
                           index === (versions.length - 1), true)}
-                        title={!compareStringVersion(v.version, dbVersion) ? '' : '点击将进行同步'}
-                        className={`pdman-db-version-list-item-tag-${!compareStringVersion(v.version, dbVersion) ?
+                        title={compareStringVersion(v.version, dbVersion) <= 0 ? '' : '点击将进行同步'}
+                        className={`pdman-db-version-list-item-tag-${compareStringVersion(v.version, dbVersion) <= 0 ?
                           'success' : 'error'}`}
                       >
                         {
-                          !compareStringVersion(v.version, dbVersion) ? '已同步' :
+                          compareStringVersion(v.version, dbVersion) <= 0 ? '已同步' :
                           <span>
                             {synchronous[v.version] ?
                               <span>

@@ -57,7 +57,7 @@ export default class Home extends React.Component{
       if (Object.keys(res).length > 0) {
         const newData = res;
         const newVersion = newData.version;
-        if (compareStringVersion(newVersion, currentVersion)) {
+        if (compareStringVersion(newVersion, currentVersion) > 0) {
           let modal = null;
           const onOk = () => {
             modal && modal.close();
