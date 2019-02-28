@@ -119,6 +119,9 @@ class Tree extends React.Component {
       blurChecked: [...new Set(this.state.checked)],
     });
   };
+  resetSearchWidth = () => {
+    this.searchInstance.style.width = 'calc(20% - 10px)';
+  };
   updateSearchWidth = (width) => {
     this.searchInstance.style.width = `${width - 10}px`;
   };

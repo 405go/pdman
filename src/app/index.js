@@ -320,6 +320,7 @@ export default class App extends React.Component {
       width: width === 0 ? 1 : 0,
     }, () => {
       this._setTabsWidth();
+      this.treeInstance && this.treeInstance.resetSearchWidth();
     });
   };
   _refresh = () => {
