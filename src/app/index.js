@@ -645,6 +645,7 @@ export default class App extends React.Component {
       width: width === 0 ? 1 : 0,
     }, () => {
       this._setTabsWidth();
+      this.treeInstance && this.treeInstance.resetSearchWidth();
     });
   };
   _refresh = () => {
@@ -1483,38 +1484,20 @@ export default class App extends React.Component {
       }}>
         <header>
           <div className="options-wrapper">
-            {/*<div className="options-toggle-menu">
-              <ul
-                className="options-menu"
-                tabIndex="0"
-                onBlur={this._closeSubMenu}
-                id="index-menu"
-              >
-                <li className="options-toggle-menu-main-menu" style={{...this.state.style}} onClick={this._showOpts}>
-                  <span><u>文</u>件</span>
-                </li>
-                <ul className="options-toggle-menu-select-menu" style={{display: this.state.display}}>
-                  <li onClick={this._open}>
-                    <Icon type='folderopen'/>
-                    <span>打开项目</span>
-                  </li>
-                  <li onClick={this._create}>
-                    <Icon type='addfolder'/>
-                    <span>新建项目</span>
-                  </li>
-                  <li onClick={this._saveAll}><Icon type='fa-save'/><span>保存项目</span></li>
-                  <li onClick={this._save}><Icon type='fa-save'/><span>项目另存为</span></li>
-                </ul>
-              </ul>
-            </div>*/}
             <div>
               <ul className="other-options-menu">
                 <li
+                  className={'other-options-menu-tools'}
+                  onClick={() => this._saveAll()}
+                >
+                  <span><u>保</u>存</span>
+                </li>
+                <li
                   className={`other-options-menu-tools
-                   ${tools === 'file' ? 'menu-tools-edit-active' : 'tools-content-enable-click'}`}
+                   ${(tools === 'file' || tools === 'entity') ? 'menu-tools-edit-active' : 'tools-content-enable-click'}`}
                   onClick={() => this._menuClick('file')}
                 >
-                  <span><u>文</u>件</span>
+                  <span><u>开</u>始</span>
                 </li>
                 <li
                   className={`other-options-menu-tools
@@ -1525,19 +1508,11 @@ export default class App extends React.Component {
                   <span><u>关</u>系图</span>
                 </li>
                 <li
-                  className={`other-options-menu-tools
-                   ${tabs.length > 0 && tools === 'entity' ? 'menu-tools-edit-active' : ''}
-                  ${tabs.length > 0 && toolsClickable === 'entity' ? '' : 'tools-content-un-click'}`}
-                  onClick={() => tabs.length > 0 && toolsClickable === 'entity' && this._menuClick('entity')}
-                >
-                  <span><u>数</u>据表</span>
-                </li>
-                <li
                   className={`other-options-menu-tools ${tools === 'plug' ?
                     'menu-tools-edit-active' : 'tools-content-enable-click'}`}
                   onClick={() =>this._menuClick('plug')}
                 >
-                  <span><u>导</u>入导出</span>
+                  <span><u>模</u>型</span>
                 </li>
                 <li
                   className={`other-options-menu-tools ${tools === 'dbversion' ?
@@ -1546,20 +1521,6 @@ export default class App extends React.Component {
                 >
                   <span><u>数</u>据库版本</span>
                 </li>
-                {/*<li
-                  className={`other-options-menu-tools-style ${tools === 'style' ? 'menu-tools-edit-active' : ''}
-                  ${toolsClickable === 'map' ? '' : 'tools-content-un-click'}`}
-                  onClick={() => toolsClickable === 'map' && this._menuClick('style')}
-                >
-                  <span><u>样</u>式</span>
-                </li>
-                <li
-                  className={`other-options-menu-tools-view ${tools === 'view' ? 'menu-tools-edit-active' : ''}
-                  ${toolsClickable === 'map' ? '' : 'tools-content-un-click'}`}
-                  onClick={() => toolsClickable === 'map' && this._menuClick('view')}
-                >
-                  <span><u>视</u>图</span>
-                </li>*/}
               </ul>
               <Icon
                 type='logout'
@@ -1613,8 +1574,6 @@ export default class App extends React.Component {
           </div>
           <div className="tools-content-tab" style={{display: tabs.length > 0 && tools === 'map' ? '' : 'none'}}>
             <div className='tools-content-clickeable' onClick={this._saveRelation}><Icon type="save"/>保存</div>
-            {/*<div className='tools-content-un-click'><Icon type="fa-reply"/>撤销</div>
-            <div className='tools-content-un-click'><Icon type="fa-share"/>重做</div>*/}
             <div
               className='tools-content-clickeable'
               onClick={() => this._onZoom('add')}
@@ -1656,12 +1615,6 @@ export default class App extends React.Component {
               style={{margin: '10px 10px 0 0', borderRadius: 3}}
               placeholder='在图上找表'
             /></div>
-          </div>
-          <div className="tools-content-tab" style={{display: tabs.length > 0 && tools === 'entity' ? '' : 'none'}}>
-            <div
-              className='tools-content-clickeable'
-              onClick={this._entitySave}
-            ><Icon type="save"/>保存</div>
           </div>
           <div className="tools-content-tab" style={{display: tools === 'plug' ? '' : 'none'}}>
             <div

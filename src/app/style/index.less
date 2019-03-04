@@ -137,10 +137,11 @@ body {
 }
 
 .tools-content {
-  height: 50px;
+  height: 80px;
   background: #F4F4F4;
   padding: 2.5px 0;
   &-tab {
+    height: 100%;
     display: flex;
     i {
       font-size: 20px;
@@ -157,11 +158,36 @@ body {
       margin-right: 2px;
     }
   }
+  &-group {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    position: relative;
+    padding: 0 10px;
+    &-content {
+      display: flex;
+      flex-direction: row;
+    }
+    &-name {
+      color: #58A1F3;
+    }
+    &::after {
+      top: 0;
+      right: 0;
+      position: absolute;
+      content: " ";
+      width: 1px;
+      background: #7E8082;
+      height: 70px;
+    }
+  }
   &-clickeable {
     text-align: center;
     display: flex;
     flex-direction: column;
-    margin-left: 10px;
+    margin: 0 5px;
     &:hover {
       cursor: pointer;
       color: #1A7DC4;

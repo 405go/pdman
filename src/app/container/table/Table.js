@@ -353,7 +353,7 @@ export default class Table extends React.Component{
             type="fa-plus"
           />
         </div>
-        <div style={{height: height - 132, overflow: 'auto'}}>
+        <div style={{height: height - 176, overflow: 'auto'}}>
           <table
             tabIndex="0"
             onKeyDown={e => this._onKeyDown(e)}

@@ -112,7 +112,7 @@ export default class TableDataCode extends React.Component{
             ))
           }
         </div>
-        <div style={{height: height - 135, overflow: 'auto'}}>
+        <div style={{height: height - 184, overflow: 'auto'}}>
           {
             database.map(db => (
               <div
@@ -193,10 +193,10 @@ export default class TableDataCode extends React.Component{
                       }
                     </span>
                   </div>
-                  <div style={{height: height - 194, overflow: 'auto'}}>
+                  <div style={{height: height - 242, overflow: 'auto'}}>
                     <Com.Code
                       language={db.code !== 'Java' ? 'SQL' : 'Java'}
-                      style={{minHeight: height - 194, width: '100%'}}
+                      style={{minHeight: height - 242, width: '100%'}}
                       data={this._getTableCode(db.code, templateShow)}
                     />
                   </div>

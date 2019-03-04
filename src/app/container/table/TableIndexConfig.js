@@ -316,7 +316,7 @@ export default class TableIndexConfig extends React.Component{
   };
   render(){
     const { selectedIndexs = [], selectedFields = [], dataTable } = this.state;
-    const { prefix = 'pdman' } = this.props;
+    const { prefix = 'pdman', height } = this.props;
     const dataFields = dataTable.fields || [];
     // 显示最后点击的索引的字段
     const key = selectedIndexs && selectedIndexs[selectedIndexs.length - 1];
@@ -357,7 +357,7 @@ export default class TableIndexConfig extends React.Component{
             type="fa-plus"
           />
         </div>
-        <div className='pdman-table-index-config-left-list'>
+        <div className='pdman-table-index-config-left-list' style={{height: height - 190, overflow: 'auto'}}>
           <table
             style={{minWidth: 200}}
             tabIndex="0"

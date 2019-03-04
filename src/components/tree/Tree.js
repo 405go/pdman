@@ -6,6 +6,7 @@ import './style/index.less';
 import TreeNode from './TreeNode';
 import { Input } from '../index';
 import { addOnResize } from '../../utils/listener';
+import defaultConfig from '../../../profile';
 
 class Tree extends React.Component {
 
@@ -119,6 +120,9 @@ class Tree extends React.Component {
       blurChecked: [...new Set(this.state.checked)],
     });
   };
+  resetSearchWidth = () => {
+    this.searchInstance.style.width = 'calc(20% - 10px)';
+  };
   updateSearchWidth = (width) => {
     this.searchInstance.style.width = `${width - 10}px`;
   };
@@ -140,7 +144,7 @@ class Tree extends React.Component {
       onBlur={this._onBlur}
       id="tree"
       style={{
-        height: height - 155,
+        height: height - 105 - defaultConfig.menuHeight,
       }}
     >
       <div
