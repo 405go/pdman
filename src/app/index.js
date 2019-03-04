@@ -27,6 +27,7 @@ import MultipleUtils from './container/multipleopt/MultipleUtils';
 import Setting from './Setting';
 
 import './style/index.less';
+import JDBCConfig from './JDBCConfig';
 
 const { ipcRenderer, remote } = electron;
 const { dialog } = remote;
@@ -231,6 +232,62 @@ export default class App extends React.Component {
     const { saveProject, dataSource } = this.props;
     this._saveAll(() => {
       saveProject('', dataSource);
+    });
+  };
+  _updateDBs = (tempDBs, callback) => {
+    const { project, dataSource, saveProject } = this.props;
+    saveProject(`${project}.pdman.json`, {
+      ...dataSource,
+      profile: {
+        ...(dataSource.profile || {}),
+        dbs: tempDBs,
+      },
+    }, () => {
+      Message.success({title: '数据库连接信息已经成功保存！'});
+      callback && callback();
+    });
+  };
+  _getJavaConfig = () => {
+    const { dataSource } = this.props;
+    const dataSourceConfig = _object.get(dataSource, 'profile.javaConfig', {});
+    if (!dataSourceConfig.JAVA_HOME) {
+      dataSourceConfig.JAVA_HOME = process.env.JAVA_HOME || process.env.JER_HOME || '';
+    }
+    return dataSourceConfig;
+  };
+  _JDBCConfig = () => {
+    const { project, dataSource } = this.props;
+    let tempDBs = _object.get(dataSource, 'profile.dbs', []);
+    const dbChange = (db) => {
+      tempDBs = db;
+    };
+    openModal(<JDBCConfig
+      onChange={dbChange}
+      data={tempDBs}
+      getJavaConfig={this._getJavaConfig}
+      project={project}
+      dataSource={dataSource}
+    />, {
+      title: '数据库连接配置',
+      onOk: (m) => {
+        const currentDB = tempDBs.filter(d => d.defaultDB)[0];
+        if (!currentDB) {
+          Modal.confirm({
+            title: '提示',
+            message: '未选择默认数据库，是否继续？',
+            onOk: (modal) => {
+              modal && modal.close();
+              this._updateDBs(tempDBs, () => {
+                m && m.close();
+                modal && modal.close();
+              });
+            }});
+        } else {
+          this._updateDBs(tempDBs, () => {
+            m && m.close();
+          });
+        }
+      },
     });
   };
   _setting = () => {
@@ -1519,7 +1576,7 @@ export default class App extends React.Component {
                     'menu-tools-edit-active' : 'tools-content-enable-click'}`}
                   onClick={() =>this._menuClick('dbversion')}
                 >
-                  <span><u>数</u>据库版本</span>
+                  <span><u>模</u>型版本</span>
                 </li>
               </ul>
               <Icon
@@ -1540,115 +1597,159 @@ export default class App extends React.Component {
           onClick={this._contextClick}
         />
         <div className="tools-content" style={{display: tools === 'dbversion' ? 'none' : ''}}>
-          <div className="tools-content-tab" style={{display: tools === 'file' ? '' : 'none'}}>
-            <div
-              className='tools-content-clickeable'
-              onClick={this._open}
-            >
-              <Icon type='folderopen' style={{marginRight: 5, color: '#FFCA28'}}/>打开
+          <div className="tools-content-tab" style={{display: (tools === 'file' || tools === 'entity') ? '' : 'none'}}>
+            <div className='tools-content-group'>
+              <div className='tools-content-group-content'>
+                <div
+                  className='tools-content-clickeable'
+                  onClick={this._open}
+                >
+                  <Icon type='folderopen' style={{marginRight: 5, color: '#FFCA28'}}/>打开
+                </div>
+                <div
+                  className='tools-content-clickeable'
+                  onClick={this._create}
+                >
+                  <Icon type='addfolder' style={{marginRight: 5, color: '#96C080'}}/>新建
+                </div>
+                <div
+                  className='tools-content-clickeable'
+                  onClick={() => this._saveAs()}
+                >
+                  <Icon type='fa-save' style={{marginRight: 5, color: '#9291CD'}}/>另存为
+                </div>
+              </div>
+              <div className='tools-content-group-name'>
+                项目
+              </div>
             </div>
-            <div
-              className='tools-content-clickeable'
-              onClick={this._create}
-            >
-              <Icon type='addfolder' style={{marginRight: 5, color: '#96C080'}}/>新建
-            </div>
-            <div
-              className='tools-content-clickeable'
-              onClick={() => this._saveAll()}
-            >
-              <Icon type='save' style={{marginRight: 5, color: '#7EA5EE'}}/>保存全部
-            </div>
-            <div
-              className='tools-content-clickeable'
-              onClick={() => this._saveAs()}
-            >
-              <Icon type='fa-save' style={{marginRight: 5, color: '#9291CD'}}/>另存为
-            </div>
-            <div
-              className='tools-content-clickeable'
-              onClick={() => this._setting()}
-            >
-              <Icon type='setting' style={{marginRight: 5}}/>设置
+            <div className='tools-content-group'>
+              <div className='tools-content-group-content'>
+                <div
+                  className='tools-content-clickeable'
+                  onClick={() => this._setting()}
+                >
+                  <Icon type='setting' style={{marginRight: 5}}/>设置
+                </div>
+                <div
+                  className='tools-content-clickeable'
+                  onClick={() => this._JDBCConfig()}
+                >
+                  <Icon type='sync' style={{marginRight: 5}}/>数据库连接
+                </div>
+              </div>
+              <div className='tools-content-group-name'>
+                配置
+              </div>
             </div>
           </div>
           <div className="tools-content-tab" style={{display: tabs.length > 0 && tools === 'map' ? '' : 'none'}}>
-            <div className='tools-content-clickeable' onClick={this._saveRelation}><Icon type="save"/>保存</div>
-            <div
-              className='tools-content-clickeable'
-              onClick={() => this._onZoom('add')}
-            >
-              <Icon type="fa-search-plus"/>
-              放大
+            <div className='tools-content-group'>
+              <div className='tools-content-group-content'>
+                <div
+                  className='tools-content-clickeable'
+                  onClick={() => this._onZoom('add')}
+                >
+                  <Icon type="fa-search-plus"/>
+                  放大
+                </div>
+                <div
+                  className='tools-content-clickeable'
+                  onClick={() => this._onZoom('sub')}
+                >
+                  <Icon type="fa-search-minus"/>
+                  缩小
+                </div>
+                <div
+                  className='tools-content-clickeable'
+                  onClick={() => this._onZoom('normal')}
+                >
+                  <Icon type="fa-search"/>
+                  原始大小
+                </div>
+              </div>
+              <div className='tools-content-group-name'>
+                比例
+              </div>
             </div>
-            <div
-              className='tools-content-clickeable'
-              onClick={() => this._onZoom('normal')}
-            >
-              <Icon type="fa-search"/>
-              1:1
+            <div className='tools-content-group'>
+              <div className='tools-content-group-content'>
+                <div
+                  className={`tools-content-${clicked === 'drag' ? 'clicked' : 'clickeable'}`}
+                  onClick={() => this._changeMode('drag')}
+                ><Icon type="fa-arrows"/>拖拽模式</div>
+                <div
+                  className={`tools-content-${clicked === 'edit' ? 'clicked' : 'clickeable'}`}
+                  onClick={() => this._changeMode('edit')}
+                ><Icon type="fa-edit"/>编辑模式</div>
+              </div>
+              <div className='tools-content-group-name'>
+                模式
+              </div>
             </div>
-            <div
-              className='tools-content-clickeable'
-              onClick={() => this._onZoom('sub')}
-            >
-              <Icon type="fa-search-minus"/>
-              缩小
+            <div className='tools-content-group'>
+              <div className='tools-content-group-content'>
+                <div
+                  className='tools-content-clickeable'
+                  onClick={() => this._exportImage()}
+                ><Icon type="fa-file-image-o"/>导出图片</div>
+              </div>
+              <div className='tools-content-group-name'>
+                导出
+              </div>
             </div>
-            <div
-              className={`tools-content-${clicked === 'drag' ? 'clicked' : 'clickeable'}`}
-              onClick={() => this._changeMode('drag')}
-            ><Icon type="fa-arrows"/>拖拽模式</div>
-            <div
-              className={`tools-content-${clicked === 'edit' ? 'clicked' : 'clickeable'}`}
-              onClick={() => this._changeMode('edit')}
-            ><Icon type="fa-edit"/>编辑模式</div>
-            <div
-              className='tools-content-clickeable'
-              onClick={() => this._exportImage()}
-            ><Icon type="fa-file-image-o"/>导出图片</div>
-            <div
-              className='tools-content-clickeable'
-              style={{flexGrow: 1, textAlign: 'right'}}
-            ><Input
-              onChange={this._relationSearch}
-              style={{margin: '10px 10px 0 0', borderRadius: 3}}
-              placeholder='在图上找表'
-            /></div>
+            <div className='tools-content-group'>
+              <div className='tools-content-group-content'>
+                <div
+                  className='tools-content-clickeable'
+                  style={{flexGrow: 1, textAlign: 'right'}}
+                ><Input
+                  onChange={this._relationSearch}
+                  style={{margin: '10px 10px 0 0', borderRadius: 3}}
+                  placeholder='在图上找表'
+                /></div>
+              </div>
+              <div className='tools-content-group-name'>
+                搜索
+              </div>
+            </div>
           </div>
           <div className="tools-content-tab" style={{display: tools === 'plug' ? '' : 'none'}}>
-            <div
-              className='tools-content-clickeable'
-              onClick={() => this._export()}
-            ><Icon type="export"/>导出文档</div>
-            <div
-              className='tools-content-clickeable'
-              onClick={() => this._exportSQL()}
-            ><Icon type="fa-database"/>导出SQL</div>
-            <div
-              className='tools-content-clickeable'
-              onClick={() => this._readDB()}
-            ><Icon type="fa-hand-lizard-o"/>从数据库解析</div>
-            <div
-              className='tools-content-clickeable'
-              onClick={() => this._readPDMfile()}
-            ><Icon type="fa-file" />解析PDM文件</div>
+            <div className='tools-content-group'>
+              <div className='tools-content-group-content'>
+                <div
+                  className='tools-content-clickeable'
+                  onClick={() => this._readDB()}
+                ><Icon type="fa-hand-lizard-o"/>数据库逆向解析</div>
+                <div
+                  className='tools-content-clickeable'
+                  onClick={() => this._readPDMfile()}
+                ><Icon type="fa-file" />解析PDM文件</div>
+                <div
+                  className='tools-content-clickeable'
+                  onClick={() => this._readPDMfile()}
+                ><Icon type="fa-file" />解析ERWin文件</div>
+              </div>
+              <div className='tools-content-group-name'>
+                解析导入
+              </div>
+            </div>
+            <div className='tools-content-group'>
+              <div className='tools-content-group-content'>
+                <div
+                  className='tools-content-clickeable'
+                  onClick={() => this._export()}
+                ><Icon type="export"/>导出文档</div>
+                <div
+                  className='tools-content-clickeable'
+                  onClick={() => this._exportSQL()}
+                ><Icon type="fa-database"/>导出DDL脚本</div>
+              </div>
+              <div className='tools-content-group-name'>
+                导出
+              </div>
+            </div>
           </div>
-          <div className="tools-content-tab" style={{display: tools === 'dbversion' ? '' : 'none'}}>
-            <div
-              className='tools-content-clickeable'
-              onClick={() => this._export()}
-            ><Icon type="export"/>导出</div>
-          </div>
-          {/*<div className="tools-content-tab-style" style={{display: tools === 'style' ? '' : 'none'}}>
-            <span className='tools-content-un-click'><Icon type="fa-sitemap"/>缩略图</span>
-            <span className='tools-content-un-click'><Icon type="fa-signing"/>主题</span>
-          </div>
-          <div className="tools-content-tab-view" style={{display: tools === 'view' ? '' : 'none'}}>
-            <span className='tools-content-un-click'><Icon type="fa-map-o"/>展开</span>
-            <span className='tools-content-un-click'><Icon type="fa-object-group"/>全选</span>
-            <span className='tools-content-un-click'><Icon type="fa-search"/>搜索</span>
-          </div>*/}
         </div>
         <div className="tools-work-content" style={{display: tools === 'dbversion' ? 'none' : ''}}>
           <div

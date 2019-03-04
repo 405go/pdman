@@ -6,7 +6,6 @@ import electron from 'electron';
 import { fileExist, fileExistPromise, deleteDirectoryFile,
   getDirListPromise, readFilePromise, saveFilePromise, deleteJsonFile } from '../utils/json';
 import {Button, openModal, Message, Modal, Input, Select, Icon, RadioGroup, Code, Editor, TextArea} from '../components';
-import JDBCConfig from './JDBCConfig';
 import {getCodeByChanges, getAllDataSQL} from '../utils/json2code';
 import { checkVersionData } from '../utils/dbversionutils';
 import { compareStringVersion } from '../utils/string';
@@ -1385,23 +1384,6 @@ export default class DatabaseVersion extends React.Component{
       ],
     });
   };
-  _updateDBs = (tempDBs, callback) => {
-    const { project, dataSource, saveProject } = this.props;
-    saveProject(`${project}.pdman.json`, {
-      ...dataSource,
-      profile: {
-        ...(dataSource.profile || {}),
-        dbs: tempDBs,
-      },
-    }, () => {
-      this.setState({
-        dbs: tempDBs,
-      }, () => {
-        this._getDBVersion();
-      });
-      callback && callback();
-    });
-  };
   _getJavaConfig = () => {
     const { dataSource } = this.props;
     const dataSourceConfig = _object.get(dataSource, 'profile.javaConfig', {});
@@ -1409,42 +1391,6 @@ export default class DatabaseVersion extends React.Component{
       dataSourceConfig.JAVA_HOME = process.env.JAVA_HOME || process.env.JER_HOME || '';
     }
     return dataSourceConfig;
-  };
-  _JDBCConfig = () => {
-    const { dbs } = this.state;
-    const { project, dataSource } = this.props;
-    let tempDBs = dbs;
-    const dbChange = (db) => {
-      tempDBs = db;
-    };
-    openModal(<JDBCConfig
-      onChange={dbChange}
-      data={dbs}
-      getJavaConfig={this._getJavaConfig}
-      project={project}
-      dataSource={dataSource}
-    />, {
-      title: 'JDBC配置',
-      onOk: (m) => {
-        const currentDB = tempDBs.filter(d => d.defaultDB)[0];
-        if (!currentDB) {
-          Modal.confirm({
-            title: '提示',
-            message: '未选择默认数据库，是否继续？',
-            onOk: (modal) => {
-              modal && modal.close();
-              this._updateDBs(tempDBs, () => {
-                m && m.close();
-                modal && modal.close();
-              });
-            }});
-        } else {
-          this._updateDBs(tempDBs, () => {
-            m && m.close();
-          });
-        }
-      },
-    });
   };
   _parseResult = (stderr, stdout) => {
     const result = (stdout || stderr);
@@ -1757,14 +1703,6 @@ export default class DatabaseVersion extends React.Component{
               }
             </Select>
           </span>
-          <div
-            className='pdman-db-version-opt-setting'
-            onClick={this._JDBCConfig}
-            style={{marginRight: 5}}
-          >
-            <span className='pdman-db-version-opt-setting-icon'>{}</span>
-            <span className='pdman-db-version-opt-setting-name'>数据库配置</span>
-          </div>
         </div>
       </div>
       {
