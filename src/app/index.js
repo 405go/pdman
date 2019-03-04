@@ -1249,47 +1249,75 @@ export default class App extends React.Component {
             </div>
           </div>
           <div className="tools-content-tab" style={{display: tabs.length > 0 && tools === 'map' ? '' : 'none'}}>
-            <div
-              className='tools-content-clickeable'
-              onClick={() => this._onZoom('add')}
-            >
-              <Icon type="fa-search-plus"/>
-              放大
+            <div className='tools-content-group'>
+              <div className='tools-content-group-content'>
+                <div
+                  className='tools-content-clickeable'
+                  onClick={() => this._onZoom('add')}
+                >
+                  <Icon type="fa-search-plus"/>
+                  放大
+                </div>
+                <div
+                  className='tools-content-clickeable'
+                  onClick={() => this._onZoom('sub')}
+                >
+                  <Icon type="fa-search-minus"/>
+                  缩小
+                </div>
+                <div
+                  className='tools-content-clickeable'
+                  onClick={() => this._onZoom('normal')}
+                >
+                  <Icon type="fa-search"/>
+                  原始大小
+                </div>
+              </div>
+              <div className='tools-content-group-name'>
+                比例
+              </div>
             </div>
-            <div
-              className='tools-content-clickeable'
-              onClick={() => this._onZoom('normal')}
-            >
-              <Icon type="fa-search"/>
-              1:1
+            <div className='tools-content-group'>
+              <div className='tools-content-group-content'>
+                <div
+                  className={`tools-content-${clicked === 'drag' ? 'clicked' : 'clickeable'}`}
+                  onClick={() => this._changeMode('drag')}
+                ><Icon type="fa-arrows"/>拖拽模式</div>
+                <div
+                  className={`tools-content-${clicked === 'edit' ? 'clicked' : 'clickeable'}`}
+                  onClick={() => this._changeMode('edit')}
+                ><Icon type="fa-edit"/>编辑模式</div>
+              </div>
+              <div className='tools-content-group-name'>
+                模式
+              </div>
             </div>
-            <div
-              className='tools-content-clickeable'
-              onClick={() => this._onZoom('sub')}
-            >
-              <Icon type="fa-search-minus"/>
-              缩小
+            <div className='tools-content-group'>
+              <div className='tools-content-group-content'>
+                <div
+                  className='tools-content-clickeable'
+                  onClick={() => this._exportImage()}
+                ><Icon type="fa-file-image-o"/>导出图片</div>
+              </div>
+              <div className='tools-content-group-name'>
+                导出
+              </div>
             </div>
-            <div
-              className={`tools-content-${clicked === 'drag' ? 'clicked' : 'clickeable'}`}
-              onClick={() => this._changeMode('drag')}
-            ><Icon type="fa-arrows"/>拖拽模式</div>
-            <div
-              className={`tools-content-${clicked === 'edit' ? 'clicked' : 'clickeable'}`}
-              onClick={() => this._changeMode('edit')}
-            ><Icon type="fa-edit"/>编辑模式</div>
-            <div
-              className='tools-content-clickeable'
-              onClick={() => this._exportImage()}
-            ><Icon type="fa-file-image-o"/>导出图片</div>
-            <div
-              className='tools-content-clickeable'
-              style={{flexGrow: 1, textAlign: 'right'}}
-            ><Input
-              onChange={this._relationSearch}
-              style={{margin: '10px 10px 0 0', borderRadius: 3}}
-              placeholder='在图上找表'
-            /></div>
+            <div className='tools-content-group'>
+              <div className='tools-content-group-content'>
+                <div
+                  className='tools-content-clickeable'
+                  style={{flexGrow: 1, textAlign: 'right'}}
+                ><Input
+                  onChange={this._relationSearch}
+                  style={{margin: '10px 10px 0 0', borderRadius: 3}}
+                  placeholder='在图上找表'
+                /></div>
+              </div>
+              <div className='tools-content-group-name'>
+                搜索
+              </div>
+            </div>
           </div>
         </div>
         <div className="tools-work-content" style={{display: tools === 'dbversion' ? 'none' : ''}}>
