@@ -155,7 +155,7 @@ const getTemplateString = (template, templateData) => {
   return resultText;
 };
 
-const generateOracleSql = (dataSource, module, dataTable, code, templateShow) => {
+const generateIncreaseSql = (dataSource, module, dataTable, code, templateShow) => {
   const datatype = _object.get(dataSource, 'dataTypeDomains.datatype', []);
   const database = _object.get(dataSource, 'dataTypeDomains.database', [])
     .filter(db => db.code === code)[0];
@@ -179,7 +179,7 @@ const generateOracleSql = (dataSource, module, dataTable, code, templateShow) =>
         index: i,
         separator
       })}`;
-    }).join(`${separator}\n`);
+    }).join('\n');
   } else {
     return getTemplateString(template, {
       entity: tempDataTable,
@@ -195,10 +195,25 @@ const getAllTable = (dataSource, name) => {
   }, []);
 };
 
-const generateUpdateSql = (dataSource, changes = [], code, oldDataSource) => {
+const generateUpdateSql = (dataSource, changesData = [], code, oldDataSource) => {
   const datatype = _object.get(dataSource, 'dataTypeDomains.datatype', []);
   const database = _object.get(dataSource, 'dataTypeDomains.database', [])
     .filter(db => db.code === code)[0];
+  // 合并字段其他变化，只留一个
+  const fieldsChanges = [];
+  const changes = changesData.filter(c => {
+    if (c.type === 'field' && c.opt === 'update') {
+      const name = c.name.split('.');
+      const fieldName = name[0] + name[1];
+      if (fieldsChanges.includes(fieldName)) {
+        return false;
+      } else {
+        fieldsChanges.push(fieldName);
+        return true;
+      }
+    }
+    return true;
+  });
   let templateResult = '';
   const getTemplate = (templateShow) => {
     return `${(database && database[templateShow]) || ''}`;
@@ -431,7 +446,7 @@ export const getCodeByDataTable = (dataSource, module, dataTable, code, template
     // 除了数据表的增删，其余的模板都是用变化模板
     if (templateShow === 'createTableTemplate' || templateShow === 'deleteTableTemplate'
       || templateShow === 'createIndexTemplate') {
-      sqlString = generateOracleSql(dataSource, module, dataTable, code, templateShow);
+      sqlString = generateIncreaseSql(dataSource, module, dataTable, code, templateShow);
     } else if(templateShow === 'rebuildTableTemplate') {
       sqlString = getCodeByRebuildTableTemplate(dataSource, changes, code, oldDataSource);
     } else {
