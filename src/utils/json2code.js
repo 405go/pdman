@@ -155,7 +155,7 @@ const getTemplateString = (template, templateData) => {
   return resultText;
 };
 
-const generateOracleSql = (dataSource, module, dataTable, code, templateShow) => {
+const generateIncreaseSql = (dataSource, module, dataTable, code, templateShow) => {
   const datatype = _object.get(dataSource, 'dataTypeDomains.datatype', []);
   const database = _object.get(dataSource, 'dataTypeDomains.database', [])
     .filter(db => db.code === code)[0];
@@ -179,7 +179,7 @@ const generateOracleSql = (dataSource, module, dataTable, code, templateShow) =>
         index: i,
         separator
       })}`;
-    }).join(`${separator}\n`);
+    }).join('\n');
   } else {
     return getTemplateString(template, {
       entity: tempDataTable,
@@ -431,7 +431,7 @@ export const getCodeByDataTable = (dataSource, module, dataTable, code, template
     // 除了数据表的增删，其余的模板都是用变化模板
     if (templateShow === 'createTableTemplate' || templateShow === 'deleteTableTemplate'
       || templateShow === 'createIndexTemplate') {
-      sqlString = generateOracleSql(dataSource, module, dataTable, code, templateShow);
+      sqlString = generateIncreaseSql(dataSource, module, dataTable, code, templateShow);
     } else if(templateShow === 'rebuildTableTemplate') {
       sqlString = getCodeByRebuildTableTemplate(dataSource, changes, code, oldDataSource);
     } else {
