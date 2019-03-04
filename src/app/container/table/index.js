@@ -206,7 +206,7 @@ class DataTable extends React.Component {
           >索引信息
           </div>
         </div>
-        <div style={{height: height - 102, overflow: 'auto'}}>
+        <div style={{height: height - 145, overflow: 'auto'}}>
           <div
             className={`${prefix}-data-table-content-summary`}
             style={{display: this.state.tabShow === 'summary' ? '' : 'none'}}
@@ -238,6 +238,7 @@ class DataTable extends React.Component {
           </div>
           <div style={{display: this.state.tabShow === 'indexs' ? '' : 'none', height: '100%'}}>
             <TableIndexConfig
+              height={height}
               ref={instance => this.indexConfigInstance = instance}
               getDataTable={this._getDataTable}
               tabShow={this.state.tabShow}

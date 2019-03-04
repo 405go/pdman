@@ -1159,38 +1159,20 @@ export default class App extends React.Component {
       }}>
         <header>
           <div className="options-wrapper">
-            {/*<div className="options-toggle-menu">
-              <ul
-                className="options-menu"
-                tabIndex="0"
-                onBlur={this._closeSubMenu}
-                id="index-menu"
-              >
-                <li className="options-toggle-menu-main-menu" style={{...this.state.style}} onClick={this._showOpts}>
-                  <span><u>文</u>件</span>
-                </li>
-                <ul className="options-toggle-menu-select-menu" style={{display: this.state.display}}>
-                  <li onClick={this._open}>
-                    <Icon type='folderopen'/>
-                    <span>打开项目</span>
-                  </li>
-                  <li onClick={this._create}>
-                    <Icon type='addfolder'/>
-                    <span>新建项目</span>
-                  </li>
-                  <li onClick={this._saveAll}><Icon type='fa-save'/><span>保存项目</span></li>
-                  <li onClick={this._save}><Icon type='fa-save'/><span>项目另存为</span></li>
-                </ul>
-              </ul>
-            </div>*/}
             <div>
               <ul className="other-options-menu">
                 <li
+                  className={'other-options-menu-tools'}
+                  onClick={() => this._saveAll()}
+                >
+                  <span><u>保</u>存</span>
+                </li>
+                <li
                   className={`other-options-menu-tools
-                   ${tools === 'file' ? 'menu-tools-edit-active' : 'tools-content-enable-click'}`}
+                   ${(tools === 'file' || tools === 'entity') ? 'menu-tools-edit-active' : 'tools-content-enable-click'}`}
                   onClick={() => this._menuClick('file')}
                 >
-                  <span><u>文</u>件</span>
+                  <span><u>开</u>始</span>
                 </li>
                 <li
                   className={`other-options-menu-tools
@@ -1201,19 +1183,11 @@ export default class App extends React.Component {
                   <span><u>关</u>系图</span>
                 </li>
                 <li
-                  className={`other-options-menu-tools
-                   ${tabs.length > 0 && tools === 'entity' ? 'menu-tools-edit-active' : ''}
-                  ${tabs.length > 0 && toolsClickable === 'entity' ? '' : 'tools-content-un-click'}`}
-                  onClick={() => tabs.length > 0 && toolsClickable === 'entity' && this._menuClick('entity')}
-                >
-                  <span><u>数</u>据表</span>
-                </li>
-                <li
                   className={`other-options-menu-tools ${tools === 'plug' ?
                     'menu-tools-edit-active' : 'tools-content-enable-click'}`}
                   onClick={() =>this._menuClick('plug')}
                 >
-                  <span><u>导</u>入导出</span>
+                  <span><u>模</u>型</span>
                 </li>
               </ul>
               <Icon
@@ -1234,40 +1208,47 @@ export default class App extends React.Component {
           onClick={this._contextClick}
         />
         <div className="tools-content" style={{display: tools === 'dbversion' ? 'none' : ''}}>
-          <div className="tools-content-tab" style={{display: tools === 'file' ? '' : 'none'}}>
-            <div
-              className='tools-content-clickeable'
-              onClick={this._open}
-            >
-              <Icon type='folderopen' style={{marginRight: 5, color: '#FFCA28'}}/>打开
+          <div className="tools-content-tab" style={{display: (tools === 'file' || tools === 'entity') ? '' : 'none'}}>
+            <div className='tools-content-group'>
+              <div className='tools-content-group-content'>
+                <div
+                  className='tools-content-clickeable'
+                  onClick={this._open}
+                >
+                  <Icon type='folderopen' style={{marginRight: 5, color: '#FFCA28'}}/>打开
+                </div>
+                <div
+                  className='tools-content-clickeable'
+                  onClick={this._create}
+                >
+                  <Icon type='addfolder' style={{marginRight: 5, color: '#96C080'}}/>新建
+                </div>
+                <div
+                  className='tools-content-clickeable'
+                  onClick={() => this._saveAs()}
+                >
+                  <Icon type='fa-save' style={{marginRight: 5, color: '#9291CD'}}/>另存为
+                </div>
+              </div>
+              <div className='tools-content-group-name'>
+                项目
+              </div>
             </div>
-            <div
-              className='tools-content-clickeable'
-              onClick={this._create}
-            >
-              <Icon type='addfolder' style={{marginRight: 5, color: '#96C080'}}/>新建
-            </div>
-            <div
-              className='tools-content-clickeable'
-              onClick={() => this._saveAll()}
-            >
-              <Icon type='save' style={{marginRight: 5, color: '#7EA5EE'}}/>保存全部
-            </div>
-            <div
-              className='tools-content-clickeable'
-              onClick={() => this._saveAs()}
-            >
-              <Icon type='fa-save' style={{marginRight: 5, color: '#9291CD'}}/>另存为
-            </div>
-            <div
-              className='tools-content-clickeable'
-              onClick={() => this._setting()}
-            >
-              <Icon type='setting' style={{marginRight: 5}}/>设置
+            <div className='tools-content-group'>
+              <div className='tools-content-group-content'>
+                <div
+                  className='tools-content-clickeable'
+                  onClick={() => this._setting()}
+                >
+                  <Icon type='setting' style={{marginRight: 5}}/>设置
+                </div>
+              </div>
+              <div className='tools-content-group-name'>
+                配置
+              </div>
             </div>
           </div>
           <div className="tools-content-tab" style={{display: tabs.length > 0 && tools === 'map' ? '' : 'none'}}>
-            <div className='tools-content-clickeable' onClick={this._saveRelation}><Icon type="save"/>保存</div>
             <div
               className='tools-content-clickeable'
               onClick={() => this._onZoom('add')}
@@ -1309,12 +1290,6 @@ export default class App extends React.Component {
               style={{margin: '10px 10px 0 0', borderRadius: 3}}
               placeholder='在图上找表'
             /></div>
-          </div>
-          <div className="tools-content-tab" style={{display: tabs.length > 0 && tools === 'entity' ? '' : 'none'}}>
-            <div
-              className='tools-content-clickeable'
-              onClick={this._entitySave}
-            ><Icon type="save"/>保存</div>
           </div>
         </div>
         <div className="tools-work-content" style={{display: tools === 'dbversion' ? 'none' : ''}}>

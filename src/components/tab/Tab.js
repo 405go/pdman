@@ -9,6 +9,7 @@ import TabPane from './TabPane';
 
 import './style/index.less';
 import { addOnResize } from '../../utils/listener';
+import defaultConfig from '../../../profile';
 
 class Tab extends React.Component {
 
@@ -30,7 +31,7 @@ class Tab extends React.Component {
   }
   getChildContext(){
     return {
-      height: this.state.height || document.body.clientHeight - 110,
+      height: this.state.height || document.body.clientHeight - defaultConfig.menuHeight - 20,
       width: document.body.clientWidth - this.props.leftTabWidth
     }
   }
@@ -43,7 +44,7 @@ class Tab extends React.Component {
   }
   _setTabsHeight = () => {
     this.flag && this.setState({
-      height: document.body.clientHeight - 110,
+      height: document.body.clientHeight - defaultConfig.menuHeight - 20,
     });
   };
   _titleClick = (key) => {
@@ -178,7 +179,8 @@ class Tab extends React.Component {
       {
         headerPosition === 'top' ? this._getTabHeader() : null
       }
-      <div id="body" style={{height: `${(this.state.height || document.body.clientHeight - 110) + 10}px`, overflow: 'auto'}}>
+      <div id="body" style={{height: `${(this.state.height ||
+          document.body.clientHeight - defaultConfig.menuHeight - 20) + 10}px`, overflow: 'auto'}}>
         {
           [].concat(children).map(child => (<div
             key={child.key}
@@ -188,7 +190,7 @@ class Tab extends React.Component {
               dataSource,
               show: this._getShowKey(),
               id: child.key,
-              height: (this.state.height || document.body.clientHeight - 110) + 10,
+              height: (this.state.height || document.body.clientHeight - defaultConfig.menuHeight - 20) + 10,
               width: document.body.clientWidth - leftTabWidth
             })}
           </div>))
