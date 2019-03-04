@@ -195,10 +195,25 @@ const getAllTable = (dataSource, name) => {
   }, []);
 };
 
-const generateUpdateSql = (dataSource, changes = [], code, oldDataSource) => {
+const generateUpdateSql = (dataSource, changesData = [], code, oldDataSource) => {
   const datatype = _object.get(dataSource, 'dataTypeDomains.datatype', []);
   const database = _object.get(dataSource, 'dataTypeDomains.database', [])
     .filter(db => db.code === code)[0];
+  // 合并字段其他变化，只留一个
+  const fieldsChanges = [];
+  const changes = changesData.filter(c => {
+    if (c.type === 'field' && c.opt === 'update') {
+      const name = c.name.split('.');
+      const fieldName = name[0] + name[1];
+      if (fieldsChanges.includes(fieldName)) {
+        return false;
+      } else {
+        fieldsChanges.push(fieldName);
+        return true;
+      }
+    }
+    return true;
+  });
   let templateResult = '';
   const getTemplate = (templateShow) => {
     return `${(database && database[templateShow]) || ''}`;
