@@ -1635,7 +1635,7 @@ export default class App extends React.Component {
                   className='tools-content-clickeable'
                   onClick={() => this._JDBCConfig()}
                 >
-                  <Icon type='sync' style={{marginRight: 5}}/>数据库连接
+                  <Icon type='fa-link' style={{marginRight: 5}}/>数据库连接
                 </div>
               </div>
               <div className='tools-content-group-name'>
