@@ -1544,7 +1544,7 @@ export default class App extends React.Component {
             <div>
               <ul className="other-options-menu">
                 <li
-                  className={'other-options-menu-tools'}
+                  className={'other-options-menu-tools other-options-menu-tools-special'}
                   onClick={() => this._saveAll()}
                 >
                   <span><u>保</u>存</span>
