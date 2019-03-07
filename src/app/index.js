@@ -228,10 +228,30 @@ export default class App extends React.Component {
       });
     });
   };
-  _saveAs = () => {
+  _saveAs = (status) => {
     const { saveProject, dataSource } = this.props;
     this._saveAll(() => {
-      saveProject('', dataSource);
+      let tempDataSource = {...dataSource};
+      if (status === 'filterDBS') {
+        // 去除数据库信息
+        tempDataSource = {
+          ...tempDataSource,
+          profile: {
+            ...(tempDataSource.profile || {}),
+            dbs: _object.get(tempDataSource, 'profile.dbs', []).map(d => {
+              return {
+                ...d,
+                properties: {
+                  url: '******',
+                  username: '******',
+                  password: '******',
+                },
+              }
+            }),
+          },
+        };
+      }
+      saveProject('', tempDataSource);
     });
   };
   _updateDBs = (tempDBs, callback) => {
@@ -1744,6 +1764,10 @@ export default class App extends React.Component {
                   className='tools-content-clickeable'
                   onClick={() => this._exportSQL()}
                 ><Icon type="fa-database"/>导出DDL脚本</div>
+                <div
+                  className='tools-content-clickeable'
+                  onClick={() => this._saveAs('filterDBS')}
+                ><Icon type="file1"/>导出所有模型</div>
               </div>
               <div className='tools-content-group-name'>
                 导出
