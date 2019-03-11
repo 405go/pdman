@@ -22,6 +22,24 @@ export default class JDBCConfig extends React.Component{
       data,
       loading: false,
     };
+    this.url = {
+      mysql : {
+        url: 'jdbc:mysql://IP地址:端口号/数据库名?characterEncoding=UTF-8&useSSL=false&useUnicode=true',
+        driverClass: 'com.mysql.jdbc.Driver',
+      },
+      oracle : {
+        url: 'jdbc:oracle:thin:@IP地址:端口号/数据库名',
+        driverClass: 'oracle.jdbc.driver.OracleDriver',
+      },
+      sqlserver : {
+        url: 'jdbc:sqlserver://IP地址:端口号;DatabaseName=数据库名',
+        driverClass: 'com.microsoft.sqlserver.jdbc.SQLServerDriver',
+      },
+      postgresql : {
+        url: 'jdbc:postgresql://IP地址:端口号/数据库名',
+        driverClass: 'org.postgresql.Driver',
+      },
+    };
   }
   _getDefaultDBSelected = (data) => {
     const defaultData = data.filter(d => d.defaultDB)[0] || data[0];
@@ -256,38 +274,35 @@ export default class JDBCConfig extends React.Component{
     const onClickCancel = () => {
       modal && modal.close();
     };
-    const mysqlString = 'jdbc:mysql://IP地址:端口号/数据库名?characterEncoding=UTF-8&useSSL=false&useUnicode=true'; // eslint-disable-line
-    const oracle = 'jdbc:oracle:thin:@IP地址:端口号/数据库名';  // eslint-disable-line
-    const SQLServer = 'jdbc:sqlserver://IP地址:端口号;DatabaseName=数据库名';
-    const postgresql = 'jdbc:postgresql://IP地址:端口号/数据库名';
+    const { mysql, oracle, sqlserver, postgresql } = this.url;
     modal = openModal(<div>
       <div style={{border: 'solid 1px green', padding: 5, margin: 5}}>
         <div style={{color: '#000000'}}>MYSQL配置示例：↓</div>
         <div style={{color: 'green'}}>driver_class：
-          <span style={{color: 'red', userSelect: 'text'}}>com.mysql.jdbc.Driver</span>
+          <span style={{color: 'red', userSelect: 'text'}}>{mysql.driverClass}</span>
         </div>
-        <div style={{color: 'green'}}>url：<span style={{color: 'red', userSelect: 'text'}}>{mysqlString}</span></div>
+        <div style={{color: 'green'}}>url：<span style={{color: 'red', userSelect: 'text'}}>{mysql.url}</span></div>
       </div>
       <div style={{border: 'solid 1px green', padding: 5, margin: 5}}>
         <div style={{color: '#000000'}}>ORACLE配置示例：↓</div>
         <div style={{color: 'green'}}>driver_class：
-          <span style={{color: 'red', userSelect: 'text'}}>oracle.jdbc.driver.OracleDriver</span>
+          <span style={{color: 'red', userSelect: 'text'}}>{oracle.driverClass}</span>
         </div>
-        <div style={{color: 'green'}}>url：<span style={{color: 'red', userSelect: 'text'}}>{oracle}</span></div>
+        <div style={{color: 'green'}}>url：<span style={{color: 'red', userSelect: 'text'}}>{oracle.url}</span></div>
       </div>
       <div style={{border: 'solid 1px green', padding: 5, margin: 5}}>
         <div style={{color: '#000000'}}>SQLServer配置示例：↓</div>
         <div style={{color: 'green'}}>driver_class：
-          <span style={{color: 'red', userSelect: 'text'}}>com.microsoft.sqlserver.jdbc.SQLServerDriver</span>
+          <span style={{color: 'red', userSelect: 'text'}}>{sqlserver.driverClass}</span>
         </div>
-        <div style={{color: 'green'}}>url：<span style={{color: 'red', userSelect: 'text'}}>{SQLServer}</span></div>
+        <div style={{color: 'green'}}>url：<span style={{color: 'red', userSelect: 'text'}}>{sqlserver.url}</span></div>
       </div>
       <div style={{border: 'solid 1px green', padding: 5, margin: 5}}>
         <div style={{color: '#000000'}}>PostgreSQL配置示例：↓</div>
         <div style={{color: 'green'}}>driver_class：
-          <span style={{color: 'red', userSelect: 'text'}}>org.postgresql.Driver</span>
+          <span style={{color: 'red', userSelect: 'text'}}>{postgresql.driverClass}</span>
         </div>
-        <div style={{color: 'green'}}>url：<span style={{color: 'red', userSelect: 'text'}}>{postgresql}</span></div>
+        <div style={{color: 'green'}}>url：<span style={{color: 'red', userSelect: 'text'}}>{postgresql.url}</span></div>
       </div>
     </div>, {
       title: 'JDBC配置示例',
@@ -303,6 +318,8 @@ export default class JDBCConfig extends React.Component{
       const key = selectedTrs[selectedTrs.length - 1];
       selectJDBC = data.filter(d => d.key === key)[0] || {};
     }
+    const dbName = (selectJDBC.type || 'mysql').toLocaleLowerCase();
+    const defaultDBData = this.url[dbName];
     const defaultDB = this._getData();
     const database = _object.get(dataSource, 'dataTypeDomains.database', []);
     return (<div className='pdman-jdbc-config'>
@@ -375,7 +392,7 @@ export default class JDBCConfig extends React.Component{
           <div className='pdman-jdbc-config-right-com-input'>
             <input
               onChange={e => this._onChange('driver_class_name', e)}
-              value={_object.get(selectJDBC, 'properties.driver_class_name', '')}
+              value={_object.get(selectJDBC, 'properties.driver_class_name', defaultDBData.driverClass || '')}
             />
           </div>
         </div>
@@ -394,7 +411,7 @@ export default class JDBCConfig extends React.Component{
           <div className='pdman-jdbc-config-right-com-input'>
             <input
               onChange={e => this._onChange('url', e)}
-              value={_object.get(selectJDBC, 'properties.url', '')}
+              value={_object.get(selectJDBC, 'properties.url', defaultDBData.url || '')}
             />
           </div>
         </div>
