@@ -1548,7 +1548,7 @@ export default class Relation extends React.Component{
         按住shift可拖动关系图，滑动鼠标可放大缩小关系图，按下M可打开或者关闭缩略图
       </div>
       <div
-        style={{position: 'fixed', top: 135, right: 20, color: 'green'}}
+        style={{position: 'fixed', top: 140, right: 20, color: 'green'}}
       >
         放大倍数：{count}X
       </div>
