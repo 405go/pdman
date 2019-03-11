@@ -1769,7 +1769,7 @@ export default class App extends React.Component {
                     <div
                       className='tools-content-clickeable'
                       onClick={() => this._saveAs('filterDBS')}
-                    ><Icon type="file1"/>导出所有JSON</div>
+                    ><Icon type="file1"/>导出JSON</div>
                   </div>
                   <div className='tools-content-group-name'>
                     导出
