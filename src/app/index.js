@@ -1566,7 +1566,7 @@ export default class App extends React.Component {
             <span><Icon type="save"/></span>
             <span>保存</span>
           </div>
-          <div className='pdman-home-header-menu'>
+          <div className='pdman-home-header-menu' style={{paddingLeft: tools === 'dbversion' ? '60px' : '0'}}>
             <header>
               <div className="options-wrapper">
                 <div>
@@ -1769,7 +1769,7 @@ export default class App extends React.Component {
                     <div
                       className='tools-content-clickeable'
                       onClick={() => this._saveAs('filterDBS')}
-                    ><Icon type="file1"/>导出所有模型</div>
+                    ><Icon type="file1"/>导出所有JSON</div>
                   </div>
                   <div className='tools-content-group-name'>
                     导出
