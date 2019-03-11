@@ -180,7 +180,8 @@ body {
       flex-direction: row;
     }
     &-name {
-      color: #58A1F3;
+      color: #9B9B9B;
+      opacity: 0.5;
     }
     &::after {
       top: 0;
@@ -222,8 +223,6 @@ body {
       margin-right: 2px;
     }
   }
-
-  border-bottom: solid 1px #9B9B9B;
 }
 .menu-tools-edit-active {
   color: #58A1F3;
@@ -322,4 +321,40 @@ body {
 .tools-right-paint {
   //width: 80%;
   text-align: center;
+}
+.pdman-home-header {
+  display: flex;
+  flex-direction: row;
+  border-bottom: solid 1px #9B9B9B;
+  &-save {
+    position: relative;
+    width: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    background: #E3E3E5;
+    i {
+      font-size: 30px;
+      color: green;
+    }
+    &:hover {
+      cursor: pointer;
+      color: #1A7DC4;
+    }
+    &::after {
+      top: 0;
+      right: 0;
+      position: absolute;
+      content: " ";
+      width: 1px;
+      background: #9B9B9B;
+      height: 100%;
+      opacity: 0.5;
+    }
+  }
+  &-menu {
+    flex-grow: 1;
+  }
 }

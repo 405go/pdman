@@ -1154,168 +1154,168 @@ export default class App extends React.Component {
         //height: 'calc(100% - 20px)',
         flexGrow: 1,
         overflow: 'hidden',
-        display: 'flex',
-        flexDirection: 'column'
       }}>
-        <header>
-          <div className="options-wrapper">
-            <div>
-              <ul className="other-options-menu">
-                <li
-                  className={'other-options-menu-tools other-options-menu-tools-special'}
-                  onClick={() => this._saveAll()}
-                >
-                  <span><u>保</u>存</span>
-                </li>
-                <li
-                  className={`other-options-menu-tools
+        <div className='pdman-home-header'>
+          <div className='pdman-home-header-save' onClick={() => this._saveAll()}>
+            <span><Icon type="save"/></span>
+            <span>保存</span>
+          </div>
+          <div className='pdman-home-header-menu'>
+            <header>
+              <div className="options-wrapper">
+                <div>
+                  <ul className="other-options-menu">
+                    <li
+                      className={`other-options-menu-tools
                    ${(tools === 'file' || tools === 'entity') ? 'menu-tools-edit-active' : 'tools-content-enable-click'}`}
-                  onClick={() => this._menuClick('file')}
-                >
-                  <span><u>开</u>始</span>
-                </li>
-                <li
-                  className={`other-options-menu-tools
+                      onClick={() => this._menuClick('file')}
+                    >
+                      <span><u>开</u>始</span>
+                    </li>
+                    <li
+                      className={`other-options-menu-tools
                    ${tabs.length > 0 && tools === 'map' ? 'menu-tools-edit-active' : ''}
                   ${tabs.length > 0 && toolsClickable === 'map' ? '' : 'tools-content-un-click'}`}
-                  onClick={() => tabs.length > 0 && toolsClickable === 'map' && this._menuClick('map')}
-                >
-                  <span><u>关</u>系图</span>
-                </li>
-                <li
-                  className={`other-options-menu-tools ${tools === 'plug' ?
-                    'menu-tools-edit-active' : 'tools-content-enable-click'}`}
-                  onClick={() =>this._menuClick('plug')}
-                >
-                  <span><u>模</u>型</span>
-                </li>
-              </ul>
-              <Icon
-                type='logout'
-                title='关闭当前项目'
-                style={{float: 'right', marginRight: 5, paddingTop: 1, cursor: 'pointer'}}
-                onClick={this._closeProject}
-              />
-            </div>
-          </div>
-        </header>
-        <Context
-          menus={this.state.contextMenus}
-          left={this.state.left}
-          top={this.state.top}
-          display={this.state.contextDisplay}
-          closeContextMenu={this._closeContextMenu}
-          onClick={this._contextClick}
-        />
-        <div className="tools-content" style={{display: tools === 'dbversion' ? 'none' : ''}}>
-          <div className="tools-content-tab" style={{display: (tools === 'file' || tools === 'entity') ? '' : 'none'}}>
-            <div className='tools-content-group'>
-              <div className='tools-content-group-content'>
-                <div
-                  className='tools-content-clickeable'
-                  onClick={this._open}
-                >
-                  <Icon type='folderopen' style={{marginRight: 5, color: '#FFCA28'}}/>打开
-                </div>
-                <div
-                  className='tools-content-clickeable'
-                  onClick={this._create}
-                >
-                  <Icon type='addfolder' style={{marginRight: 5, color: '#96C080'}}/>新建
-                </div>
-                <div
-                  className='tools-content-clickeable'
-                  onClick={() => this._saveAs()}
-                >
-                  <Icon type='fa-save' style={{marginRight: 5, color: '#9291CD'}}/>另存为
+                      onClick={() => tabs.length > 0 && toolsClickable === 'map' && this._menuClick('map')}
+                    >
+                      <span><u>关</u>系图</span>
+                    </li>
+                    <li
+                      className={`other-options-menu-tools ${tools === 'plug' ?
+                        'menu-tools-edit-active' : 'tools-content-enable-click'}`}
+                      onClick={() =>this._menuClick('plug')}
+                    >
+                      <span><u>模</u>型</span>
+                    </li>
+                  </ul>
+                  <Icon
+                    type='logout'
+                    title='关闭当前项目'
+                    style={{float: 'right', marginRight: 5, paddingTop: 1, cursor: 'pointer'}}
+                    onClick={this._closeProject}
+                  />
                 </div>
               </div>
-              <div className='tools-content-group-name'>
-                项目
-              </div>
-            </div>
-            <div className='tools-content-group'>
-              <div className='tools-content-group-content'>
-                <div
-                  className='tools-content-clickeable'
-                  onClick={() => this._setting()}
-                >
-                  <Icon type='setting' style={{marginRight: 5}}/>设置
+            </header>
+            <Context
+              menus={this.state.contextMenus}
+              left={this.state.left}
+              top={this.state.top}
+              display={this.state.contextDisplay}
+              closeContextMenu={this._closeContextMenu}
+              onClick={this._contextClick}
+            />
+            <div className="tools-content" style={{display: tools === 'dbversion' ? 'none' : ''}}>
+              <div className="tools-content-tab" style={{display: (tools === 'file' || tools === 'entity') ? '' : 'none'}}>
+                <div className='tools-content-group'>
+                  <div className='tools-content-group-content'>
+                    <div
+                      className='tools-content-clickeable'
+                      onClick={this._open}
+                    >
+                      <Icon type='folderopen' style={{marginRight: 5, color: '#FFCA28'}}/>打开
+                    </div>
+                    <div
+                      className='tools-content-clickeable'
+                      onClick={this._create}
+                    >
+                      <Icon type='addfolder' style={{marginRight: 5, color: '#96C080'}}/>新建
+                    </div>
+                    <div
+                      className='tools-content-clickeable'
+                      onClick={() => this._saveAs()}
+                    >
+                      <Icon type='fa-save' style={{marginRight: 5, color: '#9291CD'}}/>另存为
+                    </div>
+                  </div>
+                  <div className='tools-content-group-name'>
+                    项目
+                  </div>
+                </div>
+                <div className='tools-content-group'>
+                  <div className='tools-content-group-content'>
+                    <div
+                      className='tools-content-clickeable'
+                      onClick={() => this._setting()}
+                    >
+                      <Icon type='setting' style={{marginRight: 5}}/>设置
+                    </div>
+                  </div>
+                  <div className='tools-content-group-name'>
+                    配置
+                  </div>
                 </div>
               </div>
-              <div className='tools-content-group-name'>
-                配置
-              </div>
-            </div>
-          </div>
-          <div className="tools-content-tab" style={{display: tabs.length > 0 && tools === 'map' ? '' : 'none'}}>
-            <div className='tools-content-group'>
-              <div className='tools-content-group-content'>
-                <div
-                  className='tools-content-clickeable'
-                  onClick={() => this._onZoom('add')}
-                >
-                  <Icon type="fa-search-plus"/>
-                  放大
+              <div className="tools-content-tab" style={{display: tabs.length > 0 && tools === 'map' ? '' : 'none'}}>
+                <div className='tools-content-group'>
+                  <div className='tools-content-group-content'>
+                    <div
+                      className='tools-content-clickeable'
+                      onClick={() => this._onZoom('add')}
+                    >
+                      <Icon type="fa-search-plus"/>
+                      放大
+                    </div>
+                    <div
+                      className='tools-content-clickeable'
+                      onClick={() => this._onZoom('sub')}
+                    >
+                      <Icon type="fa-search-minus"/>
+                      缩小
+                    </div>
+                    <div
+                      className='tools-content-clickeable'
+                      onClick={() => this._onZoom('normal')}
+                    >
+                      <Icon type="fa-search"/>
+                      原始大小
+                    </div>
+                  </div>
+                  <div className='tools-content-group-name'>
+                    比例
+                  </div>
                 </div>
-                <div
-                  className='tools-content-clickeable'
-                  onClick={() => this._onZoom('sub')}
-                >
-                  <Icon type="fa-search-minus"/>
-                  缩小
+                <div className='tools-content-group'>
+                  <div className='tools-content-group-content'>
+                    <div
+                      className={`tools-content-${clicked === 'drag' ? 'clicked' : 'clickeable'}`}
+                      onClick={() => this._changeMode('drag')}
+                    ><Icon type="fa-arrows"/>拖拽模式</div>
+                    <div
+                      className={`tools-content-${clicked === 'edit' ? 'clicked' : 'clickeable'}`}
+                      onClick={() => this._changeMode('edit')}
+                    ><Icon type="fa-edit"/>编辑模式</div>
+                  </div>
+                  <div className='tools-content-group-name'>
+                    模式
+                  </div>
                 </div>
-                <div
-                  className='tools-content-clickeable'
-                  onClick={() => this._onZoom('normal')}
-                >
-                  <Icon type="fa-search"/>
-                  原始大小
+                <div className='tools-content-group'>
+                  <div className='tools-content-group-content'>
+                    <div
+                      className='tools-content-clickeable'
+                      onClick={() => this._exportImage()}
+                    ><Icon type="fa-file-image-o"/>导出图片</div>
+                  </div>
+                  <div className='tools-content-group-name'>
+                    导出
+                  </div>
                 </div>
-              </div>
-              <div className='tools-content-group-name'>
-                比例
-              </div>
-            </div>
-            <div className='tools-content-group'>
-              <div className='tools-content-group-content'>
-                <div
-                  className={`tools-content-${clicked === 'drag' ? 'clicked' : 'clickeable'}`}
-                  onClick={() => this._changeMode('drag')}
-                ><Icon type="fa-arrows"/>拖拽模式</div>
-                <div
-                  className={`tools-content-${clicked === 'edit' ? 'clicked' : 'clickeable'}`}
-                  onClick={() => this._changeMode('edit')}
-                ><Icon type="fa-edit"/>编辑模式</div>
-              </div>
-              <div className='tools-content-group-name'>
-                模式
-              </div>
-            </div>
-            <div className='tools-content-group'>
-              <div className='tools-content-group-content'>
-                <div
-                  className='tools-content-clickeable'
-                  onClick={() => this._exportImage()}
-                ><Icon type="fa-file-image-o"/>导出图片</div>
-              </div>
-              <div className='tools-content-group-name'>
-                导出
-              </div>
-            </div>
-            <div className='tools-content-group'>
-              <div className='tools-content-group-content'>
-                <div
-                  className='tools-content-clickeable'
-                  style={{flexGrow: 1, textAlign: 'right'}}
-                ><Input
-                  onChange={this._relationSearch}
-                  style={{margin: '10px 10px 0 0', borderRadius: 3}}
-                  placeholder='在图上找表'
-                /></div>
-              </div>
-              <div className='tools-content-group-name'>
-                搜索
+                <div className='tools-content-group'>
+                  <div className='tools-content-group-content'>
+                    <div
+                      className='tools-content-clickeable'
+                      style={{flexGrow: 1, textAlign: 'right'}}
+                    ><Input
+                      onChange={this._relationSearch}
+                      style={{margin: '10px 10px 0 0', borderRadius: 3}}
+                      placeholder='在图上找表'
+                    /></div>
+                  </div>
+                  <div className='tools-content-group-name'>
+                    搜索
+                  </div>
+                </div>
               </div>
             </div>
           </div>
