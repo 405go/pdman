@@ -86,7 +86,7 @@ export default class JDBCConfig extends React.Component{
     });
   };
   _addDB = () => {
-    const { onChange } = this.props;
+    const { onChange, dataSource } = this.props;
     const { data = [], selectedTrs } = this.state;
     const tempFields = [...data];
     const key = uuid();
@@ -97,10 +97,17 @@ export default class JDBCConfig extends React.Component{
         }
         return null;
       }).filter(field => field !== null);
+    const database = _object.get(dataSource, 'dataTypeDomains.database', [])[0] || {};
+    const dbName = (database.type || 'mysql').toLocaleLowerCase();
+    const defaultDBData = this.url[dbName] || {};
     const newField = {
       name: '',
       key: key,
       defaultDB: false,
+      properties: {
+        'driver_class_name': defaultDBData.driverClass, // eslint-disable-line
+        url: defaultDBData.url,
+      },
     };
     if (selectedTrsIndex.length > 0) {
       tempFields.splice(Math.max(...selectedTrsIndex) + 1, 0, newField);
@@ -131,9 +138,22 @@ export default class JDBCConfig extends React.Component{
     this.setState({
       data: data.map((d) => {
         if (d.key === key) {
+          let properties = {
+            ...(d.properties || {}),
+          };
+          if (name === 'type') {
+            const dbName = (e.target.value || 'mysql').toLocaleLowerCase();
+            const defaultDBData = this.url[dbName] || {};
+            properties = {
+              ...properties,
+              'driver_class_name': defaultDBData.driverClass, // eslint-disable-line
+              url: defaultDBData.url,
+            };
+          }
           return {
             ...d,
             [name]: e.target.value,
+            properties,
           };
         }
         return d;
@@ -318,8 +338,6 @@ export default class JDBCConfig extends React.Component{
       const key = selectedTrs[selectedTrs.length - 1];
       selectJDBC = data.filter(d => d.key === key)[0] || {};
     }
-    const dbName = (selectJDBC.type || 'mysql').toLocaleLowerCase();
-    const defaultDBData = this.url[dbName];
     const defaultDB = this._getData();
     const database = _object.get(dataSource, 'dataTypeDomains.database', []);
     return (<div className='pdman-jdbc-config'>
@@ -392,7 +410,7 @@ export default class JDBCConfig extends React.Component{
           <div className='pdman-jdbc-config-right-com-input'>
             <input
               onChange={e => this._onChange('driver_class_name', e)}
-              value={_object.get(selectJDBC, 'properties.driver_class_name', defaultDBData.driverClass || '')}
+              value={_object.get(selectJDBC, 'properties.driver_class_name', '')}
             />
           </div>
         </div>
@@ -411,7 +429,7 @@ export default class JDBCConfig extends React.Component{
           <div className='pdman-jdbc-config-right-com-input'>
             <input
               onChange={e => this._onChange('url', e)}
-              value={_object.get(selectJDBC, 'properties.url', defaultDBData.url || '')}
+              value={_object.get(selectJDBC, 'properties.url', '')}
             />
           </div>
         </div>
