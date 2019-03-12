@@ -1138,7 +1138,7 @@ export default class DatabaseVersion extends React.Component{
     // 1.计算当前版本变化
     // 1.1. 读取版本控制目录下的所有文件找出版本号最大的一个版本文件进行比较（如果没有其他的版本文件，则直接与基线版本进行对比）
     getDirListPromise(this.basePathDir).then((res) => {
-      const versions = res.map((r) => {
+      const versions = res.filter(r => r.endsWith('.pdman.json')).map((r) => {
         const names = r.split('-');
         const file = names[names.length - 1];
         if (file) {
@@ -1152,7 +1152,7 @@ export default class DatabaseVersion extends React.Component{
       }).filter(v => !!v);
       let checkVersion = 'base';
       if (versions.length > 0) {
-        checkVersion = versions.sort((a, b) => a < b)[0];
+        checkVersion = versions.sort((a, b) => compareStringVersion(b, a))[0];
       }
       const { dataSource, project } = this.props;
       // 读取当前版本的内容
