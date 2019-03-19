@@ -10,6 +10,7 @@ import './style/jdbc.less';
 const { execFile } = require('child_process');
 
 const { ipcRenderer } = electron;
+const { dialog } = electron.remote;
 const Radio = RadioGroup.Radio;
 
 export default class JDBCConfig extends React.Component{
@@ -329,6 +330,21 @@ export default class JDBCConfig extends React.Component{
       footer: [<Button key="cancel" onClick={onClickCancel} style={{ marginLeft: 10 }}>关闭</Button>],
     });
   };
+  _selectJar = () => {
+    dialog.showOpenDialog({
+      title: '选择驱动jar包',
+      properties:['openFile'],
+      filters: [{name: 'jar', extensions: ['jar']}],
+    }, (file) => {
+      if (file) {
+        this._onChange('customer_driver', {
+          target: {
+            value: file[0],
+          },
+        });
+      }
+    });
+  };
   render(){
     const { dataSource } = this.props;
     const { selectedTrs, data } = this.state;
@@ -395,6 +411,26 @@ export default class JDBCConfig extends React.Component{
         </div>
       </div>
       <div className='pdman-jdbc-config-right' style={{display: selectedTrs.length > 0 ? '' : 'none'}}>
+        <div className='pdman-jdbc-config-right-com'>
+          <div className='pdman-jdbc-config-right-com-label'>
+            <span>自定义驱动:</span>
+          </div>
+          <div className='pdman-jdbc-config-right-com-input'>
+            <input
+              style={{width: '80%'}}
+              onChange={e => this._onChange('customer_driver', e)}
+              value={_object.get(selectJDBC, 'properties.customer_driver', '')}
+              placeholder='默认为空'
+            />
+            <Button
+              style={{width: '20%', height: '27px'}}
+              onClick={this._selectJar}
+              title='点击选择jar包'
+            >
+              ...
+            </Button>
+          </div>
+        </div>
         <div className='pdman-jdbc-config-right-com'>
           <div className='pdman-jdbc-config-right-com-label'>
             <span>
