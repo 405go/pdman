@@ -334,7 +334,7 @@ export default class JDBCConfig extends React.Component{
     dialog.showOpenDialog({
       title: '选择驱动jar包',
       properties:['openFile'],
-      filters: [{name: 'jar', extensions: ['jar']}],
+      filters: [{name: 'PDMan自定义驱动', extensions: ['jar']}],
     }, (file) => {
       if (file) {
         this._onChange('customer_driver', {
