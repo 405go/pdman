@@ -219,24 +219,36 @@ export default class Relation extends React.Component{
     this.newNodes = nodes;
   };
   exportImg = (path, type, callback) => {
+    const { value } = this.props;
     const tempNet = this.net;
+    const currentDom = document.getElementById(`paint-${value}`);
+    const currentStyle = getComputedStyle(currentDom);
     let tempDom = null;
+    let tempWidth = '';
+    let tempHeight = '';
+    let fitView = undefined;
     if (type === 'all') {
-      // 1.创建一个临时的dom节点
-      const id = uuid();
-      tempDom = document.createElement('div');
-      tempDom.setAttribute('id', id);
-      tempDom.style.width = '2000px';
-      tempDom.style.height = '2000px';
-      document.body.appendChild(tempDom);
-      // 2.缓存当前的net对象
-      const dataSource = this.net.save().source;
-      // 3.渲染新的关系图
-      this._renderRelation(2000,
-        2000, dataSource,
-        null, id, 'autoSize',
-        true, true);
+      fitView = 'autoSize';
+      tempWidth = 2000;
+      tempHeight = 2000;
+    } else {
+      tempWidth = currentStyle.width && currentStyle.width.split('px')[0];
+      tempHeight = currentStyle.width && currentStyle.height.split('px')[0];
     }
+    // 1.创建一个临时的dom节点
+    const id = uuid();
+    tempDom = document.createElement('div');
+    tempDom.setAttribute('id', id);
+    tempDom.style.width = `${tempWidth}px`;
+    tempDom.style.height = `${tempHeight}px`;
+    document.body.appendChild(tempDom);
+    // 2.缓存当前的net对象
+    const dataSource = this.net.save().source;
+    // 3.渲染新的关系图
+    this._renderRelation(tempWidth,
+      tempHeight, dataSource,
+      null, id, fitView,
+      true, true);
     setTimeout(() => {
       const tempGraphContainer = this.net.get('graphContainer');
       // 关闭缩略图

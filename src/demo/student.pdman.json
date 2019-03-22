@@ -197,7 +197,7 @@
             },
             {
               "name": "CREATED_BY",
-              "type": "KEY",
+              "type": "IdOrKey",
               "remark": "",
               "chnname": "创建人",
               "relationNoShow": true
@@ -211,7 +211,7 @@
             },
             {
               "name": "UPDATED_BY",
-              "type": "KEY",
+              "type": "IdOrKey",
               "remark": "",
               "chnname": "更新人",
               "relationNoShow": true
@@ -431,7 +431,7 @@
             },
             {
               "name": "CREATED_BY",
-              "type": "KEY",
+              "type": "IdOrKey",
               "remark": "",
               "chnname": "创建人",
               "relationNoShow": true
@@ -445,7 +445,7 @@
             },
             {
               "name": "UPDATED_BY",
-              "type": "KEY",
+              "type": "IdOrKey",
               "remark": "",
               "chnname": "更新人",
               "relationNoShow": true
@@ -689,7 +689,7 @@
             },
             {
               "name": "CREATED_BY",
-              "type": "KEY",
+              "type": "IdOrKey",
               "remark": "",
               "chnname": "创建人",
               "relationNoShow": true
@@ -703,7 +703,7 @@
             },
             {
               "name": "UPDATED_BY",
-              "type": "KEY",
+              "type": "IdOrKey",
               "remark": "",
               "chnname": "更新人",
               "relationNoShow": true
