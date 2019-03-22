@@ -15,9 +15,11 @@ const getJavaConfig = (dataSource) => {
 const getParam = (params) => {
   const paramArray = [];
   Object.keys(params).forEach((pro) => {
-    const param = params[pro] || '';
-    const value = param.includes(' ') ? `"${param}"` : param;
-    paramArray.push(`${pro}=${value}`);
+    if (pro !== 'customer_driver') {
+      const param = params[pro] || '';
+      const value = param.includes(' ') ? `"${param}"` : param;
+      paramArray.push(`${pro}=${value}`);
+    }
   });
   return paramArray;
 };
@@ -29,14 +31,18 @@ export const execJar = (dataSource, params = {}, cb, cmd) => {
   const defaultPath = ipcRenderer.sendSync('jarPath');
   const jar = configData.DB_CONNECTOR || defaultPath;
   const tempValue = value ? `${value}${split}bin${split}java` : 'java';
-  execFile(tempValue,
-    [
-      '-Dfile.encoding=utf-8',
-      '-Xms1024m',
-      '-Xmx1024m',
-      '-jar', jar, cmd,
-      ...getParam(params),
-    ],
+  const customerDriver = _object.get(params, 'customer_driver', '');
+  const commend = [
+    '-Dfile.encoding=utf-8',
+    '-Xms1024m',
+    '-Xmx1024m',
+    '-jar', jar, cmd,
+    ...getParam(params),
+  ];
+  if (customerDriver) {
+    commend.unshift(`-Xbootclasspath/a:${customerDriver}`);
+  }
+  execFile(tempValue, commend,
     {
       maxBuffer: 100 * 1024 * 1024, // 100M
     },

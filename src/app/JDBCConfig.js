@@ -25,7 +25,7 @@ export default class JDBCConfig extends React.Component{
     };
     this.url = {
       mysql : {
-        url: 'jdbc:mysql://IP地址:端口号/数据库名?characterEncoding=UTF-8&useSSL=false&useUnicode=true',
+        url: 'jdbc:mysql://IP地址:端口号/数据库名?characterEncoding=UTF-8&useSSL=false&useUnicode=true&serverTimezone=UTC',
         driverClass: 'com.mysql.jdbc.Driver',
       },
       oracle : {
@@ -189,10 +189,10 @@ export default class JDBCConfig extends React.Component{
     const paramArray = [];
     const properties = _object.get(selectJDBC, 'properties', {});
     Object.keys(properties).forEach((pro) => {
-      //paramArray.push(`-${pro}`);
-      paramArray.push(`${pro}=${properties[pro]}`);
+      if (pro !== 'customer_driver') {
+        paramArray.push(`${pro}=${properties[pro]}`);
+      }
     });
-    //console.log(paramArray);
     return paramArray;
   };
   _getJAVAVersion = (java, cb) => {
@@ -218,6 +218,13 @@ export default class JDBCConfig extends React.Component{
       });
   };
   _connectJDBC = (selectJDBC) => {
+    const { properties = {} } = (selectJDBC || {});
+    if (Object.keys(properties).some((p) => {
+      return p !== 'customer_driver' && !properties[p];
+    })) {
+      Modal.error({title: '连接失败', message: '所有带*为必填项，不能为空!'});
+      return;
+    }
     this.setState({
       loading: true,
     });
@@ -239,17 +246,20 @@ export default class JDBCConfig extends React.Component{
             loading: false,
           });
         } else {
-          execFile(tempValue,
-            [
-              '-Dfile.encoding=utf-8',
-              '-jar', jar, 'ping',
-              ...this._getParam({
-                ...selectJDBC,
-                properties: {
-                  ...(selectJDBC.properties || {}),
-                },
-              }),
-            ],
+          const customerDriver = _object.get(selectJDBC, 'properties.customer_driver', '');
+          const commend = [
+            '-Dfile.encoding=utf-8', '-jar', jar, 'ping',
+            ...this._getParam({
+              ...selectJDBC,
+              properties: {
+                ...(selectJDBC.properties || {}),
+              },
+            }),
+          ];
+          if (customerDriver) {
+            commend.unshift(`-Xbootclasspath/a:${customerDriver}`);
+          }
+          execFile(tempValue, commend,
             (error, stdout, stderr) => {
               const result = (stdout || stderr);
               this.setState({
@@ -413,19 +423,19 @@ export default class JDBCConfig extends React.Component{
       <div className='pdman-jdbc-config-right' style={{display: selectedTrs.length > 0 ? '' : 'none'}}>
         <div className='pdman-jdbc-config-right-com'>
           <div className='pdman-jdbc-config-right-com-label'>
-            <span>自定义驱动:</span>
+            <span title='目前mysql,sqlserver,oracle,postgresql无需配置'>自定义驱动:</span>
           </div>
           <div className='pdman-jdbc-config-right-com-input'>
             <input
               style={{width: '80%'}}
               onChange={e => this._onChange('customer_driver', e)}
               value={_object.get(selectJDBC, 'properties.customer_driver', '')}
-              placeholder='默认为空'
+              placeholder='目前mysql,sqlserver,oracle,postgresql无需配置'
             />
             <Button
               style={{width: '20%', height: '27px'}}
               onClick={this._selectJar}
-              title='点击选择jar包'
+              title='点击选择jar包(目前mysql,sqlserver,oracle,postgresql无需配置)'
             >
               ...
             </Button>
@@ -439,9 +449,10 @@ export default class JDBCConfig extends React.Component{
                 title='点击查看帮助'
                 style={{marginRight: 10, color: 'green', cursor: 'pointer'}}
               >
-                ?
+                <Icon type='fa-exclamation-circle'/>
               </span>
-              driver-class:</span>
+              <span className='pdman-jdbc-config-right-com-label-require'>driver-class:</span>
+            </span>
           </div>
           <div className='pdman-jdbc-config-right-com-input'>
             <input
@@ -458,9 +469,9 @@ export default class JDBCConfig extends React.Component{
                 title='点击查看帮助'
                 style={{marginRight: 10, color: 'green', cursor: 'pointer'}}
               >
-                ?
+                <Icon type='fa-exclamation-circle'/>
               </span>
-              url:</span>
+              <span className='pdman-jdbc-config-right-com-label-require'>url:</span></span>
           </div>
           <div className='pdman-jdbc-config-right-com-input'>
             <input
@@ -471,7 +482,7 @@ export default class JDBCConfig extends React.Component{
         </div>
         <div className='pdman-jdbc-config-right-com'>
           <div className='pdman-jdbc-config-right-com-label'>
-            <span>username:</span>
+            <span className='pdman-jdbc-config-right-com-label-require'>username:</span>
           </div>
           <div className='pdman-jdbc-config-right-com-input'>
             <input
@@ -482,7 +493,7 @@ export default class JDBCConfig extends React.Component{
         </div>
         <div className='pdman-jdbc-config-right-com'>
           <div className='pdman-jdbc-config-right-com-label'>
-            <span>password:</span>
+            <span className='pdman-jdbc-config-right-com-label-require'>password:</span>
           </div>
           <div className='pdman-jdbc-config-right-com-input'>
             <input

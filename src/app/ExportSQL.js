@@ -193,7 +193,9 @@ export default class ExportSQL extends React.Component{
     const properties = _object.get(selectJDBC, 'properties', {});
     const separator = _object.get(dataSource, 'profile.sqlConfig', '/*SQL@Run*/');
     Object.keys(properties).forEach((pro) => {
-      paramArray.push(`${pro}=${properties[pro]}`);
+      if (pro !== 'customer_driver') {
+        paramArray.push(`${pro}=${properties[pro]}`);
+      }
     });
     paramArray.push(`separator=${separator}`);
     return paramArray;
@@ -214,12 +216,16 @@ export default class ExportSQL extends React.Component{
     const defaultPath = ipcRenderer.sendSync('jarPath');
     const jar = configData.DB_CONNECTOR || defaultPath;
     const tempValue = value ? `${value}${this.split}bin${this.split}java` : 'java';
-    execFile(tempValue,
-      [
-        '-Dfile.encoding=utf-8',
-        '-jar', jar, cmd,
-        ...this._getParam(selectJDBC),
-      ],
+    const customerDriver = _object.get(selectJDBC, 'properties.customer_driver', '');
+    const commend = [
+      '-Dfile.encoding=utf-8',
+      '-jar', jar, cmd,
+      ...this._getParam(selectJDBC),
+    ];
+    if (customerDriver) {
+      commend.unshift(`-Xbootclasspath/a:${customerDriver}`);
+    }
+    execFile(tempValue, commend,
       (error, stdout, stderr) => {
         cb && cb(this._parseResult(stderr, stdout));
       });

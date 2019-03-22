@@ -48,6 +48,16 @@
         text-align: right;
         width: 120px;
         padding-right: 5px;
+        &-require {
+          position: relative;
+          &:after {
+            content: "*";
+            position: absolute;
+            color: red;
+            top: 0;
+            left: -7px;
+          }
+        }
       }
       &-input {
         flex-grow: 1;

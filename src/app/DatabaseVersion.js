@@ -625,7 +625,9 @@ export default class DatabaseVersion extends React.Component{
     const paramArray = [];
     const properties = _object.get(selectJDBC, 'properties', {});
     Object.keys(properties).forEach((pro) => {
-      paramArray.push(`${pro}=${properties[pro]}`);
+      if (pro !== 'customer_driver') {
+        paramArray.push(`${pro}=${properties[pro]}`);
+      }
     });
     return paramArray;
   };
@@ -649,12 +651,16 @@ export default class DatabaseVersion extends React.Component{
         footer: [<Button style={{marginTop: 10}} key="ok" onClick={onOk} type="primary">关闭</Button>],
       });
     }
-    execFile(tempValue,
-      [
-        '-Dfile.encoding=utf-8',
-        '-jar', jar, cmd,
-        ...this._getParam(selectJDBC),
-      ],
+    const customerDriver = _object.get(selectJDBC, 'properties.customer_driver', '');
+    const commend = [
+      '-Dfile.encoding=utf-8',
+      '-jar', jar, cmd,
+      ...this._getParam(selectJDBC),
+    ];
+    if (customerDriver) {
+      commend.unshift(`-Xbootclasspath/a:${customerDriver}`);
+    }
+    execFile(tempValue, commend,
       (error, stdout, stderr) => {
         modal && modal.close();
         const result = this._parseResult(stderr, stdout);
