@@ -140,9 +140,9 @@ PDMan是由国内知名金融IT上市公司，内部研发团队设计的一款�
 #### 下载
 
 -   [码云地址](https://gitee.com/robergroup/pdman)
--   [Windows](https://share.weiyun.com/5L07rh4)
--   [Mac](https://share.weiyun.com/57ggCes)
--   [Linux](https://share.weiyun.com/5xMIsvj)
+-   [Windows](https://share.weiyun.com/5XCmQ8m)
+-   [Mac](https://share.weiyun.com/5cMgjc5)
+-   [Linux](https://share.weiyun.com/5HQxPiG)
 
 #### 欢迎加钉钉群交流
 ![](https://static.oschina.net/uploads/img/201806/01151807_3YY6.jpg "")
