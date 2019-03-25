@@ -29,6 +29,7 @@ export default class Loading extends React.Component{
         {code: 'autoIncrement', value: '自增', com: 'Checkbox', relationNoShow: true},
         {code: 'defaultValue', value: '默认值', com: 'Input', relationNoShow: true},
         {code: 'relationNoShow', value: '关系图', com: 'Icon', relationNoShow: true},
+        {code: 'uiHint', value: 'UI建议', com: 'Select', relationNoShow: true},
       ],
     };
   }

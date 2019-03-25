@@ -83,8 +83,37 @@ export default class TableCell extends React.Component{
       width,
     };
   };
+  _getOptions = (type) => {
+    const { dataTypes } = this.props;
+    const data = type === 'type' ? dataTypes : [
+      {code: 'Text', name: '文字'},
+      {code: 'Number', name: '数字'},
+      {code: 'Money', name: '金额'},
+      {code: 'Select', name: '下拉框'},
+      {code: 'Radio', name: '单选'},
+      {code: 'CheckBox', name: '多选'},
+      {code: 'Email', name: '邮件'},
+      {code: 'URL', name: 'URL'},
+      {code: 'DatePicker', name: '日期选择器'},
+      {code: 'TextArea', name: '大文本'},
+      {code: 'AddressPicker', name: '地址'},
+    ];
+   return data.concat({
+       name: '--请选择--',
+       code: '',
+     })
+       .map(d =>
+         (
+           <option
+             value={d.code}
+             key={d.code}
+           >
+             {d.name}
+           </option>
+    ));
+  };
   render() {
-    const { column, field, ThCom, index, rowIndex, dataTypes, setInputInstance } = this.props;
+    const { column, field, ThCom, index, rowIndex, setInputInstance } = this.props;
     return (
       <th key={`${column.code}-${field.key}`}>{
         <ThCom
@@ -98,29 +127,15 @@ export default class TableCell extends React.Component{
           }}
           onFocus={this._onFocus}
           onChange={e => this._inputOnChange(e, field.key, column.code)}
-          value={column.code === 'dataType' ?
-            this._getDefaultDataType(field.type) : field[column.code]}
+          value={(column.code === 'dataType' ?
+            this._getDefaultDataType(field.type) : field[column.code]) || ''}
           style={{
             height: (column.code !== 'pk' && column.code !== 'notNull' && column.code !== 'autoIncrement') ? 23 : 15,
             ...this._getStyle(column.code),
           }}
         >
           {
-            column.code === 'type' && column.com === 'Select' && (
-              dataTypes.concat({
-                name: '--请选择--',
-                code: '',
-              })
-                .map(dataType =>
-                  (
-                    <option
-                      value={dataType.code}
-                      key={dataType.code}
-                    >
-                      {dataType.name}
-                    </option>
-                  ))
-            )
+            column.com === 'Select' && this._getOptions(column.code)
           }
         </ThCom>
       }</th>
