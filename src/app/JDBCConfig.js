@@ -108,6 +108,8 @@ export default class JDBCConfig extends React.Component{
       properties: {
         'driver_class_name': defaultDBData.driverClass, // eslint-disable-line
         url: defaultDBData.url,
+        password: '',
+        username: '',
       },
     };
     if (selectedTrsIndex.length > 0) {
