@@ -62,6 +62,7 @@ export default class ReadDB extends React.Component{
               this.dbs.map(db => (<option key={db.name} value={db.name}>{db.name}</option>))
             }
           </Select>
+          <span style={{color: 'red', paddingLeft: 5}}>[暂时不支持索引解析生成]</span>
         </div>
         <div className='pdman-readdb-db-select-dataFormat'>
           <span className='pdman-readdb-db-select-dataFormat-span'>逻辑名格式：</span>

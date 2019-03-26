@@ -418,67 +418,74 @@ export default class App extends React.Component {
         });
       });
     } else if (type === 'Word' || type === 'PDF') {
-      //Message.warning({title: '该功能正在开发中，敬请期待！'})
-      const postfix = type === 'Word' ? 'doc' : 'pdf';
-      openDir((dir) => {
-        // 保存图片
-        const modal = this._showExportMessage(dir);
-        btn && btn.setLoading(true);
-        const projectName = projectDemo || this._getProjectName(project);
-        saveImage(dataSource, columnOrder, writeFile, (images) => {
-          const imagesPath = `${dir}/${projectName}_files/`;
-          Promise.all(Object.keys(images).map(mo => {
-            const base64Data = images[mo].replace(/^data:image\/\w+;base64,/, "");
-            const dataBuffer = Buffer.from(base64Data, 'base64');
-            return new Promise((res) => {
-              // 判断图片目录是否存在
-              ensureDirectoryExistence(imagesPath);
-              writeFile(`${imagesPath}${mo}.png`, dataBuffer).then(() => {
-                res();
+      const { project, projectDemo } = this.props;
+      if (!project && projectDemo) {
+        Modal.error({
+          title: '导出失败！',
+          message: `当前项目为演示项目${projectDemo}，无法直接导出${type},请先进行保存操作！`
+        })
+      } else {
+        const postfix = type === 'Word' ? 'doc' : 'pdf';
+        openDir((dir) => {
+          // 保存图片
+          const modal = this._showExportMessage(dir);
+          btn && btn.setLoading(true);
+          const projectName = projectDemo || this._getProjectName(project);
+          saveImage(dataSource, columnOrder, writeFile, (images) => {
+            const imagesPath = `${dir}/${projectName}_files/`;
+            Promise.all(Object.keys(images).map(mo => {
+              const base64Data = images[mo].replace(/^data:image\/\w+;base64,/, "");
+              const dataBuffer = Buffer.from(base64Data, 'base64');
+              return new Promise((res) => {
+                // 判断图片目录是否存在
+                ensureDirectoryExistence(imagesPath);
+                writeFile(`${imagesPath}${mo}.png`, dataBuffer).then(() => {
+                  res();
+                });
               });
+            })).then(() => {
+              // 图片保存成功
+              const defaultPath = ipcRenderer.sendSync('wordPath');
+              const templatePath = _object.get(dataSource, 'profile.wordTemplateConfig') || defaultPath;
+              generateByJar(dataSource, {
+                pdmanfile: `${project}.pdman.json`,
+                doctpl: templatePath,
+                imgdir: imagesPath,
+                imgext: '.png',
+                out: `${dir}/${projectName}.${postfix}`,
+              }, (error, stdout, stderr) => {
+                const result = (stdout || stderr);
+                let tempResult = '';
+                try {
+                  tempResult = JSON.parse(result);
+                } catch (e) {
+                  tempResult = result;
+                }
+                btn && btn.setLoading(false);
+                modal && modal.close();
+                if (tempResult.status !== 'SUCCESS') {
+                  Modal.error({
+                    title: `${type}导出失败!请重试！`,
+                    message: `出错原因：${tempResult.body || tempResult}`,
+                  });
+                } else {
+                  Modal.success({
+                    title: `${type}导出成功！`,
+                    message: `文件存储目录：[${dir}]`
+                  });
+                }
+              }, 'gendocx');
             });
-          })).then(() => {
-            // 图片保存成功
-            const defaultPath = ipcRenderer.sendSync('wordPath');
-            const templatePath = _object.get(dataSource, 'profile.wordTemplateConfig') || defaultPath;
-            generateByJar(dataSource, {
-              pdmanfile: `${project}.pdman.json`,
-              doctpl: templatePath,
-              imgdir: imagesPath,
-              imgext: '.png',
-              out: `${dir}/${projectName}.${postfix}`,
-            }, (error, stdout, stderr) => {
-              const result = (stdout || stderr);
-              let tempResult = '';
-              try {
-                tempResult = JSON.parse(result);
-              } catch (e) {
-                tempResult = result;
-              }
-              btn && btn.setLoading(false);
-              modal && modal.close();
-              if (tempResult.status !== 'SUCCESS') {
-                Modal.error({
-                  title: `${type}导出失败!请重试！`,
-                  message: `出错原因：${tempResult.body || tempResult}`,
-                });
-              } else {
-                Modal.success({
-                  title: `${type}导出成功！`,
-                  message: `文件存储目录：[${dir}]`
-                });
-              }
-            }, 'gendocx');
-          });
-        }, (err) => {
-          modal && modal.close();
-          btn && btn.setLoading(false);
-          Modal.error({
-            title: `${type}导出失败!请重试！`,
-            message: `出错原因：${err.message}`,
+          }, (err) => {
+            modal && modal.close();
+            btn && btn.setLoading(false);
+            Modal.error({
+              title: `${type}导出失败!请重试！`,
+              message: `出错原因：${err.message}`,
+            });
           });
         });
-      });
+      }
     } else if (type === 'Html') {
       openDir((dir) => {
         // 保存图片
