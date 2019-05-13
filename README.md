@@ -84,19 +84,19 @@ PDMan是由国内知名金融IT上市公司，内部研发团队设计的一款�
 #### 上图
 
 **启动画面：**
-![](https://oscimg.oschina.net/oscnet/eba42e7a27d86d7c90712637d5342a43095.jpg)
+![](https://gitee.com/uploads/images/2019/0411/183650_15612898_24669.jpeg)
 ![](https://oscimg.oschina.net/oscnet/967c2a16712629058b08e22184a3c3c5fcd.jpg)
 
 **主工作界面：**
 ![](https://oscimg.oschina.net/oscnet/826d5265d68a43df33d8f4aef4498ff1469.jpg)
-![](https://oscimg.oschina.net/oscnet/2cab05d55f076766d80fa654cb1c118b4a4.jpg)
-![](https://oscimg.oschina.net/oscnet/b14b33c20a2f500add7cc6097b378a90bed.jpg)
-![](https://oscimg.oschina.net/oscnet/1bd3093ec0ab6f188f2f41c35e63a0a3472.jpg)
+![](https://gitee.com/uploads/images/2019/0411/112013_835d9163_24669.jpeg)
+![](https://gitee.com/uploads/images/2019/0411/183650_9a6efea9_24669.jpeg)
+![](https://gitee.com/uploads/images/2019/0411/112017_72e44799_24669.jpeg)
 代码模板编辑器 
-![](https://oscimg.oschina.net/oscnet/fee036bae7c8c47213db925cd2197f1486a.jpg)
+![](https://gitee.com/uploads/images/2019/0411/112013_9a573b87_24669.jpeg)
 
 **数据类型以及数据域：**
-![](https://oscimg.oschina.net/oscnet/f11f8fe73ba251618da4312ed58b0ecc42a.jpg)
+![](https://gitee.com/uploads/images/2019/0411/112019_1641bb4f_24669.jpeg)
 ![](https://oscimg.oschina.net/oscnet/80547a25e2f57c4ec107df1501aca9581fa.jpg)
 ![](https://oscimg.oschina.net/oscnet/761364fcd82574c0df3973a62f1bcae6294.jpg)
 ![](https://oscimg.oschina.net/oscnet/6ddeae5fa48746d2662b3e5d15587a77910.jpg)
@@ -104,13 +104,13 @@ PDMan是由国内知名金融IT上市公司，内部研发团队设计的一款�
 **脚本导出：**
 ![](https://oscimg.oschina.net/oscnet/5ac2315c047e3de1a03052666cda7a24d21.jpg)
 导出特定类型的脚本 
-![](https://oscimg.oschina.net/oscnet/ae2b73dd7e0f250242f85b263a803eb2c53.jpg)
+![](https://gitee.com/uploads/images/2019/0411/112024_0135071c_24669.jpeg)
 
 **数据库版本管理：**
-![](https://oscimg.oschina.net/oscnet/59745fe5202ecd465d22db7765bfa9b102e.jpg)
-![](https://oscimg.oschina.net/oscnet/479097dcbf242ea5b919719f344599d006e.jpg)
-![](https://oscimg.oschina.net/oscnet/7564296e5e9be830fea96c24a8c2c398cd8.jpg)
-![](https://oscimg.oschina.net/oscnet/78d0d9f13c1a3a8a5eec77f5266c707fe1c.jpg)
+![](https://gitee.com/uploads/images/2019/0411/112024_f09f22fb_24669.jpeg)
+![](https://gitee.com/uploads/images/2019/0411/112024_f6b2ed31_24669.jpeg)
+![](https://gitee.com/uploads/images/2019/0411/112025_ee6f36cd_24669.jpeg)
+![](https://gitee.com/uploads/images/2019/0411/183706_5aab3a6a_24669.jpeg)
 
 **生成文档: **
 ![](https://static.oschina.net/uploads/img/201805/30142335_afkp.jpg "")
@@ -140,9 +140,13 @@ PDMan是由国内知名金融IT上市公司，内部研发团队设计的一款�
 #### 下载
 
 -   [码云地址](https://gitee.com/robergroup/pdman)
--   [Windows](https://share.weiyun.com/5XCmQ8m)
--   [Mac](https://share.weiyun.com/5cMgjc5)
--   [Linux](https://share.weiyun.com/5HQxPiG)
+-   [Windows](https://gitee.com/robergroup/pdman/attach_files)
+-   [Mac](https://gitee.com/robergroup/pdman/attach_files)
+-   [Linux](https://gitee.com/robergroup/pdman/attach_files)
 
 #### 欢迎加钉钉群交流
 ![](https://static.oschina.net/uploads/img/201806/01151807_3YY6.jpg "")
+#### 捐赠作者
+![输入图片说明](https://gitee.com/uploads/images/2019/0411/183645_ee6e3e21_24669.png "屏幕截图.png")
+![输入图片说明](https://gitee.com/uploads/images/2019/0411/183709_92999b1a_24669.png "屏幕截图.png")
+
