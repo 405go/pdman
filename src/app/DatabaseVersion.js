@@ -714,7 +714,7 @@ export default class DatabaseVersion extends React.Component{
             sqlParam.version = version.version;
           }
           if (!onlyUpdateVersion) {
-            const separator = _object.get(dataSource, 'profile.sqlConfig', '/*SQL@Run*/');
+            const separator = _object.get(dataSource, 'profile.sqlConfig', ';');
             sqlParam.sql = tempPath;
             sqlParam.separator = separator;
           }

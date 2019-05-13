@@ -751,7 +751,7 @@ export const getAllDataSQLByFilter = (dataSource, code, filter = []) => {
   const getTemplate = (templateShow) => {
     return `${(database && database[templateShow]) || ''}`;
   };
-  const separator = _object.get(dataSource, 'profile.sqlConfig', '/*SQL@Run*/');
+  const separator = _object.get(dataSource, 'profile.sqlConfig', ';');
   let sqlString = '';
   // 1.获取所有的表
   const tempEntities = getAllTable(dataSource, 'name').map((entity) => {

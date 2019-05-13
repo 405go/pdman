@@ -191,7 +191,7 @@ export default class ExportSQL extends React.Component{
     const { dataSource } = this.props;
     const paramArray = [];
     const properties = _object.get(selectJDBC, 'properties', {});
-    const separator = _object.get(dataSource, 'profile.sqlConfig', '/*SQL@Run*/');
+    const separator = _object.get(dataSource, 'profile.sqlConfig', ';');
     Object.keys(properties).forEach((pro) => {
       if (pro !== 'customer_driver') {
         paramArray.push(`${pro}=${properties[pro]}`);

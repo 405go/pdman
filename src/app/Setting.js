@@ -27,7 +27,7 @@ export default class Setting extends React.Component{
     };
     this.inputInstance = [];
     this.javaConfig = _object.get(props.dataSource, 'profile.javaConfig', {});
-    this.sqlConfig = _object.get(props.dataSource, 'profile.sqlConfig', '/*SQL@Run*/');
+    this.sqlConfig = _object.get(props.dataSource, 'profile.sqlConfig', ';');
     this.wordTemplateConfig = _object.get(props.dataSource, 'profile.wordTemplateConfig', '');
     this.dbs = _object.get(props.dataSource, 'profile.dbs', []);
   }
