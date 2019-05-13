@@ -2,8 +2,8 @@ const _http = require('http');
 const os = require('os');
 
 const version = {
-  version: '2.1.5',
-  date: '2019.3',
+  version: '2.1.6',
+  date: '2019.5',
 };
 
 const defaultUrl = `http://www.pdman.cn/launch/${os.platform()}/${version.version}`;
