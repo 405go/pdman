@@ -11,8 +11,9 @@ import WORDConfig from './WORDConfig';
 import './style/setting.less';
 import { uuid } from '../utils/uuid';
 import { moveArrayPositionByFuc, moveArrayPosition } from '../utils/array';
+import DataTypeHelp from './container/datatype/help';
 
-const { Modal, openModal, TextArea, Select } = Com;
+const { Modal, openModal, TextArea, Select, openMask } = Com;
 const clipboard = require('electron').clipboard;
 
 export default class Setting extends React.Component{
@@ -423,6 +424,9 @@ export default class Setting extends React.Component{
           </option>
         ));
   };
+  _showCreateType = () => {
+    openMask(<DataTypeHelp/>);
+  };
   render(){
     const { height, selectedTrs, fields, defaultFieldsType } = this.state;
     const { prefix = 'pdman', columnOrder, dataSource, project, register, updateRegister } = this.props;
@@ -508,6 +512,12 @@ export default class Setting extends React.Component{
                       <div>
                         <div>
                           {column.value}
+                          <Com.Icon
+                            title='创建新的数据类型'
+                            onClick={this._showCreateType}
+                            type='fa-question-circle-o'
+                            style={{display: column.code === 'type' ? '' : 'none', color: 'green'}}
+                          />
                           {
                             column.code !== 'relationNoShow' &&
                             <Com.Icon

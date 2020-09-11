@@ -5,8 +5,9 @@ import * as Com from '../../../components';
 import TableRow from './TableRow';
 import { uuid } from '../../../utils/uuid';
 import { moveArrayPositionByFuc } from '../../../utils/array';
+import DataTypeHelp from '../datatype/help';
 
-const { Modal }  = Com;
+const { Modal, openMask }  = Com;
 const clipboard = require('electron').clipboard;
 
 export default class Table extends React.Component{
@@ -180,6 +181,9 @@ export default class Table extends React.Component{
         return header;
       }),
     });
+  };
+  _showCreateType = () => {
+    openMask(<DataTypeHelp/>);
   };
   _relationNoShowClick = (e, key, code, value) => {
     if (key) {
@@ -368,7 +372,7 @@ export default class Table extends React.Component{
                     const showLeft = index === 0 ? 'none' : '';
                     const showRight = index === headers.length - 1 ? 'none' : '';
                     return (<th key={column.code}>
-                      <div>
+                      <div style={{minWidth: column.code === 'type' ? 150 : 'auto' }}>
                         <Com.Icon
                           onClick={() => this._columnClick('left', index)}
                           type='arrowleft'
@@ -385,6 +389,12 @@ export default class Table extends React.Component{
                               title='是否在关系图中显示'
                             />}
                         </div>
+                        <Com.Icon
+                          title='创建新的数据类型'
+                          onClick={this._showCreateType}
+                          type='fa-question-circle-o'
+                          style={{display: column.code === 'type' ? '' : 'none', color: 'green'}}
+                        />
                         <Com.Icon
                           onClick={() => this._columnClick('right', index)}
                           type='arrowright'

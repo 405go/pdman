@@ -158,9 +158,9 @@ function createWindow() {
   ipcMain.on("jarPath", (event) => {
     let jarPath = '';
     if (process.env.NODE_ENV === 'development') {
-      jarPath = path.join(__dirname, '../public/jar/pdman-db-connector.jar');
+      jarPath = path.join(__dirname, '../public/jar/pdman-java-connector.jar');
     } else {
-      jarPath = path.join(__dirname, '../../app.asar.unpacked/build/jar/pdman-db-connector.jar')
+      jarPath = path.join(__dirname, '../../app.asar.unpacked/build/jar/pdman-java-connector.jar')
     }
     event.returnValue = jarPath;
   });

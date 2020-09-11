@@ -481,13 +481,13 @@ export default class ExportSQL extends React.Component{
       <div style={{border: 'solid 1px #DFDFDF'}}>
         <div style={{margin: '10px 0px'}}>
           <Button type="primary" onClick={this._export}>导出</Button>
-          <Button
+          {/*<Button
             style={{marginLeft: 10}}
             onClick={this._execSql}
             loading={loading}
           >
             {loading ? '正在执行' : '执行'}
-          </Button>
+          </Button>*/}
         </div>
         <Editor
           height='300px'

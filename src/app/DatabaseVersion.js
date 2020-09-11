@@ -51,7 +51,7 @@ class ChangeCode extends React.Component{
     const { readDB } = this.props;
     readDB && readDB();
   };
-  _execSQL = (updateDBVersion, type) => {
+  /*_execSQL = (updateDBVersion, type) => {
     const { execSQL, currentVersion, data, checkVersionCount } = this.props;
     let flag = checkVersionCount && checkVersionCount(currentVersion);
     if (!flag) {
@@ -70,7 +70,7 @@ class ChangeCode extends React.Component{
         message: '当前操作的版本之前还有版本尚未同步，请不要跨版本操作!',
       });
     }
-  };
+  };*/
   _iconClick = () => {
     const { width } = this.state;
     this.setState({
@@ -123,7 +123,7 @@ class ChangeCode extends React.Component{
           </div>
           <div className='pdman-data-tab-content'>
             <Button style={{marginBottom: 10}} key="save" onClick={this._onSave}>导出到文件</Button>
-            <Button
+            {/*<Button
               loading={preSynchronous}
               title='不会更新数据库中的版本号'
               style={{
@@ -133,8 +133,8 @@ class ChangeCode extends React.Component{
               onClick={() => this._execSQL(false, 'preSynchronous')}
             >
               {preSynchronous ? '正在预同步' : '预同步'}
-            </Button>
-            <Button
+            </Button>*/}
+            {/*<Button
               loading={synchronous}
               title='会更新数据库中的版本号'
               style={{
@@ -144,8 +144,8 @@ class ChangeCode extends React.Component{
               onClick={() => this._execSQL(true, 'synchronous')}
             >
               {synchronous ? '正在同步' : '同步'}
-            </Button>
-            <Button
+            </Button>*/}
+            {/*<Button
               loading={flagSynchronous}
               title='更新数据库的版本号，不会执行差异化的SQL'
               style={{
@@ -155,8 +155,8 @@ class ChangeCode extends React.Component{
               onClick={() => this._execSQL(true, 'flagSynchronous')}
             >
               {flagSynchronous ? '正在标记为同步' : '标记为同步'}
-            </Button>
-            <Button
+            </Button>*/}
+            {/*<Button
               loading={again}
               title='不会更新数据库中的版本号'
               style={{
@@ -165,7 +165,7 @@ class ChangeCode extends React.Component{
               }}
               onClick={() => this._execSQL(false, 'again')}
             >
-              {again ? '正在执行' : '再次执行'}</Button>
+              {again ? '正在执行' : '再次执行'}</Button>*/}
             <Editor
               height='300px'
               width={width === '50%' ?
@@ -851,12 +851,12 @@ export default class DatabaseVersion extends React.Component{
   _execSQL = (data, version, updateDBVersion, cb, onlyUpdateDBVersion) => {
     const dbData = this._getCurrentDBData();
     if (!dbData) {
-      this.setState({
+      /*this.setState({
         dbVersion: '',
       });
       Modal.error({
         title: '初始化数据库版本表失败',
-        message: '无法获取到数据库信息，请切换尝试数据库'});
+        message: '无法获取到数据库信息，请切换尝试数据库'});*/
       cb && cb();
     } else {
       this._generateSQL(dbData, version, data, updateDBVersion, null, cb, onlyUpdateDBVersion);
@@ -866,10 +866,10 @@ export default class DatabaseVersion extends React.Component{
     if (!status) {
       const dbData = this._getCurrentDBData();
       if (!dbData) {
-        Modal.error({
+       /* Modal.error({
           title: '同步失败',
           message: '无法获取到数据库信息，' +
-            '请切换尝试数据库'});
+            '请切换尝试数据库'});*/
       } else {
         let flag = false;
         if (!initVersion) {
@@ -996,14 +996,14 @@ export default class DatabaseVersion extends React.Component{
   _dropVersionTable = () => {
     const dbData = this._getCurrentDBData();
     if (!dbData) {
-      this.setState({
+      /*this.setState({
         dbVersion: '',
       });
       Modal.error({
         title: '初始化数据库版本表失败',
-        message: '无法获取到数据库信息，请切换尝试数据库'});
+        message: '无法获取到数据库信息，请切换尝试数据库'});*/
     } else {
-      this._connectJDBC({
+     /* this._connectJDBC({
         ...dbData,
         properties: {
           ...(dbData.properties || {}),
@@ -1017,7 +1017,7 @@ export default class DatabaseVersion extends React.Component{
           Message.success({title: '初始化数据表成功'});
           this._getDBVersion();
         }
-      }, 'rebaseline');
+      }, 'rebaseline');*/
     }
   };
   _rebuild = () => {
@@ -1409,7 +1409,7 @@ export default class DatabaseVersion extends React.Component{
     return tempResult;
   };
   _getDBVersion = () => {
-    // 模拟返回1.0.1
+    /*// 模拟返回1.0.1
     this.setState({
       versionData: true,
     });
@@ -1441,7 +1441,7 @@ export default class DatabaseVersion extends React.Component{
           dbVersion: result.status !== 'SUCCESS' ? '' : result.body,
         });
       }, 'dbversion');
-    }
+    }*/
   };
   _getCurrentDBData = () => {
     const { dbs } = this.state;
@@ -1699,7 +1699,7 @@ export default class DatabaseVersion extends React.Component{
             <span className='pdman-db-version-opt-compare-name'>任意版本比较</span>
           </div>
         </div>
-        <div className='pdman-db-version-opt'>
+        {/*<div className='pdman-db-version-opt'>
           <span style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
           切换数据库：
             <Select value={currentDB} style={{minWidth: 200}} onChange={this._dbChange}>
@@ -1709,7 +1709,7 @@ export default class DatabaseVersion extends React.Component{
               }
             </Select>
           </span>
-        </div>
+        </div>*/}
       </div>
       {
         versionData ? <div
@@ -1724,9 +1724,12 @@ export default class DatabaseVersion extends React.Component{
             <span
               style={{textAlign: 'center', color: '#2492E6'}}
             >
-              {currentDB ? `当前使用的数据库：【${currentDB}】,
-              当前数据库版本：【${dbVersion === 'v0.0.0' ? `数据库默认初始版本:${dbVersion}` : dbVersion || '当前数据库版本暂未生成，请先初始化基线或者同步当前版本！'}】`
-                : '当前未选择数据库，如需同步到数据库请先配置数据库!'}
+              当前版本暂时关闭数据库连接功能，大家可以手动复制SQL语句手动执行
+              {/*{currentDB ? `当前使用的数据库：【${currentDB}】,
+              当前数据库版本：【${dbVersion === 'v0.0.0' ?
+                `数据库默认初始版本:${dbVersion}` : dbVersion ||
+                '当前数据库版本暂未生成，请先初始化基线或者同步当前版本！'}】`
+                : '当前未选择数据库，如需同步到数据库请先配置数据库!'}*/}
             </span>
             <div style={{display: 'flex', justifyContent: 'center',  flexGrow: 1, minHeight: 65}}>
               <div className='pdman-db-version-list-item'>
@@ -1783,12 +1786,12 @@ export default class DatabaseVersion extends React.Component{
                       <div className='pdman-db-version-list-item-tag-arrow'>{}
                       </div>
                       <div
-                        onClick={() => this._readDb(
+                        /*onClick={() => this._readDb(
                           compareStringVersion(v.version, dbVersion) <= 0,
                           v,
                           versions[index + 1] || v, v.changes,
                           index === (versions.length - 1), true)}
-                        title={compareStringVersion(v.version, dbVersion) <= 0 ? '' : '点击将进行同步'}
+                        title={compareStringVersion(v.version, dbVersion) <= 0 ? '' : '点击将进行同步'}*/
                         className={`pdman-db-version-list-item-tag-${compareStringVersion(v.version, dbVersion) <= 0 ?
                           'success' : 'error'}`}
                       >

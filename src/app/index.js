@@ -466,7 +466,7 @@ export default class App extends React.Component {
                 if (tempResult.status !== 'SUCCESS') {
                   Modal.error({
                     title: `${type}导出失败!请重试！`,
-                    message: `出错原因：${tempResult.body || tempResult}`,
+                    message: `出错原因：${tempResult.body || tempResult}，可前往\${user.home}/logs/pdman目录查看出错日志`,
                   });
                 } else {
                   Modal.success({
@@ -566,7 +566,7 @@ export default class App extends React.Component {
     openModal(<div style={{textAlign: 'center', padding: 10}}>
       <Button icon='HTML' onClick={(btn) => this._exportFile('Html', btn)}>导出HTML</Button>
       <Button icon='wordfile1' style={{marginLeft: 40}} onClick={(btn) => this._exportFile('Word', btn)}>导出WORD</Button>
-      <Button icon='pdffile1' style={{marginLeft: 40}} onClick={(btn) => this._exportFile('PDF', btn)}>导出PDF</Button>
+      {/*<Button icon='pdffile1' style={{marginLeft: 40}} onClick={(btn) => this._exportFile('PDF', btn)}>导出PDF</Button>*/}
       <Button icon='file1' style={{marginLeft: 40}} onClick={(btn) => this._exportFile('Markdown', btn)}>导出MARKDOWN</Button>
     </div>, {
       title: '文件导出'
@@ -1750,14 +1750,14 @@ export default class App extends React.Component {
                       className='tools-content-clickeable'
                       onClick={() => this._readDB()}
                     ><Icon type="fa-hand-lizard-o"/>数据库逆向解析</div>
-                    <div
+                    {/*<div
                       className='tools-content-clickeable'
                       onClick={() => this._readPDMfile()}
                     ><Icon type="fa-file" />解析PDM文件</div>
                     <div
                       className='tools-content-clickeable'
                       onClick={() => this._readPDMfile()}
-                    ><Icon type="fa-file" />解析ERWin文件</div>
+                    ><Icon type="fa-file" />解析ERWin文件</div>*/}
                   </div>
                   <div className='tools-content-group-name'>
                     解析导入
