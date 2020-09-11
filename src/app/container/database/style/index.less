@@ -18,6 +18,15 @@
       display: inline-block;
       width: 100px;
       text-align: right;
+      &-container {
+        display: flex;
+        flex-direction: column;
+        span:nth-child(2) {
+          cursor: pointer;
+          color: #36AC55;
+          text-decoration: underline;
+        }
+      }
     }
   }
 }
