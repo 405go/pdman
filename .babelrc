@@ -1,0 +1,16 @@
+{
+  "presets": [
+    "es2015",
+    "react",
+    "stage-0"
+  ],
+  "plugins": [
+    ["transform-decorators-legacy"]
+  ],
+  "ignore": [
+    "react-dom.development.js",
+    "lodash.js",
+    "BizCharts.js",
+    "data-set.js"
+  ]
+}
