@@ -14,6 +14,7 @@
  
 ```bash
 $ git clone https://gitee.com/robergroup/pdman
+$ cd pdman
 $ git checkout web
 $ npm install                   # 安装项目依赖
 $ npm run start                # 编译代码并且启动web界面
