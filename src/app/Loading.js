@@ -3,6 +3,7 @@ import Home from './Home';
 import { getCurrentVersion } from '../utils/update';
 import './style/loading.less';
 import defaultData from './defaultData';
+import project from '../demo/demo.project.json';
 
 import { get } from '../utils/fetch';
 import * as cache from '../utils/cache';
@@ -31,7 +32,7 @@ export default class Loading extends React.Component{
     };
   }
   componentDidMount() {
-    // 增加两秒的延迟时间
+    /*// 增加两秒的延迟时间
     let result = {};
     let flag = false;
     setTimeout(() => {
@@ -53,7 +54,11 @@ export default class Loading extends React.Component{
         title: '打开项目失败！',
         message: `出错原因：${err.message}，请尝试刷新页面！`,
       });
-    });
+    });*/
+    // 方便前端演示 暂时注释接口
+    setTimeout(() => {
+      this.setState({width: '100%', data: project.data});
+    }, 2000);
   }
   _refresh = () => {
     const projectId = cache.getItem('projectId');
